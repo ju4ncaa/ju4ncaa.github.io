@@ -185,6 +185,6 @@ Como el usuario **bandit11** listamos el contenido del directorio en el que nos 
 
 ![image](https://github.com/user-attachments/assets/2c3388fb-bf45-49cc-99aa-b7eab02c9c19)
 
-Podemos utilizar comando tr para transformar ciertos carácteres. La letra A se encuentra a 13 posiciones de la letra M y la letra N se encuentra a 13 posiciones de la letra Z por lo tante usaremos el comando tr para sustituir todas la letras de la a-z tanto en mayúsculas como minúsculas y rotar 13 posiciones es decir: de la 'a-zA-Z' voy a rotar a 'n-za-mN-ZA-M' obteniendo finalmente la contraseña.
+Podemos utilizar el comando **tr** para transformar ciertos carácteres. La letra A se encuentra a 13 posiciones de la letra M y la letra N se encuentra a 13 posiciones de la letra Z por lo tante usaremos el comando tr para sustituir todas la letras de la a-z tanto en mayúsculas como minúsculas y rotar 13 posiciones es decir: de la **'a-zA-Z'** voy a rotar a **'n-za-mN-ZA-M'** obteniendo finalmente la contraseña.
 
 ![image](https://github.com/user-attachments/assets/d031ace8-d699-47f5-8e5b-1ad17e824c4f)
