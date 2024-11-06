@@ -137,4 +137,29 @@ Para obtener existosamente la contraseña debemos de utilizar el comando **grep*
 
 ### Level 8 -> Level 9
 * **Objetivo:** Encontrar la contraseña para el siguiente nivel la cual se almacena en el archivo data.txt y es la única línea de texto que aparece una sola vez.
-* **Contraseña bandit8:** 
+* **Contraseña bandit9:** 4CKMh1JI91bUIZZPXDqGanal4xvAg0JM
+
+Conectados como el usuario **bandit8** si listamos el directorio en el que nos encontramos observamos el archivo data.txt
+
+![image](https://github.com/user-attachments/assets/af3e2ff2-f273-44c2-b232-14cc807866a7)
+
+Para obtener la contraseña del usuario bandit9 podemos utilizar el comando **cat**, **uniq -u** el cual permite mostrar líneas únicas de un archivo, combinándolo con **sort** para ordenador alfabeticamente las líneas.
+
+![image](https://github.com/user-attachments/assets/3e756cf9-ee70-4df7-a4d6-a3f77f30d6a4)
+
+### Level 9 -> Level 10
+* **Objetivo:** Encontrar la contraseña para el siguiente nivel la cual se almacena en el archivo data.txt en una de las pocas cadenas legibles por humanos, precedida de varios caracteres «=».
+* **Contraseña bandit10:** FGUW5ilLVJrxX9kMYMmlN4MgbpfMiqey
+
+Conectados como el usuario **bandit9** si listamos el directorio en el que nos encontramos observamos el archivo **data.txt**
+
+![image](https://github.com/user-attachments/assets/f2db3cf5-1cde-4382-9271-c8dbb9217b3a)
+
+Utilizamos el comando ```bash strings data.txt | grep == | sed -n 4p | awk '{print $2}'``` el cual realiza lo siguiente:
+
+* **strings:** Extrae las cadenas de texto legibles del archivo data.txt
+* **grep:** Filtra por las líneas que contienen == 
+* **sed:** Selecciona la cuarta línea de las filtradas
+* **awk:** Imprime el segundo campo
+
+![image](https://github.com/user-attachments/assets/2c269724-17ed-4060-8596-1f00243040ab)
