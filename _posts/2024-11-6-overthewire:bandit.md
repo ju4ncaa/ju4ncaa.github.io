@@ -163,3 +163,28 @@ Utilizamos el comando ```bash strings data.txt | grep == | sed -n 4p | awk '{pri
 * **awk:** Imprime el segundo campo
 
 ![image](https://github.com/user-attachments/assets/2c269724-17ed-4060-8596-1f00243040ab)
+
+
+### Level 10 -> Level 11
+* **Objetivo:** Encontrar la contraseña para el siguiente nivel la cual se almacena en el archivo data.txt, que contiene datos codificados en base64.
+* **Contraseña bandit11:** dtR173fZKb0RRsDFSGsg2RWnpNVj3qRr
+
+Como el usuario **bandit10** listamos el contenido del directorio en el que nos encontramos y observamos el archivo data.txt, si realizamos un cat sobre el fichero observamos una cadena codificada en base64
+
+![image](https://github.com/user-attachments/assets/d3ed651b-e0d5-446b-a14d-7180f6adba36)
+
+Podemos utilizar comando **base64** empleando el parámetro **-d** el cual permite decodear la data y obtener la contraseña del usuario **bandit11**
+
+![image](https://github.com/user-attachments/assets/cacbe1cd-4c63-42eb-a113-09bd3b63bdb0)
+
+### Level 11 -> Level 12
+* **Objetivo:** Obtener la contraseña para el siguiente nivel que se almacena en el archivo data.txt, donde todas las letras minúsculas (a-z) y mayúsculas (A-Z) se han girado 13 posiciones.
+* **Contraseña bandit12:** 7x16WNeHIi5YkIhWsfFIqoognUTyj9Q4
+
+Como el usuario **bandit11** listamos el contenido del directorio en el que nos encontramos y observamos el archivo data.txt, si realizamos un cat sobre el fichero observamos una cadena la cual de la a-z ha sido rotada 13 posiciones
+
+![image](https://github.com/user-attachments/assets/2c3388fb-bf45-49cc-99aa-b7eab02c9c19)
+
+Podemos utilizar comando tr para transformar ciertos carácteres. La letra A se encuentra a 13 posiciones de la letra M y la letra N se encuentra a 13 posiciones de la letra Z por lo tante usaremos el comando tr para sustituir todas la letras de la a-z tanto en mayúsculas como minúsculas y rotar 13 posiciones es decir: de la 'a-zA-Z' voy a rotar a 'n-za-mN-ZA-M' obteniendo finalmente la contraseña.
+
+![image](https://github.com/user-attachments/assets/d031ace8-d699-47f5-8e5b-1ad17e824c4f)
