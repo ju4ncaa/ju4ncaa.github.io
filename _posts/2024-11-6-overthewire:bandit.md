@@ -101,3 +101,40 @@ Para encontrar el archivo el cual contiene la contraseña del usuario **bandit6*
 * **! -executable:** Busca archivos que no son ejecutables por el usuario actual.
 
 ![image](https://github.com/user-attachments/assets/85e87094-80a8-4274-bb31-a1a6aa480ca6)
+
+### Level 6 -> Level 7
+* **Objetivo:** Obtener la contraseña de un archivo el cual se encuentra en algún lugar bajo el servidor y tiene todas las siguientes características:
+  
+  * propiedad del usuario bandit7
+  * propiedad del grupo bandit6
+  * 33 bytes de tamaño
+    
+* **Contraseña bandit7:** morbNTDkSW6jIlUc0ymOdMaLnOlFVAaj
+
+Para encontrar el archivo el cual contiene la contraseña del usuario **bandit7** utilizaremos el comando **find** empleando los siguientes parámetros:
+
+* **-user:** Permite indicar el usuario propietario del archivo.
+* **-group:** Permite indicar el grupo propietario del archivo
+* **-size:** Permite buscar archivos en función de su tamaño, es posible especificar el tamaño utilizando varios sufijos:
+  * **-c:** Bytes
+  * **-k:** Kilobytes
+  * **-M:** Megabytes
+  * **-G:** Gigabytes
+
+![image](https://github.com/user-attachments/assets/eae1c4bc-d7dd-4d4b-a72b-a554a334e84e)
+
+### Level 7 -> Level 8
+* **Objetivo:** Obtener la contraseña la cual se encuentra en el archivo data.txt junto a la palabra millionth
+* **Contraseña bandit8:** dfwvzFQi4mU0wfNbFOe9RoWskMLg7eEc
+
+Conectados como el usuario bandit7 si listamos el directorio en el que nos encontramos observamos el archivo data.txt
+
+![image](https://github.com/user-attachments/assets/be2f2e0c-ecc8-4e5a-953f-cbfc990c5f0b)
+
+Para obtener existosamente la contraseña debemos de utilizar el comando **grep** el cual permite buscar lineas de un archivo mediante expresiones regualres, seguido filtrar el resultado con el comando **awk** para manipular la salida. Si se desea obtener una información mas detallada sobre los comandos es posible utilizar **man** o **--help**
+
+![image](https://github.com/user-attachments/assets/0acaabb7-653b-4fbd-b9c6-10de83a8994e)
+
+### Level 8 -> Level 9
+* **Objetivo:** Encontrar la contraseña para el siguiente nivel la cual se almacena en el archivo data.txt y es la única línea de texto que aparece una sola vez.
+* **Contraseña bandit8:** 
