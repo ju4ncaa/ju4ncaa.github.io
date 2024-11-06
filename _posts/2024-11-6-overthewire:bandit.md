@@ -1,5 +1,5 @@
 ---
-title: Resolución CTF OverTheWire Bandit, Level 0-33 Write-Up
+title: Resolución CTF OverTheWire:Bandit, Level 0-33 Write-Up
 description: En este apartado se resuleven los 33 niveles del CTF de OverTheWire Bandit.
 date: 2024-11-6
 categories: [CTFs]
