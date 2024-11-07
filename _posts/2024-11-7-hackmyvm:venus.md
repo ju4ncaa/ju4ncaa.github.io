@@ -36,3 +36,16 @@ Utilizamos el comando **ls** el cual permite listar el contenido del directorio 
 Observamos que existe un fichero oculto llamado **".myhiddenpazz"** al cual si realizamos un **cat** obtenemos la contraseña del usuario sophia.
 
 ![image](https://github.com/user-attachments/assets/a3ae83a7-2fdb-4616-8823-bec0bcb6ee93)
+
+### Level 1 -> Level 2
+* **Misión:** La usuaria angela ha guardado su password en un fichero pero no recuerda donde... solo recuerda que el fichero se llamaba whereismypazz.txt
+* **Contraseña angela:** oh5p9gAABugHBje
+
+Para obtener la contraseña del usuario **angela** podemos utilizar el comando **find** con los siguientes parámetros:
+
+* **-type:** Permite indicar el tipo, ejemplo: fichero, directorio...
+* **-name:** Permite indicar el nombre del recurso que se busca.
+
+Paralelamente con un pipe utilizamos el comando **xargs** el cual nos permite ejecutar un comando a través de la entrada estándar en este caso usaré el comando **cat** para mostar el contenido del fichero **whereismypazz.txt**
+
+![image](https://github.com/user-attachments/assets/9b74bc89-4b53-4e37-ac67-4063851a530b)
