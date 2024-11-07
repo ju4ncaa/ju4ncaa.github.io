@@ -347,7 +347,7 @@ Ejecuto el binario **suconnect** para observar su funcionamiento, basicamente co
 
 Utilizamos el comando **nc** para poder abrir un puerto y ponernos en escucha por ejemplo el puerto **1234**, con los siguientes parámetros
 * **-l:** Activar modo escucha.
-* **-v:** ver más detalles de la operación (verbose).
+* **-v:** Ver más detalles de la operación (verbose).
 * **-n:** No aplicar resolucion DNS.
 * **-p:** Indicar el puerto 
 
@@ -365,3 +365,280 @@ Probamos a pasar la contraseña de **bandit20** y obtenemos como respuesta la co
 
 
 ![image](https://github.com/user-attachments/assets/d4a4e953-c959-4379-9670-aef1026d4c25)
+
+### Level 21 -> Level 22
+* **Objetivo:** Obtener la contraseña de bandit22 a través de un programa que se está ejecutando automáticamente a intervalos regulares desde cron, el programador de trabajos basado en tiempo, busca en /etc/cron.d/ la configuración y observa qué comando se está ejecutando.
+* **Contraseña bandit22:** tRae0UfB9v0UzbCdn9cY0gQnds9GF58Q
+
+Listando el contenido del directorio **/etc/cron.d** se pueden observar diferentes tares cron, suponemos que la de la cual nos tenemos que aprovechar es **cronjob_bandit22**
+
+![image](https://github.com/user-attachments/assets/6769ffb6-0f23-4963-afe5-69cc5d0731ac)
+
+Mostrando el contenido de **/etc/cron.d/cronjob_bandit22** con el comando **cat** se puede observar que la tarea se ejecuta a intervalos de un minuto y se esta haciendo referencia a un script llamado **cronjob_bandit22.sh** almacenado en **/usr/bin**
+
+![image](https://github.com/user-attachments/assets/a88cdb3b-b2f8-4aa9-83cf-3d3ff2323585)
+
+Si mostramos el contenido del script **cronjob_bandit22.sh** podemos ver que se están cambiando los permisos del archivo **tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv** donde los usuarios pueden leer y modificar, los grupos leer y otros leer, acto seguido se está visualizando la contraseña de **bandit22** alojada en el archivo **/etc/bandit_pass/bandit22** y se redirige el output hacia **/tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv**
+
+![image](https://github.com/user-attachments/assets/4690ca4b-152d-4e8b-9552-e5f36056f005)
+
+Podemos utilizar el comando **watch** e indicarle con el parámetro **-n** que a intervalos de un segundo queremos visualizar el contenido del fichero **tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv** con el comando **cat**.
+
+![image](https://github.com/user-attachments/assets/879feeb9-daa1-4636-8421-9b13e7dbec66)
+
+Finalmente obtenemos la contraseña del usuario **bandit22**
+
+![image](https://github.com/user-attachments/assets/99e85572-954b-421d-a2de-1818834d8a45)
+
+### Level 22 -> Level 23
+* **Objetivo:** Obtener la contraseña de bandit23 a través de un programa que se está ejecutando automáticamente a intervalos regulares desde cron, el programador de trabajos basado en tiempo, busca en /etc/cron.d/ la configuración y observa qué comando se está ejecutando.
+* **Contraseña bandit23:** 0Zf11ioIjMVN551jX3CmStKLYqjk54Ga
+
+Listando el contenido del directorio **/etc/cron.d** se pueden observar diferentes tares cron, suponemos que la de la cual nos tenemos que aprovechar es **cronjob_bandit23**
+
+![image](https://github.com/user-attachments/assets/d5ae3837-f79d-4ff6-9302-41e256e12e4c)
+
+Mostrando el contenido de **/etc/cron.d/cronjob_bandit23** con el comando **cat** se puede observar que la tarea se ejecuta a intervalos de un minuto y se esta haciendo referencia a un script llamado **cronjob_bandit23.sh** almacenado en **/usr/bin**
+
+![image](https://github.com/user-attachments/assets/0b3d2620-a1c6-4633-ae0c-c265c72e2ad9)
+
+Si mostramos el contenido del script **cronjob_bandit23.sh** se están declarando dos varibale una llamada **myname** que ejecuta el comando whoami, seguido se convierta la cadena de texto **"I am user $myname"** a md5, por último se copia la contraseña de **/etc/bandit_pass/$myname** en /**tmp/$mytarget**
+
+![image](https://github.com/user-attachments/assets/cd4a9014-191b-440b-a0ce-3bc981436456)
+
+Si cambiamos de usuario y en vez de poner **bandit22** ponemos **bandit23** obtendremos el hash **md5** de **bandit23** con el cual podremos consultar la contraseña en el directorio **/tmp**
+
+![image](https://github.com/user-attachments/assets/cd48d7b3-ae28-4a4c-90d4-6a29728f4eb4)
+
+
+### Level 23 -> Level 24
+* **Objetivo:** Obtener la contraseña de bandit24 a través de un programa que se está ejecutando automáticamente a intervalos regulares desde cron, el programador de trabajos basado en tiempo, busca en /etc/cron.d/ la configuración y observa qué comando se está ejecutando.
+* **Contraseña bandit24:** gb8KRRCsshuZXI0tUuR6ypOFjiZbf3G8
+
+Listando el contenido del directorio **/etc/cron.d** se pueden observar diferentes tares cron, suponemos que la de la cual nos tenemos que aprovechar es **cronjob_bandit24**
+
+![image](https://github.com/user-attachments/assets/8357245a-a6ba-4550-830b-e6c715225277)
+
+Mostrando el contenido de **/etc/cron.d/cronjob_bandit24** con el comando **cat** se puede observar que la tarea se ejecuta a intervalos de un minuto y se esta haciendo referencia a un script llamado **cronjob_bandit24.sh** almacenado en **/usr/bin**
+
+![image](https://github.com/user-attachments/assets/2a735603-17a8-4536-902b-44d66b19e607)
+
+Si mostramos el contenido del script **cronjob_bandit24.sh** se declara una variable **$myname** que equivale a el comando **whoami** luego se está accediendo a el directorio **/var/spool/$myname/foo** y si dentro de ese directorio existe algun archivo el cual el propierario sea bandit23 lo va a ejecutar.
+
+![image](https://github.com/user-attachments/assets/082344a8-b282-49c9-9eb1-9c908059e54a)
+
+Podemos aprovecharnos creando un directorio temporal con el comando **mktemp -d** dandole permisos de lectura y ejecución con el comando **chmod +xr** y copiando el script en **/var/spool/bandit24/foo**
+
+![image](https://github.com/user-attachments/assets/8575a8ef-e352-490e-bb5a-61c04aa0bc16)
+
+```bash
+#!/bin/bash
+cat /etc/bandit_pass/bandit24 > /tmp/tmp.s8svzAOPxT/bandit24_pass.txt
+```
+
+![image](https://github.com/user-attachments/assets/f6f7be96-234d-400f-8c75-b8474ccf94b7)
+
+Finalmente obtenemos la contraseña del usuario **bandit24**
+
+![image](https://github.com/user-attachments/assets/6b5e53d7-96ba-4fd1-a970-188de7bd37e0)
+
+### Level 24 -> Level 25
+* **Objetivo:** Obtener la contraseña de bandit25 a través de un demonio que está escuchando en el puerto 30002 al cual si se le da la contraseña para bandit24 y un código secreto numérico de 4 dígitos devuelve de vuelta la contraseña correcta para bandit25
+* **Contraseña bandit25:** iCi86ttT4KSNe1armKiwbQNmB3YJP3q4
+
+Intentamos obtener la contraseña de **bandit25** realizando una prueba para ver como funciona, debemos de especificar una contraseña en este caso usaré la del usuario bandit24 y un pin de 4 digitos que puede ir desde el **0000** hasta el **9999**
+
+![image](https://github.com/user-attachments/assets/82f03474-0928-46ef-bc79-ec52db0040a1)
+
+Podemos crear un diccionario con un one-liner de bash con el cual en un futuro aplicar fuerza bruta sobre el puerto 30002.
+
+```bash
+for i in $(seq 0000 9999); do echo gb8KRRCsshuZXI0tUuR6ypOFjiZbf3G8 $i; done > combinations.txt
+```
+
+Despues tenemos que pasarle el archivo al servicio del puerto **30002** con el comando **cat** y **nc**
+
+![image](https://github.com/user-attachments/assets/e3407c6a-9e15-46fe-9fb9-5c406fdb339a)
+
+Finalmente obtenemos la contraseña del usuario **bandit25**
+
+![image](https://github.com/user-attachments/assets/b209517b-4f49-4ac0-b7a3-2f1388a6ff7e)
+
+### Level 25 -> Level 26
+* **Objetivo:** Acceder a bandit26 desde bandit25 debería ser bastante fácil... pero el shell para el usuario bandit26 no es /bin/bash, sino otra cosa, debes de everiguar qué es, cómo funciona y cómo salir de él.
+* **Contraseña bandit26:** s0773xxkk0MXfdqOfPRVr9L3jJBUOgCZ
+
+Como el usuario **bandit25** listamos el contenido del directorio en el que nos encontramos y observamos una clave privada SSH.
+
+![image](https://github.com/user-attachments/assets/12036521-ce0b-4420-b1c9-540169260ef4)
+
+Utilizamos la clave privada SSH para iniciar sesión como **bandit26**, pero automaticamente somos expulsados de la sesión.
+
+![image](https://github.com/user-attachments/assets/f7818f8e-4380-46e5-9c8e-a8b985345a7a)
+
+![image](https://github.com/user-attachments/assets/25e4ae68-d097-439d-8824-bafefaced7e7)
+
+Visualizamos el archivo **/etc/passwd** para comprobar que valor tiene la shell de **bandit26**, observando que recibe el valor de **/usr/bin/showtext**
+
+![image](https://github.com/user-attachments/assets/b9241b16-cc90-4c61-8318-d92d12de85a5)
+
+Si visualizamos el fichero **/usr/bin/showtext**, podemos ver que iguala la variable de entorno **TERM** a el valor **linux**, luego visualiza de forma paginada con el comando **more** un fichero que esta en el directorio **home** de **bandit26** llamado **text.txt**, por ultimo realiza un exit 0
+
+![image](https://github.com/user-attachments/assets/4a8f20f4-2efb-47e7-8ddc-927e3bffd977)
+
+Se nos esta expulsando de la sesion por que el comando **more** necesita un mínimo de texto para entrar en ejecución, lo que podemos hacer es más pequeña la ventana de la terminal y estaria resuelto.
+
+![image](https://github.com/user-attachments/assets/bac38aac-6eca-4f72-b1a2-4484fcc479c6)
+
+Ya hemos entrado en la ejecucion del comando **more** como se puede observar
+
+![image](https://github.com/user-attachments/assets/d921ffd7-3919-4041-83dc-71a4a5de274c)
+
+Si pulsamos la letra **V** entramos en un modo donde podemos ejecutar comandos y obtener una shell
+
+![image](https://github.com/user-attachments/assets/23983343-382f-4b1f-863f-04b90a8c8f2d)
+
+![image](https://github.com/user-attachments/assets/a94113cf-d3ab-4f32-8abd-cbe6caf7d210)
+
+Finalmente podemos leer el fichero **/etc/bandit_pass/bandit26** que contiene la contraseña del usuario **bandit26**.
+
+![image](https://github.com/user-attachments/assets/8632171e-a882-4bdb-8a02-3729adbb0647)
+
+### Level 26 -> Level 27
+* **Objetivo:** ¡Buen trabajo consiguiendo el shell! ¡Ahora date prisa y consigue la contraseña para bandit27!
+* **Contraseña bandit27:** upsNCc7vzaRDx6oZC6GiR6ERwe1MowGB
+
+Como el usuario bandit26 listamos el contenido del directorio actual y se puede observarun binario SUID llamado **bandit27-do** el cual el propietario es **bandit27** y el grupo **bandit26** y tenemos solo permisos de ejecución.
+
+![image](https://github.com/user-attachments/assets/42d7177c-3808-4b37-82bd-0d783a089752)
+
+Ejecutando el fichero SUID **bandit27-do** observamos que permite ejecutar comandos como el usuario **bandit27**
+
+![image](https://github.com/user-attachments/assets/4aef5579-701d-4d05-999d-d34b0830eac6)
+
+Por lo que simplemente tenemos que usar el comando **cat** para visualizar la contraseña la cual se encuentra en el fichero **/etc/bandit_pass/bandit27**
+
+![image](https://github.com/user-attachments/assets/0281d831-df13-4fec-be76-481d7819b6d2)
+
+
+### Level 27 -> Level 28
+* **Objetivo:** Hay un repositorio git en ssh://bandit27-git@localhost/home/bandit27-git/repo a través del puerto 2220. La contraseña para el usuario bandit27-git es la misma que para el usuario bandit27.
+* **Contraseña bandit28:** Yz9IpL0sBcCeuG7m9uQFt8ZNpS4HZRcN
+
+Clonamos el repositorio de GitHub con el comando **git clone** en un directorio temporal creado con **mktemp**
+
+![image](https://github.com/user-attachments/assets/579f7280-dcb8-4787-b0ee-aa05b6c3e78d)
+
+Accedemos al directorio **repo** clonado anteriormente donde al hacer **ls** observamos un fichero **README** al cual si realizamos un **cat** para visualizar el contenido nos proporciona la contraseña del usuario **bandit28**
+
+![image](https://github.com/user-attachments/assets/0f454089-5b25-41c8-8263-fdef25e52903)
+
+### Level 28 -> Level 29
+* **Objetivo:** Hay un repositorio git en ssh://bandit28-git@localhost/home/bandit28-git/repo a través del puerto 2220. La contraseña para el usuario bandit28-git es la misma que para el usuario bandit28.
+* **Contraseña bandit29:** 4pT1t5DENaYuqnqvadYs1oE4QLCdjmJ7
+
+Clonamos el repositorio con **git clone** y accedemos dentro del mismo.
+
+![image](https://github.com/user-attachments/assets/caf75070-6469-4500-9db6-f74f4aa7767f)
+
+Si listamos el contenido del repositorio obervamos que existe un fichero **README.md**, procedemos a realizar una visualizacion del contenido del mismo con el comando **cat**
+
+![image](https://github.com/user-attachments/assets/c59d166a-4b71-4109-af2c-7a75cdb45021)
+
+Existe un comando en **git** el cual es **git log** el cual permite ver el historial del proyecto, filtrarlo y buscar cambios concretos. Aplicando este comando podemos observar que hay un cambio que llama la atencion el cual pone **fix info leak**
+
+![image](https://github.com/user-attachments/assets/6bc48ed6-8db5-44e4-b90d-7ebbed9bdc28)
+
+Con el comando **git show** podemos ver los cambios que se han realizado pasándole el identificador del commit, observamos que antes la contraseña se encontraba en texto claro y la han remplazado por varias **X**, conseguimos obtener la contraseña del usuario **bandit29** satisfactoriamente
+
+![image](https://github.com/user-attachments/assets/9329b60e-4693-48f5-b8e3-2c2ecf37ed61)
+
+### Level 29 -> Level 30
+* **Objetivo:** Hay un repositorio git en ssh://bandit29-git@localhost/home/bandit29-git/repo a través del puerto 2220. La contraseña para el usuario bandit29-git es la misma que para el usuario bandit29.
+* **Contraseña bandit30:** qp30ex3VLz5MDG1n91YowTv4Q8l7CDZL
+
+Clonamos el repositorio con **git clone** y accedemos dentro del mismo.
+
+![image](https://github.com/user-attachments/assets/4863fd79-662c-4223-9eac-928d01b3033d)
+
+Si listamos el contenido del repositorio obervamos que existe un fichero **README.md**, procedemos a realizar una visualizacion del contenido del mismo con el comando **cat**
+
+![image](https://github.com/user-attachments/assets/71f618b0-fa14-40fb-896f-b51591af7111)
+
+No se encuentran contraseñas en producción, con esa pista podemos utilizar el comando **git branch -a** el cual nos permite listar todas las ramas existentes en el proyecto.
+
+![image](https://github.com/user-attachments/assets/6a289bf7-343c-4bbf-8d15-683e794de4cd)
+
+Me llama la atención la rama **dev** que lo asocio a **developers** y si no se encuentran contraseñas en producción puede que aqui sí, migramos a la rama **dev** con el comando **git checkout**, y observamos un fichero README.md el cual si hacemos **cat** contiene la contraseña del usuario **bandit30**
+
+![image](https://github.com/user-attachments/assets/095610dd-a5d0-434b-a6da-b7982680ffa9)
+
+### Level 30 -> Level 31
+* **Objetivo:** Hay un repositorio git en ssh://bandit30-git@localhost/home/bandit30-git/repo a través del puerto 2220. La contraseña para el usuario bandit30-git es la misma que para el usuario bandit30.
+* **Contraseña bandit31:** fb5S2xb7bRyFmAvQYQGEqsbhVyJqhnDy
+
+Como el usuario **bandit30** clonamos el repositorio con **git clone** y accedemos dentro del mismo.
+
+![image](https://github.com/user-attachments/assets/4f16bfcb-3999-43c9-b0c4-bee797ca4100)
+
+Listamos el contenido del repositorio y vemos un fichero **README.md**, al cual si aplicamos un comando cat para ver el contenido vemos que se están riendo en nuestra cara con la siguiente frase **`just an epmty file... muahaha`**
+
+![image](https://github.com/user-attachments/assets/50b5582c-5f08-4aad-895f-901e5ef828c7)
+
+No existen ni **commits** ni difernetes **ramas** del repositorio
+
+![image](https://github.com/user-attachments/assets/449dc3d8-3b2b-440d-b65b-da8d4d7a7ff3)
+
+Existe un comando **git tag** el cual permite la creeación, modificación y eliminación de una etiqueta, utilizando este comanndo vemos un tag llamado **secret**
+
+![image](https://github.com/user-attachments/assets/55599626-abb7-4f07-8493-7251ff004305)
+
+Podemos visualizar el contenido del tag con el comando **git show** obteniendo asi la contraseña del usuario **bandit31**
+
+![image](https://github.com/user-attachments/assets/4097eedc-6c17-432d-a4ba-92e29a713932)
+
+### Level 31 -> Level 32
+* **Objetivo:** Hay un repositorio git en ssh://bandit31-git@localhost/home/bandit31-git/repo a través del puerto 2220. La contraseña para el usuario bandit31-git es la misma que para el usuario bandit31.
+* **Contraseña bandit32:** 3O9RfhqyAlVBEZpVb6LYStshZoqoSx5K
+
+Clonamos el repositorio con **git clone** y accedemos dentro del mismo.
+
+![image](https://github.com/user-attachments/assets/2b723236-d138-4095-a103-a420d9a3fb6c)
+
+Listamos el contenido del repositorio y vemos un fichero **README.md**, al cual si aplicamos un comando cat para ver el contenido nos dice que tenemos que subir un fichero con el nombre **key.txt** al repositorio con el texto **May I come in?** en la rama **master**
+
+![image](https://github.com/user-attachments/assets/dd97b2af-880d-4269-ace8-12308366a19e)
+
+Cremoa el fichero **key.txt** con el comando **touch** e introducimos el texto **May I come in?** con el comando **echo**, al realizar un **git add** nos avisa de que el el fichero **.gitignore** tiene implantado ignorar los ficheros **.txt**
+
+![image](https://github.com/user-attachments/assets/5300dea6-644d-487e-b2b9-1bc299ce9720)
+
+![image](https://github.com/user-attachments/assets/f16a9d69-d5d7-4f2e-8fbb-64fd198392ae)
+
+Borramos el fichero **.gitignore** para que no aplique.
+
+![image](https://github.com/user-attachments/assets/e4510f96-06e9-48fd-9528-56a26d3fbff5)
+
+Subimos el commit y obtenemos el contraseña del usuario **bandit32**
+
+![image](https://github.com/user-attachments/assets/865a7825-d58a-4d10-99db-118f2fa94d78)
+
+### Level 32 -> Level 33
+* **Objetivo:** Después de tanto git, es hora de otra escapada. ¡Buena suerte!
+* **Contraseña bandit33:** tQdtbs5D5i2vJwkO8mEyYEyTL8izoeJ0
+
+Al conectarnos remotamente como el usuario **bandit32** obtenemos un shell el cual convierte el input que se pasa en minúsculas a mayúsculas
+
+![image](https://github.com/user-attachments/assets/5f8a21af-fcef-4110-8760-db2646e842cf)
+
+Si visualizamos el fichero /etc/passwd y grepeamos por el usuario bandit32 podemos ver que la shell vale /home/bandit32/upershell
+
+![image](https://github.com/user-attachments/assets/f97320dc-8c5e-4076-b554-b2d4e4b81eba)
+
+Podemos escapar del UPPERCASE SHELL indicando el parámetro **$0** el cual hace referencia al script que se ejecuta o al terminal que se utiliza por lo que sería equivalente a escribir bash en la terminal.
+
+![image](https://github.com/user-attachments/assets/21d7b79e-654a-4792-940b-87ae0868d916)
+
+Por ultimo visualizamos la contraseña del usuario final **bandit33**
+
+![image](https://github.com/user-attachments/assets/5f589d5a-ac7c-4542-a811-e3dbe7e983f0)
