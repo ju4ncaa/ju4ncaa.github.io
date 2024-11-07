@@ -332,3 +332,36 @@ Ejecutamos el script **bandit20-do** sin especificar ningun parámetro y obtenem
 Para obtener la contraseña de **bandit20**debemos de utilizar el binario SUID y especificar que queremos utilizar el comando **cat** para visualizar el contenido del directorio **/etc/bandit_pass/bandit20**
 
 ![image](https://github.com/user-attachments/assets/eab5f503-217d-4605-a759-ef2126f4db03)
+
+### Level 20 -> Level 21
+* **Objetivo:** Acceder al siguiente nivel utilizando el binario setuid en el directorio home. Ejecútalo sin argumentos para saber cómo usarlo.
+* **Contraseña bandit21:** EeoULMCra2q0dSkYj561DX7s1CpBuOBt
+
+Como el usuario **bandit20** si listamos el contenido que del directorio actual podemos observar un binario **SUID** llamado **suconnect**
+
+![image](https://github.com/user-attachments/assets/f0346597-6142-4456-ae73-9db7cbe44ed1)
+
+Ejecuto el binario **suconnect** para observar su funcionamiento, basicamente consiste en que se conectará al puerto dado en localhost usando TCP y si recibe la contraseña correcta del otro lado, la del usuario **bandit21** transmite de vuelta.
+
+![image](https://github.com/user-attachments/assets/dfd7b532-b6ab-42dd-a099-bf1e1add8c27)
+
+Utilizamos el comando **nc** para poder abrir un puerto y ponernos en escucha por ejemplo el puerto **1234**, con los siguientes parámetros
+* **-l:** Activar modo escucha.
+* **-v:** ver más detalles de la operación (verbose).
+* **-n:** No aplicar resolucion DNS.
+* **-p:** Indicar el puerto 
+
+![image](https://github.com/user-attachments/assets/fd8c278d-3423-44e0-b8a2-3dfcd892b3ab)
+
+Ejecutamos el binario SUID **suconnect** indicando el puerto en escucha en este el **1234**
+
+![image](https://github.com/user-attachments/assets/0fe818c3-cdab-48b9-bb7d-a0dc6fd45833)
+
+
+Probamos a pasar la contraseña de **bandit20** y obtenemos como respuesta la contraseña de **bandit21**
+
+
+![image](https://github.com/user-attachments/assets/27ce0009-d239-4115-ac7e-0017057154b2)
+
+
+![image](https://github.com/user-attachments/assets/d4a4e953-c959-4379-9670-aef1026d4c25)
