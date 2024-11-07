@@ -188,3 +188,113 @@ Como el usuario **bandit11** listamos el contenido del directorio en el que nos 
 Podemos utilizar el comando **tr** para transformar ciertos carácteres. La letra A se encuentra a 13 posiciones de la letra M y la letra N se encuentra a 13 posiciones de la letra Z por lo tante usaremos el comando tr para sustituir todas la letras de la a-z tanto en mayúsculas como minúsculas y rotar 13 posiciones es decir: de la **'a-zA-Z'** voy a rotar a **'n-za-mN-ZA-M'** obteniendo finalmente la contraseña.
 
 ![image](https://github.com/user-attachments/assets/d031ace8-d699-47f5-8e5b-1ad17e824c4f)
+
+
+### Level 12 -> Level 13
+* **Objetivo:** Obtener la contraseña para el siguiente nivel la cual se almacena en el archivo data.txt, que es un hexdump de un archivo que ha sido comprimido repetidamente.
+* **Contraseña bandit13:** FO5dwFsc0cbaIiH0h8J2eUks2vdTDwAn
+
+Como el usuario bandit12 listamos el contenido del directorio actual y observamos que existe un archivo llamado **data.txt** al cual si realizamos un **cat** vemos contenido en formato hexadecimal.
+
+![image](https://github.com/user-attachments/assets/ecd945b4-b979-4ff9-a0c0-6252f468ce43)
+
+Para trabajar mas comodamente utilizaré el comando **scp** el cual me va a permitir copiar archivos del sistema remoto a mi sistema local.
+
+![image](https://github.com/user-attachments/assets/19e06c34-265e-4fbf-93c2-79b82cc23246)
+
+Si utilizamos el comando **xxd** con la opción **-r** y reenviamos el output a un archivo llamado por ejemplo **data** conseguimos revertir el volcado hexadecimal a su forma binaria. Por último aplicando el comando **file** el cual permite identificar el tipo de archivo que se está tratando a través de los magic numbers puedo identificar que se trata de un archivo comprimido **.gzip**
+
+![image](https://github.com/user-attachments/assets/ca6b3980-053b-4b07-ad5a-19e610786c74)
+
+Desrrollaré un script en Bash el cual automatice el proceso de descomprimir los archivos, por lo que creamos un archivo llamado **descomprimir.sh** y le otorgamos permisos de ejecución.
+
+![image](https://github.com/user-attachments/assets/6cfef5a5-cad1-4a08-8297-8a37c0e2bb03)
+
+```bash
+#!/bin/bash
+nombre_comprimido=$(7z l data.gzip | grep "Name" -A 2 | tail -n 1 | awk 'NF{print $NF}')
+7z x data.gzip > /dev/null 2>&1
+
+while true; do
+        7z l $nombre_comprimido > /dev/null 2>&1
+
+        if [ "$(echo $?)" == "0" ]; then
+                descomprimir_siguiente=$(7z l $nombre_comprimido | grep "Name" -A 2 | tail -n 1 | awk 'NF{print $NF}')
+                7z x $nombre_comprimido > /dev/null 2>&1 && nombre_comprimido=$descomprimir_siguiente
+        else
+                cat $nombre_comprimido && rm data*
+                break
+        fi
+done
+```
+
+![image](https://github.com/user-attachments/assets/5692b79a-1c49-4f5a-9a87-097519dde294)
+
+### Level 13 -> Level 14
+* **Objetivo:** Obtener la contraseña para el siguiente nivel la cual se almacena en /etc/bandit_pass/bandit14 y sólo puede ser leída por el usuario bandit14. Para este nivel, no obtienes la contraseña, pero obtienes una clave SSH privada que puede ser usada para iniciar sesión en el siguiente nivel.
+* **Contraseña bandit14:** MU4VWeTyJk8ROof1qqmcBPaLh7lDCPvS
+
+Una vez conectados en el servidor SSH como el usuario **bandit13** si listamos el contenido del directorio actual se observa una clave privada SSH.
+
+![image](https://github.com/user-attachments/assets/70323c39-7d16-4195-b023-f7d10538c7dc)
+
+Usaremos esta clave para iniciar sesion con **ssh** en el usuario **bandit14** indicando el parámetro **-i** el cual permite seleccionar un archivo del que se lee la identidad clave privada para la autenticación de clave pública.
+
+![image](https://github.com/user-attachments/assets/1c134fde-9ea6-41db-8e28-f20161f0e5f9)
+
+Hemos accedido como el usuario bandit14, si queremos visualizar la contraseña de este usuario podemos realizar un cat de la siguiente ruta: **/etc/bandit_pass/bandit14**
+
+![image](https://github.com/user-attachments/assets/0ba0f938-e5ff-4c56-ac49-d775b57d95c9)
+
+### Level 14 -> Level 15
+* **Objetivo:** Obtener la contraseña de bandit15, la cual se puede recuperar enviando la contraseña del nivel actual (bandit14) al puerto 30000 en localhost.
+* **Contraseña bandit15:** 8xCjnmgoKbGLhHFAZlGE5Tmu4M2tKJQo
+
+Podemos obtener la contraseña utilizando los comandos **echo** y **nc** lo cuales nos van a permitir interactuar con el puerto 30000 del localhost
+
+![image](https://github.com/user-attachments/assets/2cb38fbc-4799-4a2e-aa7f-bf3f8b87a390)
+
+### Level 15 -> Level 16
+* **Objetivo:** Obtener la contraseña de bandit15, la cual se puede recuperar enviando la contraseña del nivel actual al puerto 30001 en localhost utilizando encriptación SSL/TLS.
+* **Contraseña bandit16:** kSkvUpMQ7lBYyCM4GBPvCvT1BfWRy0Dx
+
+Nos conenctamos con **openssl** al puerto 30001 con el parámetro **-connect**
+
+![image](https://github.com/user-attachments/assets/81831e0b-85b1-43aa-8a84-4248a4956c2b)
+
+Pegamos la contraseña de **bandit15** y obtenemos como respuesta la contraseña de **bandit16**
+
+![image](https://github.com/user-attachments/assets/80639535-dd84-4ddc-98fc-90ee02a125c3)
+
+### Level 16 -> Level 17
+* **Objetivo:** Obtener las credenciales para el siguiente nivel, para ello se puede enviar la contraseña del nivel actual a un puerto en localhost en el rango 31000 a 32000. Primero averigua cuáles de estos puertos tienen un servidor escuchando en ellos. Luego averigua cuáles de ellos hablan SSL/TLS y cuáles no. Sólo hay 1 servidor que te dará las siguientes credenciales, los demás simplemente te devolverán lo que le envíes.
+* **Contraseña bandit17:** EReVavePLFHtFlFsjn3hyzMlvSuSAcRD
+
+Para realizar el descubrimiento de puertos abiertos desde **31000** hasta **32000** en el localhost voy a programar un sencillo script en bash el cual utiliza el comando **nc -zv** que permite realizar un escaneo de puertos sin enviar datos.
+
+```bash
+#!/bin/bash
+for port in $(seq 31000 32000); do
+	nc -zv 127.0.0.1 $port 2>/dev/null && echo "[+] Puerto $port abierto"
+done
+```
+
+Con el script completo, procedemos a ejecutarlo y obtener los puertos abiertos en el localhost.
+
+![image](https://github.com/user-attachments/assets/8e3470ce-2be2-4bc0-831a-5204b49b021d)
+
+Los puertos abiertos son: **{31046, 31518, 31691, 31790, 31960}** intentaremos conectarnos con **openssl** a los mismos y proporcionar la contraseña de **bandit16**, dandonos cuenta de que el puerto correcto es **31790**. Cuando introducimos la contraseña de **bandit16** obtenemos una clave id_rsa.
+
+![image](https://github.com/user-attachments/assets/67aa3d61-e7ef-43cf-a9f5-92a472b80e83)
+
+Copiamos la clave rsa en un archivo llamado **id_rsa** y le asignamos los permisos correctos con **chmod** para poder utilizarla y conectarnos por SSH.
+
+![image](https://github.com/user-attachments/assets/b7c25755-0461-4692-8904-23dcdac8414e)
+
+Nos conectamos al usuario **bandit17** con SSH utilizando el parámetro **-i**
+
+![image](https://github.com/user-attachments/assets/a8d3e1c6-986e-439a-bad0-88de7679baa3)
+
+Para obtener la contraseña de **bandit17** podemos utilizar el comando **cat** para visualizar el fichero **/etc/bandit_pass/bandit17**
+
+![image](https://github.com/user-attachments/assets/cf050e24-3974-4fb4-87a4-503b5736981d)
