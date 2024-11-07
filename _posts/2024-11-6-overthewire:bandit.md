@@ -298,3 +298,37 @@ Nos conectamos al usuario **bandit17** con SSH utilizando el parámetro **-i**
 Para obtener la contraseña de **bandit17** podemos utilizar el comando **cat** para visualizar el fichero **/etc/bandit_pass/bandit17**
 
 ![image](https://github.com/user-attachments/assets/cf050e24-3974-4fb4-87a4-503b5736981d)
+
+### Level 17 -> Level 18
+* **Objetivo:** Obtener la contraseña de bandit18 la cual se encuentra en el directorio principal donde hay dos archivos: passwords.old y passwords.new, la contraseña está en passwords.new y es la única línea que ha cambiado entre passwords.old y passwords.new.
+* **Contraseña bandit18:** x2gLTTjFwMOhQ8oWNbMN362QKxfRqGlO
+
+Para obtener cual es la línea diferente en el archivo **passwords.new** podemos utilizar el comando **diff** el cual permite mostrar diferencias entre archivos comparándolos línea por línea.
+
+![image](https://github.com/user-attachments/assets/36b375ba-7ebf-467d-9635-89b0e5f705b5)
+
+### Level 18 -> Level 19
+* **Objetivo:** Obtener la contraseña para el siguiente nivel la cual se almacena en un archivo readme en el **homedirectory**, desafortunadamente alguien ha modificado **.bashrc** para cerrar la sesión cuando te conectas con SSH.
+* **Contraseña bandit19:** cGWpMaKXVwDUNgPAVJbWYuGHVn9zl3j8
+
+Podemos spawnear un shell bash añadiendo al final del comando ssh **`bash`**, pudiendo asi leer el archivo readme y obtener la contraseña del usuario **bandit19**
+
+![image](https://github.com/user-attachments/assets/af021ec7-b439-4d14-8e8c-0bb93764e2dc)
+
+### Level 19 -> Level 20
+* **Objetivo:** Acceder al siguiente nivel utilizando el binario setuid del directorio home. Ejecútalo sin argumentos para saber cómo usarlo.
+* **Contraseña bandit20:** 0qXahG8ZjOVMN9Ghs7iOWsCfZyXOUbYO
+
+Como el usuario **bandit19** si listamos el contenido del directorio actual observamos un binario **SUID** llamado **bandit20-do** y el cual es propietario **bandit20**
+
+![image](https://github.com/user-attachments/assets/3e1a0b61-4e31-4d33-aae5-3dc3cd23a314)
+
+Ejecutamos el script **bandit20-do** sin especificar ningun parámetro y obtenemos la respuesta de que podemos ejecutar comandos como otro usuario, por ejemplo: ./bandit20-do whoami
+
+![image](https://github.com/user-attachments/assets/3c08bdc6-2004-40d3-a98e-3e9a78376f9c)
+
+![image](https://github.com/user-attachments/assets/020ecb08-686f-4b50-9486-9fc0af5d58b3)
+
+Para obtener la contraseña de **bandit20**debemos de utilizar el binario SUID y especificar que queremos utilizar el comando **cat** para visualizar el contenido del directorio **/etc/bandit_pass/bandit20**
+
+![image](https://github.com/user-attachments/assets/eab5f503-217d-4605-a759-ef2126f4db03)
