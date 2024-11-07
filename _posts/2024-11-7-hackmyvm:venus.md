@@ -31,8 +31,8 @@ Utilizamos ssh para conectarnos remotamente al CTF utilizando los siguientes par
 
 Utilizamos el comando **ls** el cual permite listar el contenido del directorio en el que nos encontramos y lo combinamos con el parámetro **-a** lo cual permite mostrar todos los archivos incluidos los ocultos.
 
-![image](https://github.com/user-attachments/assets/2d8488eb-64e4-4121-a647-9c6db1c5f7d3)
+![image](https://github.com/user-attachments/assets/14becad5-9719-417f-a9d5-0caa904ea546)
 
 Observamos que existe un fichero oculto llamado **".myhiddenpazz"** al cual si realizamos un **cat** obtenemos la contraseña del usuario sophia.
 
-![image](https://github.com/user-attachments/assets/0efa54a1-b20b-4c6f-bd06-6d060585eda3)
+![image](https://github.com/user-attachments/assets/a3ae83a7-2fdb-4616-8823-bec0bcb6ee93)
