@@ -173,3 +173,25 @@ Si tenemos curiosidad y queremos saber cuantas líneas tiene el archivo **end** 
 Para obtener la contraseña del usuario **lucy** podemos utilizar el comando **grep** empleando la expresión regular **$** la cual permite indicar que termina por **0JuAZ**, por otro lado podemos utilizar el comando **cut** o **awk** para excluir los últimos 5 carácteres los cuales no forman parte de la password.
 
 ![image](https://github.com/user-attachments/assets/806f9ffb-15bb-4527-b52e-730def8df208)
+
+
+### Level 11 -> Level 12
+* **Misión:** El password de la usuaria elena esta entre los caracteres fu y ck
+* **Contraseña elena:** 4xZ5lIKYmfPLg9t
+
+Como el usuario **lucy** utilizamos el comando **ls** para lisar el contenido del directorio actual, observamos un archivo llamado **file.yo**, al cual si hacemos un **cat** para mostrar su contenido contiene un monton de lineas con contraseñas.
+
+![image](https://github.com/user-attachments/assets/22613a7f-5880-4581-8bcd-f28f4484722f)
+
+Si tenemos curiosidad y queremos saber cuantas líneas tiene el archivo **file.yo** podemos utilizar el comando **wc (word count)** combinado del parámetro **-l** que nos permitira contar la líneas de un archivo dado.
+
+![image](https://github.com/user-attachments/assets/9232b801-132c-4003-a382-bd2ad4d1e993)
+
+Para obtener la contraseña del usuario **elena** podemos utilizar el comando **grep** empleando la expresión regular **'.*'** la cual permite indicar que entre las letras **fu** y **ck** hay data, por otro lado podemos utilizar el comando **sed** para excluir las letras **fu** y **ck** las cuales no forman parte de la password.
+
+![image](https://github.com/user-attachments/assets/65c3e803-7128-47b6-b950-c14be07fd302)
+
+### Level 12 -> Level 13
+* **Misión:** La password de alice esta en una variable de entorno.
+* **Contraseña alice:**
+
