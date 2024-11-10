@@ -73,7 +73,7 @@ En **OverTheWire:Bandit** nos encontramos con un caso igual, lo que sucede cuand
 * **Misión:** Parece que la usuaria camila ha dejado su password dentro de una carpeta llamada hereiam 
 * **Contraseña camila:** F67aDmCAAgOOaOc
 
-Para obtener donde se encientra la carpeta hereiam del usuario **camila** podemos utilizar el comando **find** con los siguientes parámetros:
+Para obtener donde se encuentra la carpeta **hereiam** del usuario **camila** podemos utilizar el comando **find** con los siguientes parámetros:
 
 * **-type:** Permite indicar el tipo, ejemplo: fichero, directorio...
 * **-name:** Permite indicar el nombre del recurso que se busca.
@@ -83,3 +83,93 @@ Para obtener donde se encientra la carpeta hereiam del usuario **camila** podemo
 Nos dirigimos al directorio resultante **/opt/hereiam** y utilizamos el comando **ls -a** para mostrar todo el contenido del directorio observando así un archivo oculto llamado .here al cual si hacemos cat contiene la contraseña de **camila**
 
 ![image](https://github.com/user-attachments/assets/e95b2930-2bd0-44cd-81fd-19608998d4fa)
+
+### Level 5 -> Level 6
+* **Misión:** La usuaria luna ha dejado su password en algun fichero dentro de la carpeta muack
+* **Contraseña luna:** j3vkuoKQwvbhkMc
+
+Como el usuario **camila** realizamos un **ls** para observar el contenido del directorio actual, nos encontramos con una carpeta llamada **muack**, la cual si listamos su contenido tiene muchas mas carpetas donde dentro de esas carpetas hay muchas más carpetas.
+
+![image](https://github.com/user-attachments/assets/d60fcef0-4c4c-454b-aa65-eaa9a85889c4)
+
+Para obtener donde se encuentra el fichero que contiene la password dentro de la carpeta **muack** del usuario **luna** podemos utilizar el comando **find** indicándole que queremos buscar todos los ficheros recursivamente dentro de la carpeta **muack**, se emplean los siguientes parámetros:
+
+* **-type:** Permite indicar el tipo, ejemplo: fichero, directorio...
+
+![image](https://github.com/user-attachments/assets/39d5c653-40f8-4015-b44e-f5fcba7204b6)
+
+### Level 6 -> Level 7
+* **Misión:** La usuaria eleanor ha dejado su password en un fichero que ocupa 6969 bytes.
+* **Contraseña eleanor:** UNDchvln6Bmtu7b
+
+Para obtener donde se encuentra la password del usuario **eleanor** podemos utilizar el comando **find** con los siguientes parámetros:
+
+* **-type:** Permite indicar el tipo, ejemplo: fichero, directorio...
+* **-size:** Permite indicar el tamaño del archivo:
+  
+    * **-c:** Bytes
+    * **-k:** Kilobytes
+    * **-G:** Gigabytes
+    * **-M:** Megabytes
+       
+![image](https://github.com/user-attachments/assets/b6e8a20c-b1a8-4740-b71a-89bf040e23b2)
+
+### Level 7 -> Level 8
+* **Misión:** La usuaria victoria ha dejado su password en un fichero en el cual el propietario es el usuario violin.
+* **Contraseña victoria:** pz8OqvJBFxH0cSj
+
+Para obtener la password del usuario **victoria** podemos utilizar el comando **find** con los siguientes parámetros:
+
+* **-type:** Permite indicar el tipo, ejemplo: fichero, directorio...
+* **-user:** Permite indicar el usuario propietario del archivo
+
+![image](https://github.com/user-attachments/assets/d43502f1-acf1-42ee-a510-f85e84a38cf4)
+
+### Level 8 -> Level 9
+* **Misión:** La usuaria isla ha dejado su password en un fichero zip.
+* **Contraseña isla:** D3XTob0FUImsoBb
+
+Como el usuario **victoria** utilizamos el comando **ls** para listar el contenido del directorio actual, observamos en fichero con extensión **.zip** llamado **passw0rd.zip**
+
+![image](https://github.com/user-attachments/assets/67e995f2-a85e-4292-99a9-7d240546a74f)
+
+Podemos utilizar el comando **unzip** para descomprimir la data del archivo **passw0rd.zip**, encontramos como resultado que no tenemos permisos para descomprimir en el directorio que nos encontramos.
+
+![image](https://github.com/user-attachments/assets/e67bb38e-a5d8-4868-9776-67447f5907c3)
+
+Para poder descomprimir la data del archivo **passw0rd.zip** utilizaremos el comando **mktemp -d**, creando así un direcorio temporal donde poder extraear la data. Utilizaremos nuevamente el comando **unzip** con el parámetro **-d**, el cual permitirá indicar el directorio donde se quiere extraer.
+
+![image](https://github.com/user-attachments/assets/738f041d-af3b-4a38-9c3e-0bef204d3f05)
+
+### Level 9 -> Level 10
+* **Misión:** El password de la usuaria violet esta en la linea que empieza por a9HFX (sin ser estos 5 caracteres parte de su password.).
+* **Contraseña violet:** WKINVzNQLKLDVAc
+
+Como el usuario **isla** utilizamos el comando **ls** para lisar el contenido del directorio actual, observamos un archivo llamado **passy**, al cual si hacemos un **cat** para mostrar su contenido contiene un monton de lineas con contraseñas.
+
+![image](https://github.com/user-attachments/assets/763a8cc3-baf3-407b-88c5-7c0077907dab)
+
+Si tenemos curiosidad y queremos saber cuantas líneas tiene el archivo **passy** podemos utilizar el comando **wc (word count)** combinado del parámetro **-l** que nos permitira contar la líneas de un archivo dado.
+
+![image](https://github.com/user-attachments/assets/fb45bbb4-d027-41fd-9474-2b6d19b16fb5)
+
+Para obtener la contraseña del usuario **violet** podemos utilizar el comando **grep** empleando la expresión regular **^** la cual permite indicar que empieza por **a9HFX**, por otro lado podemos utilizar el comando **cut** o **awk** para excluir los primeros 5 carácteres los cuales no forman parte de la password.
+
+![image](https://github.com/user-attachments/assets/e64fca9d-7ecb-463b-a58d-47fb70737302)
+
+### Level 10 -> Level 11
+* **Misión:** El password de la usuaria lucy se encuentra en la linea que acaba por 0JuAZ (sin ser estos ultimos 5 caracteres parte de su password)
+* **Contraseña lucy:** OCmMUjebG53giud
+
+Como el usuario **violet** utilizamos el comando **ls** para lisar el contenido del directorio actual, observamos un archivo llamado **end**, al cual si hacemos un **cat** para mostrar su contenido contiene un monton de lineas con contraseñas.
+
+![image](https://github.com/user-attachments/assets/449d5710-af28-4258-8726-117d1463dd18)
+
+
+Si tenemos curiosidad y queremos saber cuantas líneas tiene el archivo **end** podemos utilizar el comando **wc (word count)** combinado del parámetro **-l** que nos permitira contar la líneas de un archivo dado.
+
+![image](https://github.com/user-attachments/assets/b2665221-11ca-40c1-b388-1a56098940da)
+
+Para obtener la contraseña del usuario **lucy** podemos utilizar el comando **grep** empleando la expresión regular **$** la cual permite indicar que termina por **0JuAZ**, por otro lado podemos utilizar el comando **cut** o **awk** para excluir los últimos 5 carácteres los cuales no forman parte de la password.
+
+![image](https://github.com/user-attachments/assets/806f9ffb-15bb-4527-b52e-730def8df208)
