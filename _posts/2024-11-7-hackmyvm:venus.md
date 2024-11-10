@@ -193,5 +193,37 @@ Para obtener la contraseña del usuario **elena** podemos utilizar el comando **
 
 ### Level 12 -> Level 13
 * **Misión:** La password de alice esta en una variable de entorno.
-* **Contraseña alice:**
+* **Contraseña alice:** Cgecy2MY2MWbaqt
 
+Como el usuario **elena** podemos utilizar el comando **env** para listar las variables de entorno actuales en el sistema, obervamos una variable entorno llamada **PASS**
+
+![image](https://github.com/user-attachments/assets/a7e893ad-20f8-4332-b263-439d7f034334)
+
+Podemos utilizar de nuevo el comando **env** combinádolo con **grep** y **cut** o **awk**, para filtrar simplemente por el password, que es la data que nos interesa obtener.
+
+![image](https://github.com/user-attachments/assets/3f6b2dc0-26cd-47a4-a439-7a0359620c30)
+
+### Level 13 -> Level 14
+* **Misión:** El admin ha dejado la password de anna como comentario en el fichero passwd.
+* **Contraseña anna:** w8NvY27qkpdePox
+
+Como el usuario **alice** utilizamos el comando **cat** para visualizar el contenido del fichero **/etc/passwd**, si lo combinamos con el comando **grep** para filtrar por nuestro usuario **alice**, encontramos que en el quinto campo se encuentra un texto el cual es la contraseña del usuario **anna**
+
+![image](https://github.com/user-attachments/assets/7f30410e-a809-46ce-861c-78dbae101cf7)
+
+Por otro lado si queremos obtener simplemente la contraseña, que es la data que nos interesa, podemos utilizar los comando **cut** o **awk** para filtrar entre los dos puntos **':'** en el quinto campo.
+
+![image](https://github.com/user-attachments/assets/32b867c2-37ef-48f6-a517-3af1235e8730)
+
+
+### Level 14 -> Level 15
+* **Misión:** Puede que sudo te ayude para ser natalia.
+* **Contraseña natalia:** NMuc4DkYKDsmZ5z
+
+Como el usuario **anna** utilizamos el comando **sudo -l**, el cual nos permite listar los privielgios y comandos que podemos ejecutar en el sistema como el usuario **anna**, vemos que podemos ejecutar como el usuario **natalia** sin proporcionar contraseña el binario **/bin/bash**, lo cual permite spawnear un shell tipo **bash**
+
+![image](https://github.com/user-attachments/assets/aae2b387-57b7-48fc-8be6-daf430d4e85b)
+
+Para convertirnos en el usuario **natalia** podemos utilizar el comando **sudo -u** y llamar al binario **/bin/bash** indicando que lo queremos ejecutar como **natalia**
+
+![image](https://github.com/user-attachments/assets/a29c9d59-c70e-4dd2-8d88-c395c6ce1e90)
