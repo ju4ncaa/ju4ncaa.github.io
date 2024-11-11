@@ -227,3 +227,101 @@ Como el usuario **anna** utilizamos el comando **sudo -l**, el cual nos permite 
 Para convertirnos en el usuario **natalia** podemos utilizar el comando **sudo -u** y llamar al binario **/bin/bash** indicando que lo queremos ejecutar como **natalia**
 
 ![image](https://github.com/user-attachments/assets/a29c9d59-c70e-4dd2-8d88-c395c6ce1e90)
+
+
+### Level 15 -> Level 16
+* **Misión:** El password de eva esta encodeado en el fichero base64.txt
+* **Contraseña eva:** upsCA3UFu10fDAO
+
+Como el usuario **eva** utilizammos el comando **ls** para listar el contenido del directorio en el que nos encontramos, encontramos un fichero llamado **base64.txt** al cual si realizamos un cat para visualizar su contenido vemos una cadena codeada en **base64**.
+
+![image](https://github.com/user-attachments/assets/67efd5a9-0d85-4bc4-b49b-458e6a3762a8)
+
+Si queremos decodear el texto para obtener la contraseña del usuario **eva** podemos utilizar el comando **'base64 -d'**
+
+![image](https://github.com/user-attachments/assets/cea2b969-1866-4d7f-b43b-4a6ee2cf823c)
+
+
+### Level 16 -> Level 17
+* **Misión:** La password de la usuaria clara se encuentra en un fichero modificado el 01 de Mayo de 1968.
+* **Contraseña clara:** 39YziWp5gSvgQN9
+
+Para calcular los días que han pasado desde que se modificó el archivo debemos de utilizar la siguiente operación **```(2024-1970)*365```**
+
+![image](https://github.com/user-attachments/assets/d783b24e-e979-4b6a-9758-7b873ff4f7f1)
+
+Para obtener la contraseña del usuario **clara** podemos utilizar el comando **find** con los siguientes parámetros:
+
+* **-mtime:** Permite buscar archivos basándose en la fecha de modificación en días.
+
+![image](https://github.com/user-attachments/assets/b0990975-f9e7-4feb-ad3b-e8dee8437470)
+
+### Level 17 -> Level 18
+* **Misión:** La password de frida esta en el zip protegido con password.(rockyou.txt puede ayudarte)
+* **Contraseña frida:** Ed4ErEUJEaMcXli
+
+Como el usuario **frida** utilizamos el comando **ls** para listar el contenido del directorio actual, observamos un fichero **.zip** llamado **'protected.zip'**.
+
+![image](https://github.com/user-attachments/assets/a5a37d22-328c-49c0-abcc-40f592726512)
+
+Podemos utilizar el comando **scp** para trasladar el archivo **protected.zip** a nuestra máquina local y trabajar comodamente. Y utilizar el comando **md5sum** para comprobar que la data se ha trasladado integramente y no ha sido alterada.
+
+![image](https://github.com/user-attachments/assets/e506174a-c3c5-4735-b8b4-17395ce5add0)
+
+![image](https://github.com/user-attachments/assets/b8a4e195-0def-4ece-a36c-dd82ba271251)
+
+Una vez trasladado el fichero **protected.zip** podemos utilizar la herramienta **7z** con el parámetro **l** para listar el contenido del comprimido.
+
+![image](https://github.com/user-attachments/assets/e5cb2253-38c7-4149-b794-2d361c2a2ef5)
+
+Probamos a descomprimir el .zip con la herramienta **7z** empleando el parámetro **x**, obtenemos como resultado que el fichero se encuentra protegido por contraseña.
+
+![image](https://github.com/user-attachments/assets/b2153853-a496-4423-affa-3e5ed8cb286e)
+
+Utilizaremos la herramienta **zip2john** la cual nos va a permitir extraer el **hash** de la contraseña del fichero **protected.zip**
+
+![image](https://github.com/user-attachments/assets/1aab7440-4007-47ba-b32d-957a69a748ca)
+
+Una vez extraído el **hash** utilizaremos le herramienta **John The Ripper** la cual nos permitira crackear el hash obtenido anteriomente y obtener la contraseña en texto claro.
+
+![image](https://github.com/user-attachments/assets/f4889f89-2643-49c5-aff0-6f8646a0475e)
+
+Utilizamos la contraseña **pass123** para descomprimir el contenido del fichero **protected.zip** con la herramienta **7z**.
+
+![image](https://github.com/user-attachments/assets/4fa9fabe-e3e5-44bf-8cc6-5e6cf83260c2)
+
+Por último ya podemos visualizar la contraseña del usuario **frida**
+
+![image](https://github.com/user-attachments/assets/4c4ca26c-fe96-401e-be42-a9e4c6cbcd14)
+
+### Level 18 -> Level 19
+* **Misión:** La password de eliza es el unico string que se repite (sin estar ordenado) en repeated.txt.
+* **Contraseña eliza:** Fg6b6aoksceQqB9
+
+Como el usuario **frida** utilizamos el comando **ls** para listar el contenido del directorio actual donde nos encontramos, donde podemos observar el fichero **'repeated.txt'**
+
+![image](https://github.com/user-attachments/assets/e30c8aca-bf03-4b60-a61d-ac9907c5b8c8)
+
+Podemos utilizar el comando **uniq **con el parámetro **-d**, el cual imprime las líneas duplicadas de un archivo dado.
+
+![image](https://github.com/user-attachments/assets/d2a8c6f9-500c-4183-b188-673b8cf9fe8e)
+
+### Level 19 -> Level 20
+* **Misión:** La usuaria iris me ha dejado su key.
+* **Contraseña iris:** kYjyoLcnBZ9EJdz
+
+Como el usuario **eliza** utilizamos el comando **ls -a** para listar todo el contenido del directorio actual en el que nos encontramos, observamos un archivo llamado **'.iris_key'**, si realizamos un **cat** sobre el fichero **.iris_key** observamos que se trata de una **clave SSH privada**
+
+![image](https://github.com/user-attachments/assets/29d91b04-8772-405f-bcd6-099f5203af20)
+
+Podemos utilizar el comando **ssh** acompañado del parametroo **-i** para indicar la **clave SSH privada** e iniciar sesión como el usuario **iris**.
+
+![image](https://github.com/user-attachments/assets/f0eb4984-611b-44a9-b2dd-4aecb90aa77c)
+
+Finalmente conseguimos migrar satisfactoriamente al usuario **iris** y podemso visualizar la password.
+
+![image](https://github.com/user-attachments/assets/3a9486d1-2422-4fdb-81fe-f1a1b3c5d981)
+
+### Level 20 -> Level 21
+* **Misión:** La usuaria eloise ha guardado su password de una forma particular.
+* **Contraseña eloise:** 
