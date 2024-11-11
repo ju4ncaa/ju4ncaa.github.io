@@ -324,4 +324,166 @@ Finalmente conseguimos migrar satisfactoriamente al usuario **iris** y podemso v
 
 ### Level 20 -> Level 21
 * **Misión:** La usuaria eloise ha guardado su password de una forma particular.
-* **Contraseña eloise:** 
+* **Contraseña eloise:** yOUJlV0SHOnbSPm
+  
+Como el usuario **iris** utilizamos el comando **ls** para listar el contenido del directorio en el que nos encontramos, como resultado podemos observar un fichero llamado **eloise**, si realizamos un **cat** sobre este fichero podemos vizualizar una cadena en **base64**
+
+![image](https://github.com/user-attachments/assets/f262a35e-c6cf-4a6e-a1e5-440d7c9a4a80)
+
+Podemos utilizar el comando **base64 -d** para decodear la data del fichero **eloise**, como resultado obtenemos texto ilegible, pero al principio de la cadena obtenido se puede observar que es un formato JFIF, esto quiere decir que es un un formato de fichero estándar de imagen. 
+
+![image](https://github.com/user-attachments/assets/cf67a0a0-408a-47ac-97ec-13fd6beea568)
+
+Si queremos obtener de que tipo de archivo del que se trata en concreto podemos utilizar un **pipe** y combinar el comando **file**, obteniendo como resultado que se trata de un archivo **JPEG**
+
+![image](https://github.com/user-attachments/assets/53134bb8-a958-4b35-8b88-ce8c934a905c)
+
+Para trabajar mas comodamente utilizamos el comando **scp** para trasladar el archivo **eloise** a nuestra máquina loca, una vez extraído utilizamos el comando **md5sum** para comprobar que el hash **md5** es el mismo y la data no se ha visto alterada.
+
+![image](https://github.com/user-attachments/assets/49b9bc76-bebb-43a1-b5b0-5d59be1f94ef)
+
+![image](https://github.com/user-attachments/assets/780c88bf-60da-4cc1-b98e-039f804679b1)
+
+Utilizamos el comando **base64 -d** para decodear la data del archivo **eloise**, acto seguido redireccionamos el output a un archivo llamado **eloisepass.jpeg**
+
+![image](https://github.com/user-attachments/assets/eabb1efa-6bc8-451c-a45a-09240a97826e)
+
+Podemos utilizar un gestor de imágenes GUI o si nos encontramos en un terminal kitty utilizamos el comando **'kitty +kitten icat eloisepass.jpeg'**
+
+![image](https://github.com/user-attachments/assets/5a5fbbc0-2ef0-4560-b4f1-21ff81f7f9c3)
+
+### Level 21 -> Level 22
+* **Misión:** La usuaria lucia ha sido creativa en la forma de guardar su password.
+* **Contraseña lucia:** uvMwFDQrQWPMeGP
+
+Como el usuario **eloise** utilizamos el comando **ls** para listar el contenido del directorio actual, observamos un fichero llamado **hi**, si realizamos un **cat** sobre el mismo para observar un volcado en hexadecimal
+
+![image](https://github.com/user-attachments/assets/a0033da6-6110-46a8-9ca5-cf6c69152ae9)
+
+Para obtener la contraseña del usuario **lucia** podemos utilizar el comando **xxd** con los siguientes parámetros:
+
+* **-r:** Permite revertir la operación y convertir el hexdump a binario.
+
+![image](https://github.com/user-attachments/assets/adbbcf3e-2c0d-450f-8d4f-450a6d7bb50c)
+
+### Level 22 -> Level 23
+* **Misión:** La usuaria isabel ha dejado su password en un fichero en la carpeta /etc/xdg pero no recuerda el nombre, sin embargo tiene dict.txt que puede ayudarle a recordar.
+* **Contraseña isabel:** H5ol8Z2mrRsorC0
+
+Podemos utilizar un bucle **for** con bash el cual busque en la carpeta **/etc/xdg** cada uno de los nombres de archivo listados en **dict.txt**, una vez obtenido el fichero podemos realizar un **cat** o concatenar un **xargs** con un **cat** con un pipe con un bucle
+
+```bash
+for file in `cat dict.txt`; do ls /etc/xdg/$file 2>/dev/null; done
+```
+
+![image](https://github.com/user-attachments/assets/db1acdba-4cc2-49d6-8124-7dd3f5a20cdb)
+
+
+### Level 23 -> Level 24
+* **Misión:** La password de la usuaria freya es el unico string que no se repite en different.txt
+* **Contraseña freya:** EEDyYFDwYsmYawj
+
+Como el usuario **isabel** utilizamos  el comando **ls** para listar el contenido del directorio actual, observamos un fichero de texto con el nombre **different.txt**
+
+![image](https://github.com/user-attachments/assets/8e1ecc7e-3fbc-4cfc-aeb8-62aef9fa24e2)
+
+Podemos utilizar el comando **uniq -u** el cual nos va a permitir imprimir las líneas unicas de un archivo dado.
+
+![image](https://github.com/user-attachments/assets/0e37c1e3-4cc5-4a7e-b01e-52a789fae1e1)
+
+### Level 24 -> Level 25
+* **Misión:** La usuaria alexa pone su password en un fichero .txt en la carpeta /free cada minuto y luego lo borra.
+* **Contraseña alexa:** mxq9O3MSxxX9Q3S
+
+Como el usuario freya podemos utilizar el comando watch, el cual nos va a permitir ejecutar un comando de forma periódica, debemos de añadir los siguiente parámetros:
+
+* **-n:**
+
+![image](https://github.com/user-attachments/assets/d5346f8c-c660-40e5-a2f6-3edb928a1ffb)
+
+Esperamos ejecutando el comando **cat** cada segundo hasta obtener la contraseña del usuario **alexa** con éxito.
+
+![image](https://github.com/user-attachments/assets/f07f1f99-9b34-4495-b168-5e99ed963bcf)
+
+### Level 24 -> Level 25
+* **Misión:** El password de la usuaria ariel esta online! (HTTP)
+* **Contraseña ariel:** 33EtHoz9a0w2Yqo
+
+Como el usuario **alexa** podemos utilizar el comando **curl**, este nos va a permitir realizar una petición web, en este caso a nuestra propia máquina o a la interfaz de red **loopback** que es lo mismo y equivale a la dirección IP **127.0.0.1**, en este caso el **curl** se realiza contra el puerto por defecto ya que no se ha indicado otro, este es el **puerto 80** el mismo en el cual trabaja el protocolo **HTTP** por defecto.
+
+![image](https://github.com/user-attachments/assets/3ccbf3fd-2f07-4fb5-9daf-e282cb11f81e)
+
+### Level 25 -> Level 26
+* **Misión:** Parece ser que a ariel no le dio tiempo a guardar la password de lola... menosmal que hay un temporal!
+* **Contraseña lola:** d3LieOzRGX5wud6
+
+Como el usuario **ariel** realizamos un **ls -a** para lista todo el contenido del directorio actual en el que nos encontramos, podemos observar un archivo tanto peculiar llamado **'.goas.swp'**.
+
+![image](https://github.com/user-attachments/assets/a7cd4979-bee8-4bde-ac96-62a6cabce6ee)
+
+La extensión **.swp** es un **archivo de intercambio** utilizado por el editor de texto **Vim**, estos archivos se crean automáticamente cuando se edita un archivo en Vim y sirven como una **copia de seguridad temporal**. Podemos utilizar el comando **vim** con los siguientes parámetros:
+
+* **-r:** Permite listar el contenido de archivos swap.
+
+![image](https://github.com/user-attachments/assets/6e1a38dd-554c-43c1-b481-dec1bf32624b)
+
+
+Obtenemos un diccionario de contraseñas antiguas y actuales del usuario **lola**
+
+![image](https://github.com/user-attachments/assets/0baff960-da1c-44bd-aee1-9a1e4c08e260)
+
+Guardamos el contenido del fichero **.goas.swp** en un archivo llamado **dict.txt** en el directorio **/tmp**
+
+![image](https://github.com/user-attachments/assets/c498374d-34d2-4f01-82cd-a96c5450aa6a)
+
+Si visualizamos el fichero dict.txt existe mucho texto el cual no deseamos, ya que solo necesitmas las contraseñas para poder ir probando en el futuro con cada una de ellas.
+
+
+Para obtener solo las contraseñas podemos utilizar el comando **sed** el cual nos permitirá sustituir ciertos carácteres, por otro lado podemos redireccionar el output a un nuevo fichero de texto llamado **passwords.txt**
+
+![image](https://github.com/user-attachments/assets/618cd733-53a3-4eed-94f0-d2fb8cfae61c)
+
+![image](https://github.com/user-attachments/assets/687fbf44-166d-40b5-a7e1-fa160fe23a03)
+
+
+Una vez obtenido el fichero **passwords.txt** utilizamos el comando scp y nos trasladamos el fichero **passwords.txt** a nuestro equipo local
+
+![image](https://github.com/user-attachments/assets/5a33d42c-b6d5-45cc-a74d-596e7f153a87)
+
+Empleamos el uso de la herramienta **hydra** para realizar un ataque de fuerza bruta con el diccionario **passwords.txt** contra el protocolo **ssh** y así poder obtener la contraseña del usuario **lola**
+
+![image](https://github.com/user-attachments/assets/9eee46c9-5a94-4fb9-8d66-bc4edd9d091b)
+
+### Level 26 -> Level 27
+* **Misión:** La usuaria celeste ha dejado un listado de nombres de posibles paginas .html donde encontrar su password.
+* **Contraseña celeste:** VLSNMTKwSV2o8Tn
+
+Como el usuario **lola** realizamos un **ls** para obtener el contenido del directorio actual, observamos un fichero de texto llamado **pages.txt**, si realizamos un **cat** sobre el mismo visualizamos posibles páginas donde podemos encontrar la password.
+
+![image](https://github.com/user-attachments/assets/89513ff7-ad5c-4364-91f7-5a512e3d832b)
+
+Si tenemos curiosidad de saber cuantas líneas existen en el fichero **pages.txt** podemos utilizar el comando **wc** acompañado del parámetros **-l (lines)**, e inidicar el archivo **pages.txt**.
+
+![image](https://github.com/user-attachments/assets/fcbfc966-24f1-4ad4-ad14-2b8a5d9cfc8c)
+
+
+Podemos realizar un **Local Port Forwarding** con **SSH** y traer el puerto **80 (HTTP)** de la máquina remota **SSH** a nuestra máquina local como el **puerto 9090**
+
+![image](https://github.com/user-attachments/assets/3d457b2b-19c2-4129-a4aa-5f3097cdb87b)
+
+Una vez realizado el **Local Port Forwarding** utilizamos el comando scp para trasladar el ficheor **pages.txt** a nuestra máquina local.
+
+![image](https://github.com/user-attachments/assets/4383bb61-64dc-4967-b25e-5add1bcf70c8)
+
+Utilizaremos la herramienta **gobuster** para realizar un ataque de fuerza bruta contra directorios utilizando el diccionario **pages.txt**, para ello se usaran los siguientes parámetros:
+
+* **dir:** Especificar que se debe realizar una búsqueda de directorios y archivos en un servidor web.
+* **-w:** Indicar la ruta a la lista de palabras que se va a utilizar para realizar la fuerza bruta.
+* **-u:** Especificar la URL del objetivo que queremos escanear.
+* **-x:** Permite especificar extensiones de archivo como .php, .html ...
+
+![image](https://github.com/user-attachments/assets/1b36c5d0-bc15-4972-9d70-ca6ddcfd385b)
+
+Obtenemos un resultado el cual es **'cebolla.html'**, realizaremos un **curl (petición web)** a la siguiente dirección URL **http://127.0.0.1:9090/cebolla.html** para obtener la password del usuario **celeste**
+
+![image](https://github.com/user-attachments/assets/fdef90c8-f072-4e8c-9925-2217ae9f827c)
