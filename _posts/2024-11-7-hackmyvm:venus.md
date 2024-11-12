@@ -405,7 +405,7 @@ Esperamos ejecutando el comando **cat** cada segundo hasta obtener la contraseñ
 
 ![image](https://github.com/user-attachments/assets/f07f1f99-9b34-4495-b168-5e99ed963bcf)
 
-### Level 24 -> Level 25
+### Level 25 -> Level 26
 * **Misión:** El password de la usuaria ariel esta online! (HTTP)
 * **Contraseña ariel:** 33EtHoz9a0w2Yqo
 
@@ -413,7 +413,7 @@ Como el usuario **alexa** podemos utilizar el comando **curl**, este nos va a pe
 
 ![image](https://github.com/user-attachments/assets/3ccbf3fd-2f07-4fb5-9daf-e282cb11f81e)
 
-### Level 25 -> Level 26
+### Level 26 -> Level 27
 * **Misión:** Parece ser que a ariel no le dio tiempo a guardar la password de lola... menosmal que hay un temporal!
 * **Contraseña lola:** d3LieOzRGX5wud6
 
@@ -454,7 +454,7 @@ Empleamos el uso de la herramienta **hydra** para realizar un ataque de fuerza b
 
 ![image](https://github.com/user-attachments/assets/9eee46c9-5a94-4fb9-8d66-bc4edd9d091b)
 
-### Level 26 -> Level 27
+### Level 27 -> Level 28
 * **Misión:** La usuaria celeste ha dejado un listado de nombres de posibles paginas .html donde encontrar su password.
 * **Contraseña celeste:** VLSNMTKwSV2o8Tn
 
@@ -487,3 +487,63 @@ Utilizaremos la herramienta **gobuster** para realizar un ataque de fuerza bruta
 Obtenemos un resultado el cual es **'cebolla.html'**, realizaremos un **curl (petición web)** a la siguiente dirección URL **http://127.0.0.1:9090/cebolla.html** para obtener la password del usuario **celeste**
 
 ![image](https://github.com/user-attachments/assets/fdef90c8-f072-4e8c-9925-2217ae9f827c)
+
+### Level 28 -> Level 29
+* **Misión:** La usuaria celeste tiene acceso al mysql, pero para que?
+* **Contraseña nina:** ixpeqdWuvC5N9kG
+
+Como el usuario **celeste** utilizamos el comando **mysql** con los siguientes parámetros:
+
+* **-u:** Indicar el nombre usuario para iniciar sesión.
+* **-p:** Indicar la contraseña para conectarse al servidor.
+
+![image](https://github.com/user-attachments/assets/f5003256-f612-4fa0-8596-612979dde652)
+
+Una vez dentro como el usuario **celeste** en **mysql** utilizamos la consulta **'show databases;'** la cual nos va a permitir visualizar listar todas las bases de datos disponibles en el servidor.
+
+![image](https://github.com/user-attachments/assets/c1e791d6-14f9-49e0-a211-56b97705d297)
+
+Utilizamos la consulta **'use venus;'** para seleccionar la base de datos **venus**
+
+![image](https://github.com/user-attachments/assets/e3b21dca-98f6-4d44-b134-c9c06a6a1f90)
+
+Listamos todas las tablas disponibles de la base de datos **venus**, para ello utilizamos la consulta **'show tables;'**
+
+![image](https://github.com/user-attachments/assets/60343575-7e92-42b3-b891-83284a056232)
+
+Observamos que existe una tabla llamada **people**, utilizamos la consulta **'select * from people;'** para imprimir todo el contenido de la tabla, podemos observar nombres de usuarios asociados a una contraseña.
+
+![image](https://github.com/user-attachments/assets/49847c7b-c19c-44cb-82e3-a6ac2df8a3cf)
+
+Si visualizamoss el fichero **/etc/passwd** y lo comparamos con la tabla **people** de la base de datos **venus** encontramos un conincidencia la cual es el usuario **nina**
+
+![image](https://github.com/user-attachments/assets/8598a1a0-f465-45f0-958f-f111234b8250)
+
+![image](https://github.com/user-attachments/assets/56409197-9308-4ace-8d6f-0a07d7a2b241)
+
+Utilizamos la contraseña obtenido para migrar a el usuario **nina**
+
+![image](https://github.com/user-attachments/assets/e890ae8f-2738-45b6-8129-bd49ebb1d957)
+
+### Level 29 -> Level 30
+* **Misión:** La usuaria kira esconde algo en http://localhost/method.php
+* **Contraseña kira:** tPlqxSKuT4eP3yr
+
+Como el usuario **nina** realizamos una petición web con **curl** a la dirección HTTP **http://localhost/method.php**
+
+![image](https://github.com/user-attachments/assets/134df347-19a9-4ff0-9a0b-12a28e7fb12e)
+
+Obtenemos como respuesta que el método por defecto que usa **curl** **(GET)** no es válido para obtener la password, por ello a continuación se detallan los diferentes métodos que existen para realizar peticiones con **curl**:
+
+* **GET:** Utilizado para solicitar datos de un recurso específico.
+* **POST:** Utilizado para enviar datos a procesar a un recurso específico.
+* **PUT:** Permite actualizar un recurso o crear uno nuevo si no existe
+* **DELETE:** Se utiliza para solicitar que se elimine un recurso.
+
+Probamos a relizar una petición web con el comando **curl** y el método **PUT** y obtenemos satisfactoriamente la contraseña del usuario **kira**.
+
+![image](https://github.com/user-attachments/assets/d8ce1de2-4e51-4fdc-afc8-123e15eb8a9b)
+
+### Level 30 -> Level 31
+* **Misión:** 
+* **Contraseña :** 
