@@ -4,22 +4,22 @@
 - type: linkedin
   icon: "fa-brands fa-linkedin"
   url: "https://linkedin.com/in/juancarlos-rr"  
-  noblank: true
+  noblank: false
 
 - type: twitter
   icon: "fa-brands fa-x-twitter"
   url: "https://x.com/ju4ncaa"
-  noblank: true
+  noblank: false
 
 - type: github
   icon: "fab fa-github"
   url: "https://github.com/ju4ncaa"
-  noblank: true
+  noblank: false
 
 - type: htb
   icon: "fas fa-cube"
   url:  "#"
-  noblank: true
+  noblank: false
 
 
 # Uncomment and complete the url below to enable more contact options
