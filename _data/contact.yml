@@ -3,7 +3,7 @@
 
 - type: linkedin
   icon: "fa-brands fa-linkedin"
-  url: "https://www.linkedin.com/in/juancarlos-rr/"  
+  url: "https://linkedin.com/in/juancarlos-rr"  
   noblank: true
 
 - type: twitter
@@ -18,7 +18,7 @@
 
 - type: htb
   icon: "fas fa-cube"
-  url:  ""
+  url:  "#"
   noblank: true
 
 
