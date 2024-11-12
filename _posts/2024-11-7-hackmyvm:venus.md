@@ -545,5 +545,157 @@ Probamos a relizar una petición web con el comando **curl** y el método **PUT*
 ![image](https://github.com/user-attachments/assets/d8ce1de2-4e51-4fdc-afc8-123e15eb8a9b)
 
 ### Level 30 -> Level 31
-* **Misión:** 
-* **Contraseña :** 
+* **Misión:** La usuaria veronica visita mucho http://localhost/waiting.php
+* **Contraseña veronica:** QTOel6BodTx2cwX
+
+Como el usuario **kira** realizamos una petición web con el comando **curl** a la dirección HTTP **http://localhost/waiting.php**, pero obtenemos como respues que se esta esperando el user-agent **PARADISE**
+
+![image](https://github.com/user-attachments/assets/7e5a2775-71be-493d-924e-96f357cc055d)
+***
+Podemos utilizar el comando **curl** con el parámetro **-A**, este nos va a permitir realizar una petición web especificando el user-agent **PARADISE** y obtener la contraseña del usuario **veronica** satisfactoriamente.
+
+![image](https://github.com/user-attachments/assets/1edda2e3-9c16-4a04-bd94-2a412c86021d)
+
+### Level 31 -> Level 32
+* **Misión:** La usuaria veronica usa mucho la password de lana, asi que ha creado un alias.
+* **Contraseña lana:** UWbc0zNEVVops1v
+
+Como el usuario **veronica** podemos utilizar el comando **alias** el cual nos permite visualiar todos los **alias** existentes en la sesión actual y sus correspondientes definiciones.
+
+![image](https://github.com/user-attachments/assets/4cef50b0-7448-46f3-be3e-3ef3fd9e4d58)
+
+### Level 32 -> Level 33
+* **Misión:** A la usuaria noa le gusta comprimir sus cosas.
+* **Contraseña noa:** 9WWOPoeJrq6ncvJ
+
+Como el usuario **lana** nos creamos un directorio temporal con el comando **mktemp -d** en el cual podamos extraer el contenido del comprimido **'zip.gz'**
+
+![image](https://github.com/user-attachments/assets/63e81af6-a63b-4037-872e-1ab851ea2fad)
+
+Utilizamos el comando **gunzip -d** para descomprimir el comprimido **'zip.gz'**, pero obtenemos un error el cual especifica que el comprimido no se encuentra en formato **.gzip**
+
+![image](https://github.com/user-attachments/assets/d2c9fcc3-6563-453a-864e-6cc81c304486)
+
+Utilizamos el comando **file** para ver de que tipo de archivo se trata, observamos que se trata de un comprimido con extensión **.tar**
+
+![image](https://github.com/user-attachments/assets/18f2b111-e57b-4c8e-81be-0bf322b72a26)
+
+Para descromprimir el contenido de **'zip.gz'** utilizamos el comando **tar** con los siguientes parámetros:
+
+* **-x:** Indicar que deseamos extraer los archivos del comprimido.
+* **-v:** Mostrar el progreso en la terminal (verbose).
+* **-f:** Especificar el nombre del archivo.
+
+![image](https://github.com/user-attachments/assets/963b2968-cc36-4343-b62d-cd3760d535ce)
+
+### Level 33 -> Level 34
+* **Misión:** La password de maia esta rodeada de basura
+* **Contraseña maia:** h1hnDPHpydEjoEN
+
+Como el usuario **noa** utilizamos el comando **ls** para listar el contenido del directorio en el que nos encontramos, podemos observar un fichero llamado **'trash'**
+
+![image](https://github.com/user-attachments/assets/8aa6d368-be0c-43fd-99c0-04f1e52bd5d2)
+
+Si utilizamos el comando **cat** para visualizar el contenido del fichero **trash** observamos que nos imprime un montón de cadenas ilegibles para culaquier humano.
+
+![image](https://github.com/user-attachments/assets/b51df0ba-c6e1-4009-aa48-b60b262cdc7f)
+
+Podemos utilizar el comando **strings**, este nos va a permitir mostrar todas las secuencias de caracteres imprimibles que se encuentran en el archivo **'trash'**
+
+![image](https://github.com/user-attachments/assets/9778571d-1077-4720-abe7-7f9a43567127)
+
+### Level 34 -> Level 35
+* **Misión:** La usuaria gloria ha olvidado los 2 ultimos caracteres de su password... Solo recuerdan que eran 2 letras minusculas.
+* **Contraseña gloria:** v7xUVE2e5bjUcxw
+
+Como el usuario **maia** utilizamos el comando **ls** para listar el contenido del directorio en el que nos encontramos, observamos un fichero llamado **forget**, si utilizamos el comando **cat** para imprimir el contenido del mismo somos capaces de visualizar la contraseña del usuario **gloria** a falta de los dos últimos carácteres los cuales son dos letras minúsculas del abecedario.
+
+![image](https://github.com/user-attachments/assets/14cac82e-92e1-46a0-ac9a-c3e94e647dfc)
+
+Podemos utilizr el comando **crunch** en nuestra máquina local para generar una lista de palabras y redireccionar el output a un fichero de texto llamado **'gloriapasswords.txt'**
+
+![image](https://github.com/user-attachments/assets/f45fe791-dacc-405d-b537-bbfa370c2025)
+
+Una vez hemos generado el diccionario de contraseñas posibles utilizaremos la herramienta **hydra** para realizar un ataque de fuerza bruta sobre el protocolo **SSH**
+
+![image](https://github.com/user-attachments/assets/7ee07e01-c1fc-47bb-903f-369d4c44567a)
+
+### Level 35 -> Level 36
+* **Misión:** A la usuaria alora le gustan los dibujos, por eso ha guardado su password como...
+* **Contraseña alora:** mhrTFCoxGoqUxtw
+
+Como el usuario **gloria** utilizamos el comando **ls** para mostrar el contenido del directorio actual, podemos observar un fichero llamado **'image'**, si utilizamos el comando **cat** para imprimir el contenido del fichero **'image'** podemos observar un código QR.
+
+![image](https://github.com/user-attachments/assets/49e4b101-b452-4d7b-9d0c-c592099492ae)
+
+Podemos utilizar cualquier tipo de software el cual nos permita decodear la información del codigo QR.
+
+<div align="center"><img src="https://github.com/user-attachments/assets/c58ce3b3-0b25-41ec-8001-1fc5d8d505a0" alt="qrcode"></div>
+
+### Level 36 -> Level 37
+* **Misión:** La usuaria julie ha creado una iso con su password.
+* **Contraseña julie:** sjDf4i2MSNgSvOv
+
+Como el usuario **alora** utilizamos el comando **ls** para listar el contenido del directorio actual en el que nos encontramos, puediendo observar un archivo con extesión **.iso** llamado **'music.iso'**, si realizamos un cat sobre este archivo observamos cadenas de texto ilegibles por culaquier humano.
+
+![image](https://github.com/user-attachments/assets/64c21adc-2a27-4db0-9a7e-f5088d9fb13a)
+
+Una opcion es utilizar el comando **strings** el cual nos va a permitir extraer cadenas legibles de un archivo.
+
+![image](https://github.com/user-attachments/assets/19ad58d4-ae0a-413e-84ca-e7085a6e5334)
+
+Otra opción es utilizar el comando **scp** para trasladar el archivo **music.iso** a la máquina local, una vez trasladado montar la **iso** con el comando **mount** y extraer el contenido de la misma con el comando **unzip -p**.
+
+![image](https://github.com/user-attachments/assets/9e901b1e-1b77-4887-b5d2-300bb37e529b)
+
+![image](https://github.com/user-attachments/assets/825f54dc-751d-464f-95d7-78f960af023c)
+
+![image](https://github.com/user-attachments/assets/68666f2b-ecf0-47ba-8422-af1714d7745e)
+
+### Level 37 -> Level 38
+* **Misión:** La usuaria irene cree que en la diferencia esta lo bonito.
+* **Contraseña irene:** 8VeRLEFkBpe2DSD
+
+Como el usuario **julie** utilizamos el comando **ls** para mostrar el contenido del directorio actual en el que nos encontramos. Podemos observar dos ficheros de texto **'1.txt'** y **'2.txt'**.
+
+![image](https://github.com/user-attachments/assets/dbb50b35-f7cf-4db5-8e61-e74c724f9efb)
+
+Utilizamos el comando **head** para mostrar las primeras 5 líneas de los archivos **'1.txt'** **'2.txt'**, las primeras lineas mostradas de los dos archivos coinciden.
+
+![image](https://github.com/user-attachments/assets/7193d6a8-c266-4f11-b1ba-f903eb1a705d)
+
+Para obtenr la password del usuario **irene** utilizaremos el comando **diff** el cual nos va a permitir mostrar las diferencias entre los archivos de texto **'1.txt'** y **'2.txt'**.
+
+![image](https://github.com/user-attachments/assets/33e5c75c-7fb3-4d6b-ba72-100f6ac6717c)
+
+### Level 38 -> Level 39
+* **Misión:** La usuaria adela le ha dejado prestada su password a irene.
+* **Contraseña adela:** nbhlQyKuaXGojHx
+
+Como el usuario **irene** utilizamos el comando **ls** para mostrar el contenido del directorio actual en el que nos encontramos. Podemos observar tres ficheros de **'id_rsa.pub'**, **'id_rsa.pem'** y **'pass.enc'**.
+
+![image](https://github.com/user-attachments/assets/77ca9d08-248a-4f24-bcad-3f1d3af0aae0)
+
+Podemos utilizar el comando **openssl** y su subcomando **pkeyutl**, este nos va a permitir descifrar el contenido del archivo encriptado **'pass.enc'**
+
+![image](https://github.com/user-attachments/assets/c3ea6243-cae7-4fca-baaa-d46346af2e1c)
+
+### Level 39 -> Level 40
+* **Misión:** La usuaria sky ha guardado su password en algo que puede ser escuchado.
+* **Contraseña sky:** papaparadise
+
+Una vez hemos migrado a el usuario **adela** utilizamos el comando **ls** para mostrar el contenido del directorio actual en el que nos encontramos. Observamos un fichero llamado **'wtf'**, si utilizamos el comando **cat** para mostrar el contenido del mismo podemos observar que se trata de una cadena en codigo morse
+
+![image](https://github.com/user-attachments/assets/bbd23eca-3bd6-4a7a-a21c-5534fa6eab9b)
+
+Para descifrar la cadena en código morse podemos utilizar la herramienta **[CyberChef](https://gchq.github.io/CyberChef/)** la cual se considera el cuchillo suizo cibernético.
+
+![image](https://github.com/user-attachments/assets/7c7ae37b-ac41-4c37-967d-59d1ac557d31)
+
+Convertimos la contraseña de mayúsculas a minúsculas con el comando **tr**
+
+![image](https://github.com/user-attachments/assets/21318f53-4b3d-4b72-bb02-4990f3e578b4)
+
+Migramos al usuario sky como el comando **su**
+
+![image](https://github.com/user-attachments/assets/d459e767-8f1c-429d-a438-8abddea72972)
