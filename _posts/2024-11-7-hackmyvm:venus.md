@@ -664,7 +664,7 @@ Utilizamos el comando **head** para mostrar las primeras 5 líneas de los archiv
 
 ![image](https://github.com/user-attachments/assets/7193d6a8-c266-4f11-b1ba-f903eb1a705d)
 
-Para obtenr la password del usuario **irene** utilizaremos el comando **diff** el cual nos va a permitir mostrar las diferencias entre los archivos de texto **'1.txt'** y **'2.txt'**.
+Para obtener la password del usuario **irene** utilizaremos el comando **diff** el cual nos va a permitir mostrar las diferencias entre los archivos de texto **'1.txt'** y **'2.txt'**.
 
 ![image](https://github.com/user-attachments/assets/33e5c75c-7fb3-4d6b-ba72-100f6ac6717c)
 
@@ -699,3 +699,112 @@ Convertimos la contraseña de mayúsculas a minúsculas con el comando **tr**
 Migramos al usuario sky como el comando **su**
 
 ![image](https://github.com/user-attachments/assets/d459e767-8f1c-429d-a438-8abddea72972)
+
+### Level 40 -> Level 41
+* **Misión:** La usuaria sarah utiliza header para http://localhost/key.php
+* **Contraseña sarah:** LWOHeRgmIxg7fuS
+
+Como el usuario **sky** utilizamos el comando **curl** para realizar una peticióin web a **http://localhost/key.php**, obtenemos la siguientes respuesta: **Key header is true?**
+
+![image](https://github.com/user-attachments/assets/c8dccef7-2eb9-41a2-8e9c-5657e85d642f)
+
+Podemos emplear el parámetro **-H** con el comando **curl** esto nos va a permitir establecer un encabezado HTTP personalizado el cual sea **'key:true'**
+
+![image](https://github.com/user-attachments/assets/2fe6c8c7-1173-40cf-bc04-69369e74165d)
+
+### Level 41 -> Level 42
+* **Misión:** La password de mercy esta oculta en este directorio.
+* **Contraseña mercy:** ym5yyXZ163uIS8L
+
+Una vez hemos migrado a el usuario **sarah** utilizamos el comando **ls -a** para mostrar todo el contenido del directorio actual en el que nos encontramos. Observamos un archivo llamado **'...'** al cual si realizamos un cat para mostrar su contenido obtenemos la contraseña del usuario **mercy**
+
+![image](https://github.com/user-attachments/assets/a13f3733-d624-452c-a226-4e2e91aca4e1)
+
+### Level 42 -> Level 43
+* **Misión:** La usuaria mercy siempre se equivoca con la password de paula.
+* **Contraseña paula:** dlHZ6cvX6cLuL8p
+
+Una vez hemos migrado a el usuario **mercy** utilizamos el comando **ls -a** para mostrar todo el contenido del directorio actual en el que nos encontramos. Observamos un archivo llamado **'.bash_history'**, este archivo almacena el historial de comandos que se han ejecutado en la terminal de **Bash**, si utilizamos el comando cat para mostrar el contenido del archivo **'.bash_history'** obtenemos la contraseña del usuario paula en texto claro.
+
+![image](https://github.com/user-attachments/assets/8e06b9c6-4129-4182-92f4-6e0550681ab8)
+
+### Level 43 -> Level 44
+* **Misión:** La usuaria karla confia en mi, es parte de mi grupo de amigos.
+* **Contraseña karla:** gYAmvWY3I7yDKRf
+
+Como el usuario **paula** utilizamos el comando **id** para comprobar los grupos a los que pertenece, se puede observar un grupo fuera de lo común el cual es **'hidden'**, podemos utilizar el comando **find** para buscar por archivos los cuales el grupo propietario de los mismos sea **'hidden'**, por otro lado concatenar un cat para imprimir el contenido de los mismos.
+
+![image](https://github.com/user-attachments/assets/fa64e825-5a2e-421b-a542-f86c5b929244)
+
+### Level 44 -> Level 45
+* **Misión:** La usuaria denise ha guardado su password en la imagen.
+* **Contraseña denise:** pFg92DpGucMWccA
+
+Como el usuario **julie** utilizamos el comando **ls** para mostrar el contenido del directorio actual en el que nos encontramos. Podemos observar un archivo llamado **'yuju.jpg'**
+
+![image](https://github.com/user-attachments/assets/595eee18-e9d2-47e0-b5c2-5e392a0d745b)
+
+Utilizamos el comando **scp** para trasladar el archivo **'yuju.jpg'** a nuestra máquina local y poder trabajar mas comodamente.
+
+![image](https://github.com/user-attachments/assets/3e040511-4de1-4ad9-8358-b266900b101a)
+
+Podemos utilizar una herramienta como **Exiftool** la cual permite analizar, editar y manipular metadatos, en este caso lo heramos con archivo de tipo **'.jpg'**, llegamos a observar en apartado **about** la contraseña del usuario **denise**
+
+![image](https://github.com/user-attachments/assets/ca89b991-36e5-4f85-9940-3dc3dba09243)
+
+### Level 45 -> Level 46
+* **Misión:** La usuaria zora no deja de gritar doas!
+* **Contraseña zora:** BWm1R3jCcb53riO
+
+El comando **doas** permite ejecutar comandos como otro usuario, es algo parecido a sudo, por lo que la sintaxis es muy parecida.
+
+![image](https://github.com/user-attachments/assets/339419e2-7fe0-4efa-97bb-34477228f132)
+
+Una vez hemos migrado al usuario **zora** visualizamos su password.
+
+![image](https://github.com/user-attachments/assets/de3755d3-a8eb-4fb6-a4de-cc56eb0bc869)
+
+### Level 46 -> Level 47
+* **Misión:** La usuaria belen ha dejado su password en venus.hmv
+* **Contraseña belen:** 2jA0E8bQ4WrGwWZ
+
+Como el usuario **zora** utilizamos el comando **curl** para realizar una petición web, a este le combinamos el parámetro **-H**, este nos va a permitir indicar en la cabecera HTTP que el **HOST** es **venus.hmv** y así poder obtener el password del usuario **belen**
+
+![image](https://github.com/user-attachments/assets/99a28cae-542c-4e81-bab1-78d7f5b4f5ec)
+
+
+### Level 47 -> Level 48
+* **Misión:** Parece que belen ha robado el password de la usuaria leona..
+* **Contraseña leona:** freedom
+
+Una vez hemos migrado a el usuario **belen** utilizamos el comando **ls -a** para mostrar todo el contenido del directorio actual en el que nos encontramos. Observamos un archivo de texto llamado **'stolen.txt'**, si utilizamos el comando **cat** para el contenido del archivo observamos un hash
+
+![image](https://github.com/user-attachments/assets/24d9d6cf-1e09-436d-9f97-f32723ca6096)
+
+Podemos utilizar la herramienta **John The Ripper** la cual permite descifrar hashes en diferentes formatos de encriptación.
+
+![image](https://github.com/user-attachments/assets/c882c07d-cd54-468e-80b1-aebe35f05e16)
+
+### Level 48 -> Level 49
+* **Misión:** La usuaria ava juega mucho con el DNS de venus.hmv ultimamente...
+* **Contraseña ava:** oCXBeeEeYFX34NU
+
+Como el usuario **leona** nos dirigimos al directorio de configuración de servidores DNS **/etc/bind**, y en el fichero **db.venus.hmv** observamos un registro **TXT** el cual contiene la password del usuario **ava**
+
+![image](https://github.com/user-attachments/assets/c620c8d8-677f-4528-80da-50ea54daff33)
+
+### Level 49 -> Level 50
+* **Misión:** El password de maria esta en algun lugar...
+* **Contraseña maria:** 
+
+Creamos un diccionario con las contraseñas obtenidas de todos los usuarios hasta el momento, ya que se puede dar la reutilización de contraseñas. y con la herramienta **hydra** realizamos un ataque de fuerza bruta contra el protocolo **SSH** pero no hay suerte.
+
+![image](https://github.com/user-attachments/assets/45833b58-dd50-4448-9fe4-3cb974cc6dd8)
+
+Recuerdo que habia una password la cual estaba también, esta se encontraba en codigo morse y no la hemos contemplado en nuestro diccionario de posibles contraseñas...
+
+![image](https://github.com/user-attachments/assets/4d877f6a-3b6d-4672-8c6b-5ad1f8119f5a)
+
+Migramos a el usuario final **maria**
+
+![image](https://github.com/user-attachments/assets/6e6a1af3-05d5-4538-9d72-a3953aec65c5)
