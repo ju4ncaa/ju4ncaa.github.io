@@ -14,4 +14,4 @@ Me llamo Juan Carlos Rodríguez, tengo 18 años, actualmente me encuentro estudi
 ## Apoya mi contenido
 Si encuentras útil el contenido y deseas apoyar este proyecto, puedes hacerlo a través de mi página de Buy Me a Coffee. Tu apoyo me permitirá seguir compartiendo más recursos y conocimientos con la comunidad. ¡Gracias por visitar!
 
-<script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="jcrrdeveloe" data-color="#FFDD00" data-emoji="☕"  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script>
+<a href="https://www.buymeacoffee.com/jcrrdeveloe"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=jcrrdeveloe&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" /></a>
