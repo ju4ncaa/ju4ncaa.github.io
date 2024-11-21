@@ -67,6 +67,14 @@ En el archivo **robots.txt** podemos observar un directorio llamado **s3cr3t** a
 ![image](https://github.com/user-attachments/assets/525380a3-2cee-4200-8b74-b735838d31e7)
 
 ### Level 4 -> Level 5
-* **Contraseña natas5:** 
+* **Contraseña natas5:** 0n35PkggAPm2zbEpOU802c0x0Msn1ToK
 * **URL:** http://natas4.natas.labs.overthewire.org
-* **Misión:** Acceso denegado. Usted está visitando desde "" mientras que los usuarios autorizados deben venir sólo de "http://natas5.natas.labs.overthewire.org/"
+* **Misión:** Acceso denegado, estás visitando desde `"http://natas4.natas.labs.overthewire.org/"` mientras que los usuarios autorizados deben venir sólo de `"http://natas5.natas.labs.overthewire.org/"`
+
+Podemos observar las **cabeceras de solicitud** en concreto el **Referer** que es la dirección de la página web desde la que se realiza la solicitud.
+
+![image](https://github.com/user-attachments/assets/2cc9f763-7740-46af-9574-e79b84745bf5)
+
+Interceptamos la petición con el proxy BurpSuite y cambiamos el Referer a **http://natas5.natas.labs.overthewire.org/**
+
+![image](https://github.com/user-attachments/assets/b50f2d73-84e7-40e4-b38a-34b211ee9e6a)
