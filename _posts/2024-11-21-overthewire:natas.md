@@ -139,3 +139,33 @@ Si visualizamos el codigo fuente podemos ver un comentario HTML el cual contiene
 Intentamos listar la contraseña de **natas8** en **/etc/natas_webpass/natas8** igual que hicimos con **/etc/passwd**, conseguimos obtener la contraseña con éxito.
 
 ![image](https://github.com/user-attachments/assets/fb0d3d1b-ba35-4d53-a0ba-577863e799c3)
+
+### Level 8 -> Level 9
+* **Contraseña natas9:** 
+* **URL:** http://natas8.natas.labs.overthewire.org
+* **Misión:** Introduce el secreto para obtener la contraseña del usuario natas9
+
+Observamos un campo donde se nos permite introducir una frase secreta.
+
+![image](https://github.com/user-attachments/assets/be59b792-66a0-4085-93b4-bf56656a0056)
+
+
+Observamos el codigo fuente, podemos ver un codigo **PHP** este tiene una función llamada **encodeSecret** y una variable **encodedSecret**
+
+![image](https://github.com/user-attachments/assets/1aec429e-ec64-4f9a-9f16-02db9751d148)
+
+En la función **encodedSecret** se estan utilizando la funciónes **bin2hex()** la cual convierte datos binarios en su representación hexadecimal, y por otro lado **strrev()** la cual invierte una string, por ultimo la función **base64_encode()** la cual convierte la cadena a base64, para obtener la frase secreta debemos de realizar el proceos inverso. 
+
+```php
+<?php
+    echo (hex2bin("3d3d516343746d4d6d6c315669563362")); 
+    echo "\n";
+    echo (strrev(hex2bin("3d3d516343746d4d6d6c315669563362"))); 
+    echo "\n";
+    echo (base64_decode(strrev(hex2bin("3d3d516343746d4d6d6c315669563362"))));
+    echo "\n";
+?>
+
+```
+
+![image](https://github.com/user-attachments/assets/a31f66fe-d55b-4600-9a32-da2bec0f0e88)
