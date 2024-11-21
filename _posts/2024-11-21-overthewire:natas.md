@@ -30,4 +30,4 @@ Utilizamos el shortcut **Ctrl + U**, esto nos permite visualizar el codigo fuent
 
 Utilizamos el shortcut **Ctrl + U**, esto nos permite visualizar el codigo fuente de la página de la misma forma que haciendo clic derecho y seleccionar **View Page Source**, observamos que en un comentario HTML se encuentra la contraseña de **natas2**
 
-![image](https://github.com/user-attachments/assets/ecc05a80-30b6-4c99-a62c-842204095e08)
+![image](https://github.com/user-attachments/assets/fd24ea3e-74e4-4418-8512-e8759604f9a0)
