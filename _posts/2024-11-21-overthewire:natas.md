@@ -141,7 +141,7 @@ Intentamos listar la contraseña de **natas8** en **/etc/natas_webpass/natas8** 
 ![image](https://github.com/user-attachments/assets/fb0d3d1b-ba35-4d53-a0ba-577863e799c3)
 
 ### Level 8 -> Level 9
-* **Contraseña natas9:** 
+* **Contraseña natas9:** ZE1ck82lmdGIoErlhQgWND6j2Wzz6b6t
 * **URL:** http://natas8.natas.labs.overthewire.org
 * **Misión:** Introduce el secreto para obtener la contraseña del usuario natas9
 
@@ -156,9 +156,35 @@ Observamos el codigo fuente, podemos ver un codigo **PHP** este tiene una funci�
 
 En la función **encodedSecret** se estan utilizando la funciónes **bin2hex()** la cual convierte datos binarios en su representación hexadecimal, y por otro lado **strrev()** la cual invierte una string, por ultimo la función **base64_encode()** la cual convierte la cadena a base64, para obtener la frase secreta debemos de realizar el proceos inverso. 
 
-![image](https://github.com/user-attachments/assets/e29cc087-0504-4ba4-b7d5-da0efa3899c3)
+![image](https://github.com/user-attachments/assets/8b4fff4c-2835-41f2-af64-4d229d9aa01e)
 
-![image](https://github.com/user-attachments/assets/1a845a4c-0608-42b6-8b00-7b9d23a5e8d2)
+![image](https://github.com/user-attachments/assets/29b2b6cb-1bd6-4d76-8a0b-f1dfa394c7bf)
 
 Introducimos la frase secreta y obtenemos ls contraseña de **natas9**
 
+![image](https://github.com/user-attachments/assets/baf55b74-dbfe-4587-bbf3-2214123a6d1d)
+
+### Level 9 -> Level 10
+* **Contraseña natas10:** 
+* **URL:** http://natas9.natas.labs.overthewire.org
+* **Misión:**
+
+Observamos un campo que nos permite buscar palabras que contengan que contenga las letras que le indiquemos.
+
+![image](https://github.com/user-attachments/assets/810d256a-e4a5-4401-9d85-026c4ab536dd)
+
+Si revisamos el codigo **PHP** podemos observar que se está utilizando la función **passthru()**, esta función permite ejecutar un programa externo y muestra la salida en bruto, en este case se utiliza el comando grep y se muestra su salida en el navegador.
+
+![image](https://github.com/user-attachments/assets/c9c8dd64-6f90-435a-952d-4522c2a83c4f)
+
+Se nos permite ingresar comandos los cuales se pasan a **passthru()**, lo cual puede desembocar en una inyección de comandos, para evitar estas situaciones se recomienda utilizar la función **escapecmdshell()** sanitizando cualquier entrada del usuario antes de pasarla a **passthru()**
+
+![image](https://github.com/user-attachments/assets/50d17d73-f04f-4ab5-a076-e09817c13723)
+
+![image](https://github.com/user-attachments/assets/45047a87-73dc-4c51-b289-bc3f9d0d6242)
+
+La contraseña de **natas8**  se encontraba en **/etc/natas_webpass/natas8**, por lo que aprovechare el command injection para mediante el comando **cat** mostrar la contraseña de **natas 10** en **/etc/natas_webpass/natas10**
+
+![image](https://github.com/user-attachments/assets/e8b22015-feb2-4064-9b9e-b68e2cec4bbe)
+
+![image](https://github.com/user-attachments/assets/e50a2fed-90ec-4289-8d1d-473ee9e680fe)
