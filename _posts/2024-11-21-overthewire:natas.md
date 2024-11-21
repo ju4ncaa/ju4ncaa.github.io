@@ -1,7 +1,7 @@
 ---
 title: Resolución CTF OverTheWire:Natas, Level 0-34 Write-Up
 description: En este apartado se resuleven los 34 niveles del CTF de OverTheWire Natas.
-date: 2024-11-6
+date: 2024-11-21
 categories: [CTFs]
 tags: [CTFs, Linux]
 img_path: https://i.ibb.co/NsS3QzS/natas.png
