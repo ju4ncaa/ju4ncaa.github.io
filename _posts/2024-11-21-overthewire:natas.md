@@ -78,3 +78,29 @@ Podemos observar las **cabeceras de solicitud** en concreto el **Referer** que e
 Interceptamos la petición con el proxy BurpSuite y cambiamos el Referer a **http://natas5.natas.labs.overthewire.org/**
 
 ![image](https://github.com/user-attachments/assets/b50f2d73-84e7-40e4-b38a-34b211ee9e6a)
+
+### Level 5 -> Level 6
+* **Contraseña natas6:** 0RoJwHdSKWFTYR5WuiAewauSuNaBXned
+* **URL:** http://natas5.natas.labs.overthewire.org
+* **Misión:**  Acceso denegado, no has iniciado sesión
+
+Interceptamos la petiicón con el proxy BurpSuite y observamos que el Header Cookie tiene el paráemtro `logeddin=0`
+
+![image](https://github.com/user-attachments/assets/efda2130-6213-44d1-9aaa-9afac32fdf00)
+
+Supongo que `**0 es igual a False**` y `**1 es igual a True**`, lo que me permitirá indicar que si esto logeado como el usuario **natas5**
+
+![image](https://github.com/user-attachments/assets/4f144080-26e0-4f58-aa99-78b851267aad)
+
+### Level 6 -> Level 7
+* **Contraseña natas7:** 
+* **URL:** http://natas6.natas.labs.overthewire.org
+* **Misión:** Introduce el secreto para obtener la contraseña del usuario natas7
+
+Observamos un campo donde se nos permite introducir una frase secreta.
+
+![image](https://github.com/user-attachments/assets/0f7d6943-63eb-4845-8813-1e28eecc8c15)
+
+Observamos el codigo fuente, podemos ver un codigo **PHP** el cual se encarga de validar a través del método **POST** que lo que introducimos en el input equivale a la frase secreta, de ser así nos muestra la contraseña de **natas7** y si no es así se nos muestra `Wrong secret`
+
+![image](https://github.com/user-attachments/assets/c6e6ff76-d95c-4ad0-80fc-dad7429332af)
