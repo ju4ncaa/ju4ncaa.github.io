@@ -65,3 +65,8 @@ En el archivo **robots.txt** podemos observar un directorio llamado **s3cr3t** a
 ![image](https://github.com/user-attachments/assets/8963064a-396c-4680-b7ef-8b63a411fdd2)
 
 ![image](https://github.com/user-attachments/assets/525380a3-2cee-4200-8b74-b735838d31e7)
+
+### Level 4 -> Level 5
+* **Contraseña natas5:** 
+* **URL:** http://natas4.natas.labs.overthewire.org
+* **Misión:** Acceso denegado. Usted está visitando desde "" mientras que los usuarios autorizados deben venir sólo de "http://natas5.natas.labs.overthewire.org/"
