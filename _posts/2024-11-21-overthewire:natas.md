@@ -41,8 +41,27 @@ Observamos el codigo fuente y observamos que hay una imagen llamado **pixel.png*
 
 ![image](https://github.com/user-attachments/assets/eb92e349-fbf3-4e65-9e41-59caf1b01b2f)
 
-Nos dirigimos a el directorio **/files** donde podemos observar un fichero de texto llamado **users.txt**, dentro del mismo se encuentra la contraseña de natas3.
+Nos dirigimos a el directorio **/files** donde podemos observar un fichero de texto llamado **users.txt**, dentro del mismo se encuentra la contraseña de **natas3**.
 
 ![image](https://github.com/user-attachments/assets/444ea6fb-7230-4879-9346-5190b11420f4)
 
 ![image](https://github.com/user-attachments/assets/c8394321-ea92-40fa-9388-d421f87fcfa2)
+
+### Level 3 -> Level 4
+* **Contraseña natas4:** 
+* **URL:** http://natas3.natas.labs.overthewire.org
+* **Misión:**  No hay nada en esta página
+
+Utilizamos el shortcut **Ctrl + U** para inspeccionar el codigo fuente de la página pero no encontramos ninguna fuga de información.
+
+![image](https://github.com/user-attachments/assets/765b0549-34fc-40ad-bae7-2eeccf330d80)
+
+Existe un archivo llamado **robots.txt** el cual contiene estructura de un sitio web, si este se encuentra habilitado puede contener información valiosa.
+
+![image](https://github.com/user-attachments/assets/8902600d-02d1-4849-9a71-4147d45ad2c2)
+
+En el archivo **robots.txt** podemos observar un directorio llamado **s3cr3t** al cual si accedemos podemos ver un fichero llamado **users.txt** dentro del mismo se encuentra la contraseña de **natas4**.
+
+![image](https://github.com/user-attachments/assets/8963064a-396c-4680-b7ef-8b63a411fdd2)
+
+![image](https://github.com/user-attachments/assets/525380a3-2cee-4200-8b74-b735838d31e7)
