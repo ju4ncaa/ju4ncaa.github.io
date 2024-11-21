@@ -13,12 +13,21 @@ En este apartado se resuelven los 33 niveles del CTF de OverTheWire Natas. Estos
 
 ### Level 0 -> Level 1
 * **Nombre de usuario** natas0
-* **Contraseña bandit0:** natas0
+* **Contraseña natas0:** natas0
 * **URL:** http://natas0.natas.labs.overthewire.org
 * **Misión:** Encontrar la contraseña para el siguiente nivel (natas1) en esta página.
-* **Contraseña bandit1:** 0nzCigAq7t2iALyvU9xcHlYN4MlkIwlq
+* **Contraseña natas1:** 0nzCigAq7t2iALyvU9xcHlYN4MlkIwlq
 
 
 Utilizamos el shortcut **Ctrl + U**, esto nos permite visualizar el codigo fuente de la página donde en un comentario HTML se encuentra la contraseña de **natas1**
 
 ![image](https://github.com/user-attachments/assets/b58d1b7f-51a8-47f1-aeca-147f3a04d039)
+
+### Level 1 -> Level 2
+* **Contraseña natas2:** TguMNxKo1DSa1tujBLuZJnDUlCcUAPlI
+* **URL:** http://natas1.natas.labs.overthewire.org
+* **Misión:** Encontrar la contraseña para el siguiente nivel en esta página, ¡pero el botón derecho del ratón ha sido bloqueado!
+
+Utilizamos el shortcut **Ctrl + U**, esto nos permite visualizar el codigo fuente de la página de la misma forma que haciendo clic derecho y seleccionar **View Page Source**, observamos que en un comentario HTML se encuentra la contraseña de **natas2**
+
+![image](https://github.com/user-attachments/assets/ecc05a80-30b6-4c99-a62c-842204095e08)
