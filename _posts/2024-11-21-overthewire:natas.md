@@ -156,16 +156,9 @@ Observamos el codigo fuente, podemos ver un codigo **PHP** este tiene una funci�
 
 En la función **encodedSecret** se estan utilizando la funciónes **bin2hex()** la cual convierte datos binarios en su representación hexadecimal, y por otro lado **strrev()** la cual invierte una string, por ultimo la función **base64_encode()** la cual convierte la cadena a base64, para obtener la frase secreta debemos de realizar el proceos inverso. 
 
-```php
-<?php
-    echo (hex2bin("3d3d516343746d4d6d6c315669563362")); 
-    echo "\n";
-    echo (strrev(hex2bin("3d3d516343746d4d6d6c315669563362"))); 
-    echo "\n";
-    echo (base64_decode(strrev(hex2bin("3d3d516343746d4d6d6c315669563362"))));
-    echo "\n";
-?>
+![image](https://github.com/user-attachments/assets/e29cc087-0504-4ba4-b7d5-da0efa3899c3)
 
-```
+![image](https://github.com/user-attachments/assets/1a845a4c-0608-42b6-8b00-7b9d23a5e8d2)
 
-![image](https://github.com/user-attachments/assets/a31f66fe-d55b-4600-9a32-da2bec0f0e88)
+Introducimos la frase secreta y obtenemos ls contraseña de **natas9**
+
