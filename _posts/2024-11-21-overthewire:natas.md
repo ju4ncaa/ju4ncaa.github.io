@@ -4,8 +4,8 @@ description: En este apartado se resuleven los 34 niveles del CTF de OverTheWire
 date: 2024-11-6
 categories: [CTFs]
 tags: [CTFs, Linux]
-img_path: https://i.ibb.co/3kF0PSm/2024-11-06-19-19.png
-image: https://i.ibb.co/3kF0PSm/2024-11-06-19-19.png
+img_path: https://i.ibb.co/NsS3QzS/natas.png
+image: https://i.ibb.co/NsS3QzS/natas.png
 ---
 
 ## **Introducción**
