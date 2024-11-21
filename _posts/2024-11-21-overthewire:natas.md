@@ -31,3 +31,18 @@ Utilizamos el shortcut **Ctrl + U**, esto nos permite visualizar el codigo fuent
 Utilizamos el shortcut **Ctrl + U**, esto nos permite visualizar el codigo fuente de la página de la misma forma que haciendo clic derecho y seleccionar **View Page Source**, observamos que en un comentario HTML se encuentra la contraseña de **natas2**
 
 ![image](https://github.com/user-attachments/assets/fd24ea3e-74e4-4418-8512-e8759604f9a0)
+
+### Level 2 -> Level 3
+* **Contraseña natas3:** 3gqisGdR0pjm6tpkDKdIWO2hSvchLeYH
+* **URL:** http://natas2.natas.labs.overthewire.org
+* **Misión:**  No hay nada en esta página
+
+Observamos el codigo fuente y observamos que hay una imagen llamado **pixel.png** que se carga desde el directorio **/files**
+
+![image](https://github.com/user-attachments/assets/eb92e349-fbf3-4e65-9e41-59caf1b01b2f)
+
+Nos dirigimos a el directorio **/files** donde podemos observar un fichero de texto llamado **users.txt**, dentro del mismo se encuentra la contraseña de natas3.
+
+![image](https://github.com/user-attachments/assets/444ea6fb-7230-4879-9346-5190b11420f4)
+
+![image](https://github.com/user-attachments/assets/c8394321-ea92-40fa-9388-d421f87fcfa2)
