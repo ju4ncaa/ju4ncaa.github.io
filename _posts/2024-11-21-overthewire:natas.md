@@ -93,7 +93,7 @@ Supongo que `**0 es igual a False**` y `**1 es igual a True**`, lo que me permit
 ![image](https://github.com/user-attachments/assets/4f144080-26e0-4f58-aa99-78b851267aad)
 
 ### Level 6 -> Level 7
-* **Contraseña natas7:** 
+* **Contraseña natas7:** bmg8SvU1LizuWjx3y7xkNERkHxGre0GS
 * **URL:** http://natas6.natas.labs.overthewire.org
 * **Misión:** Introduce el secreto para obtener la contraseña del usuario natas7
 
@@ -101,6 +101,41 @@ Observamos un campo donde se nos permite introducir una frase secreta.
 
 ![image](https://github.com/user-attachments/assets/0f7d6943-63eb-4845-8813-1e28eecc8c15)
 
-Observamos el codigo fuente, podemos ver un codigo **PHP** el cual se encarga de validar a través del método **POST** que lo que introducimos en el input equivale a la frase secreta, de ser así nos muestra la contraseña de **natas7** y si no es así se nos muestra `Wrong secret`
+Observamos el codigo fuente, podemos ver un codigo **PHP** el cual se encarga de validar a través del método **POST** que lo que introducimos en el input equivale a la frase secreta, de ser así nos muestra la contraseña de **natas7** y si no es así se nos muestra `Wrong secret`, por ultimo y lo mas importante es que al princpio del codigo se incluye el siguiente archivo `"includes/secret.inc"`
 
 ![image](https://github.com/user-attachments/assets/c6e6ff76-d95c-4ad0-80fc-dad7429332af)
+
+Intentamos ver que contiene el archivo `"includes/secret.inc"`, no observamos nada, si utilizamos el shortcut **Ctrl + U** podemos ver en el codigo fuente la frase secreta.
+
+![image](https://github.com/user-attachments/assets/b4a5c739-705e-41e3-b46a-0e2d2a4bc9b1)
+
+![image](https://github.com/user-attachments/assets/c24c25ca-e605-4f29-82c2-d4145c0d4a56)
+
+Introducimos la frase secrete y obtenemos la contraseña de **natas7**
+
+![image](https://github.com/user-attachments/assets/63dbc6d5-1ccc-4890-a88b-280005c8dc2e)
+
+### Level 7 -> Level 8
+* **Contraseña natas8:** xcoXLmzMkoIP9D7hlgPlh9XD7OgLAe5Q 
+* **URL:** http://natas7.natas.labs.overthewire.org
+* **Misión:** Obtener la contraseña de natas8 a través de un LFI (Local File Inclusion)
+
+En la página principal observamos dos enlaces uno llamado **Home** y otro **About**
+
+![image](https://github.com/user-attachments/assets/6415b849-1b4a-4e7b-a976-3ed7f9ca89d7)
+
+Si nos fijamos en la url se apuntas hacia estos enlaces a través de un parámetro por GET llamado **?page=**
+
+![image](https://github.com/user-attachments/assets/6cff0f55-f730-4aed-a8ee-283a54eeed40)
+
+Se están cargando archivos del sistema a través del parametro GET **?page=**, esta mala practica es tipica de la vulnerabilidad LFI (Local File Inclusion) la cual nos permite como atacantes apuntar hacia archivos locales del sistema y ver su contenido, por ejemplo **(/etc/passwd)**
+
+![image](https://github.com/user-attachments/assets/81df185d-1702-4635-bd6c-7a7ccc1301d3)
+
+Si visualizamos el codigo fuente podemos ver un comentario HTML el cual contiene una filtración de información donde indica que la contraseña de **natas8** se encuentra en **/etc/natas_webpass/natas8**
+
+![image](https://github.com/user-attachments/assets/70d1acbc-c10b-4fac-b615-571679291540)
+
+Intentamos listar la contraseña de **natas8** en **/etc/natas_webpass/natas8** igual que hicimos con **/etc/passwd**, conseguimos obtener la contraseña con éxito.
+
+![image](https://github.com/user-attachments/assets/fb0d3d1b-ba35-4d53-a0ba-577863e799c3)
