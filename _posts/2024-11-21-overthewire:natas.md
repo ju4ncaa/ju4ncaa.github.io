@@ -48,7 +48,7 @@ Nos dirigimos a el directorio **/files** donde podemos observar un fichero de te
 ![image](https://github.com/user-attachments/assets/c8394321-ea92-40fa-9388-d421f87fcfa2)
 
 ### Level 3 -> Level 4
-* **Contraseña natas4:** 
+* **Contraseña natas4:** QryZXc2e0zahULdHrtHxzyYkj59kUxLQ
 * **URL:** http://natas3.natas.labs.overthewire.org
 * **Misión:**  No hay nada en esta página
 
