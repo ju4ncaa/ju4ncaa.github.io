@@ -207,10 +207,3 @@ El comando **grep** permite mediante expresiones regulares buscar cadenas de tex
 ![image](https://github.com/user-attachments/assets/8904b6bc-97e4-454b-a68c-c74265c58010)
 
 ![image](https://github.com/user-attachments/assets/01a5b0f4-bbca-4cfa-abc1-eadfe72f1f61)
-
-### Level 11 -> Level 12
-* **Contraseña natas12:** 
-* **URL:** http://natas11.natas.labs.overthewire.org
-* **Misión:** 
-
-![image](https://github.com/user-attachments/assets/80153f55-a9f3-4684-804c-991bcfbd0782)
