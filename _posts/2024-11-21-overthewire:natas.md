@@ -124,7 +124,7 @@ En la página principal observamos dos enlaces uno llamado **Home** y otro **Abo
 
 ![image](https://github.com/user-attachments/assets/6415b849-1b4a-4e7b-a976-3ed7f9ca89d7)
 
-Si nos fijamos en la url se apuntas hacia estos enlaces a través de un parámetro por GET llamado **?page=**
+Si nos fijamos en la url se apunta hacia estos enlaces a través de un parámetro por GET llamado **?page=**
 
 ![image](https://github.com/user-attachments/assets/6cff0f55-f730-4aed-a8ee-283a54eeed40)
 
@@ -165,9 +165,9 @@ Introducimos la frase secreta y obtenemos ls contraseña de **natas9**
 ![image](https://github.com/user-attachments/assets/baf55b74-dbfe-4587-bbf3-2214123a6d1d)
 
 ### Level 9 -> Level 10
-* **Contraseña natas10:** 
+* **Contraseña natas10:** t7I5VHvpa14sJTUGV0cbEsbYfFP2dmOu
 * **URL:** http://natas9.natas.labs.overthewire.org
-* **Misión:**
+* **Misión:** Obtener la contraseá de natas10 a través de una inyección de comandos
 
 Observamos un campo que nos permite buscar palabras que contengan que contenga las letras que le indiquemos.
 
@@ -188,3 +188,29 @@ La contraseña de **natas8**  se encontraba en **/etc/natas_webpass/natas8**, po
 ![image](https://github.com/user-attachments/assets/e8b22015-feb2-4064-9b9e-b68e2cec4bbe)
 
 ![image](https://github.com/user-attachments/assets/e50a2fed-90ec-4289-8d1d-473ee9e680fe)
+
+### Level 10 -> Level 11
+* **Contraseña natas11:** UJdqkK1pTu6VLt9UHWAgRZz6sVUZ3lEk
+* **URL:** http://natas10.natas.labs.overthewire.org
+* **Misión:**  Obtener la contraseña de natas11 a través de expresión regular con grep
+
+Observamos un campo que nos permite buscar palabras que contengan que contenga las letras que le indiquemos.
+
+![image](https://github.com/user-attachments/assets/5ef066ff-6905-4677-9dcc-ebd0fce4153c)
+
+Si revisamos el codigo PHP podemos observar que se está utilizando la función **preg_match()**, esta función permite a través de una expresión regular obtener coincidencias, en este caso si se detectan estos carácteres `;|&` se devuelve el texto `Input contains an illegal character!`, por otro lado tenemos la función **passthru()**, esta función permite ejecutar un programa externo y muestra la salida en bruto, en este case se utiliza el comando grep y se muestra su salida en el navegador.
+
+![image](https://github.com/user-attachments/assets/35368031-d745-47f4-8e19-9016a51a6458)
+
+El comando **grep** permite mediante expresiones regulares buscar cadenas de texto, una de las expresiones regulares que tiene es el  punto `.` que permite hacer **match** con cualquier resultado introducido, por otro lado le pasaremos el archivo que queremos leer con grep en este caso el que contiene la contraseña de natas11 **/etc/natas_webpass/natas11**, por ultimo utilizamor el caracter almohadilla `#` url encodeado que sería `%23f`, esto nos va a permite omitir el resto del output que viene despues del archivo que queremos leer.
+
+![image](https://github.com/user-attachments/assets/8904b6bc-97e4-454b-a68c-c74265c58010)
+
+![image](https://github.com/user-attachments/assets/01a5b0f4-bbca-4cfa-abc1-eadfe72f1f61)
+
+### Level 11 -> Level 12
+* **Contraseña natas12:** 
+* **URL:** http://natas11.natas.labs.overthewire.org
+* **Misión:** 
+
+![image](https://github.com/user-attachments/assets/80153f55-a9f3-4684-804c-991bcfbd0782)
