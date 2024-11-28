@@ -207,3 +207,181 @@ El comando **grep** permite mediante expresiones regulares buscar cadenas de tex
 ![image](https://github.com/user-attachments/assets/8904b6bc-97e4-454b-a68c-c74265c58010)
 
 ![image](https://github.com/user-attachments/assets/01a5b0f4-bbca-4cfa-abc1-eadfe72f1f61)
+
+### Level 11 -> Level 12
+* **Contraseña natas12:** yZdkjAYZRd3R7tq7T5kXMjMJlOIkzDeB
+* **URL:** http://natas11.natas.labs.overthewire.org
+* **Misión:** Obtener la contraseña de natas12 a través del cifrado XOR
+
+Observamos un input en la página el cual nos permite cambiar el color de fondo de la misma.
+
+![image](https://github.com/user-attachments/assets/f0427a4d-50da-4587-8902-2c88ef59c776)
+
+![image](https://github.com/user-attachments/assets/621ec638-392b-453c-bfb1-7f01b479ac8b)
+
+Por otro lado tambien se indica que las cookies de sesion se encuentras cifradas con XOR. 
+
+![image](https://github.com/user-attachments/assets/dd2e95f3-3332-4195-88a5-1f279da04305)
+
+Analizaremos el código PHP función por función ya que se trata de un código mas complejo.
+
+![image](https://github.com/user-attachments/assets/1b1becbe-ae0f-43fc-b2f5-1dcc91f6cec7)
+
+Comenzamos con una data por defecto, donde el color de fondo y la inclusion de la contraseña se almacenan en el mismo array.
+
+![image](https://github.com/user-attachments/assets/6a0b511a-890c-47b7-a9bc-c590acad8257)
+
+Tenemos una función llamada **xor_encrypt()**, esta se encarga de cifrar la clave, por lo que encontrarla es un paso crucial.
+
+![image](https://github.com/user-attachments/assets/344db2e5-12cb-46ad-bb53-c4eb4f4a8064)
+
+A continuación tenemos una función llamada **loadData()**, esta toma el valor de la cookie, lo decodifica y luego lo utiliza para establecer los valores de la web **(el color de fondo y si podemos ver la contraseña)**
+
+![image](https://github.com/user-attachments/assets/d288b043-38bb-42ee-a3a7-043e3afeb145)
+
+Otra función llamada **saveData()** la cual cifra la matriz y la guarda como cookie en el navegador del usuario.
+
+![image](https://github.com/user-attachments/assets/b8f6e7bc-04f2-4cdb-9912-d97dad120128)
+
+Por último hay una petición del usuario que se tramita por get para conseguir el color de fondo.
+
+![image](https://github.com/user-attachments/assets/4948babd-704e-4efe-9113-40bd39b161cf)
+
+Abrimos el inspector de página y nos dirigimos a la pestaña **Storage** y vemos que el valor de la cookie para el color blanco es **HmYkBwozJw4WNyAAFyB1VUcqOE1JZjUIBis7ABdmbU1GIjEJAyIxTRg%3D**
+
+![image](https://github.com/user-attachments/assets/a8a76793-dd44-45b3-a336-05bc3c3369f7)
+
+La cookie incluye **showpassword=no** y queremos cambiarlo a **showpassword=yes**, para ello tenemos que descifrarlo con XOR, pero el problema es que no tenemos la llave, por ello en primer lugar crearemos una cookie sin cifrado XOR
+
+![image](https://github.com/user-attachments/assets/0e48817e-8a6e-4814-8112-6475740b5487)
+
+![image](https://github.com/user-attachments/assets/d4cd3c98-8428-43dd-9661-14afe41e907f)
+
+Utilizaremos la herramienta **CyberChef** la cual nos va a permitir obtener la **clave XOR**
+
+![image](https://github.com/user-attachments/assets/959dbf69-0592-4ebb-b74c-778f5913df56)
+
+Utilizamos la **clave XOR** para descifrar la cookie y comprobar que los valores que contiene son **showpassword** y **bgcolor**
+
+![image](https://github.com/user-attachments/assets/28bf797e-a7f3-4219-97b6-44b922b21f84)
+
+Una vez tenemos la **clave XOR** ya podemos crear una cookie que contenga el siguientes objeto JSON  **{"showpassword":"yes","bgcolor":"#ffffff"}**
+
+![image](https://github.com/user-attachments/assets/5e9e5003-4d60-469e-be25-a9ad9fbb650d)
+
+La cookie de sesión obtenida con el valor **showpassword=yes** es **"HmYkBwozJw4WNyAAFyB1VUc9MhxHaHUNAic4Awo2dVVHZzEJAyIxCUc5"**, abrimos el inspector de página y en la pestaña **Storage** reemplazamos la cookie.
+
+![image](https://github.com/user-attachments/assets/4031787d-1729-4199-854b-7748733db167)
+
+Recargamos la página con F5 y obtenemos la contraseña de **natas12**
+
+![image](https://github.com/user-attachments/assets/f60352ed-f701-49c8-a4fe-be5d4cff4fbe)
+
+### Level 12 -> Level 13
+* **Contraseña natas13:** trbs5pCjCrkuSknBBKHhaBxq6Wm1j3LC
+* **URL:** http://natas12.natas.labs.overthewire.org
+* **Misión:** Obtener la contraseña de natas13 a través de un File Upload
+
+Observamos un campo donde se nos permite subir una imagen con extensión **JPEG** de máximo **1KB** de tamaño
+
+![image](https://github.com/user-attachments/assets/860c1038-c606-4e16-97d5-dc4f2f277934)
+
+Analizamos el código PHP y vemos que si es correcto que el archivo no puede superar 1KB de tamaño, y que se utiliza la función **makeRandomPath()** donde se generar un nombre de archivo aleatorio y al final siempre se le añade la extensión **.jpg**
+
+![image](https://github.com/user-attachments/assets/f98f6889-8fc5-46c0-b3e0-9c45a7b3c0ce)
+
+Crearemos un archivo PHP con código malicioso simplificado el cual permita a través de un parámetro por **GET** llamado **cmd** ejecutar comandos.
+
+![image](https://github.com/user-attachments/assets/e9a69196-c484-4a87-bf24-df7bc3e18ad0)
+
+Interceptamos con **BurpSuite** la subida del archivo **cmd.php** y cambiamos la extensión **.jpeg** con la que se nos va a guardar el archivo a **.php**
+
+![image](https://github.com/user-attachments/assets/a199d5c2-be81-4f47-b3bd-655469dfc0d7)
+
+![image](https://github.com/user-attachments/assets/8622ae59-e809-4901-a87a-032316ca8b75)
+
+![image](https://github.com/user-attachments/assets/794d61eb-e362-4950-8371-2bbcd1363920)
+
+![image](https://github.com/user-attachments/assets/489d88c3-3142-47f4-9bea-7e6fff7ddb5e)
+
+Accedemos a **/upload/gnrgxmlmth.php** y vemos que podemos ejecutar comandos.
+
+![image](https://github.com/user-attachments/assets/48a5bdb4-b03b-41e7-81c8-6c2fc8460db1)
+
+Visualizamos la contraseña de **natas13** que está en **/etc/natas_webpass/natas13** con el comando **cat**
+
+![image](https://github.com/user-attachments/assets/1230a770-6135-467b-8802-b49600447de4)
+
+### Level 13 -> Level 14
+* **Contraseña natas14:** z3UYcr4v4uBpeX8f7EZbMHlzK4UR2XtQ
+* **URL:** http://natas13.natas.labs.overthewire.org
+* **Misión:** Obtener la contraseña de natas14 a través de un File Upload
+
+Observamos un campo donde se nos permite subir una imagen con extension **JPEG** de máximo **1KB** de tamaño
+
+![image](https://github.com/user-attachments/assets/3cffc2a7-ed13-4201-a5db-9addd60f66d5)
+
+Interceptamos la petición con BurpSuite y realizamos lo mismo que con natas12, cambiamos la extensión de **.jpg** a **.php** y dejamos continuar la petición.
+
+![image](https://github.com/user-attachments/assets/85636f43-1ae3-42c6-b024-8672df2a50b8)
+
+![image](https://github.com/user-attachments/assets/fa3830e7-c3d1-4bd1-b572-1b0c5465ae03)
+
+Obtenemos el mensaje **"For security reasons, we now only accept image files!"**
+
+![image](https://github.com/user-attachments/assets/2c3df4ad-0959-4787-ad3c-c5943e83272f)
+
+Podemos añadir a el archivo cmd.php un **magic header** que corresponda a el del un archivo **GIF** para engañar al servidor y que crea que estamos subiendo un archivo de tipo imagen.
+
+![image](https://github.com/user-attachments/assets/f36a5c27-8c86-489f-a058-358bc7c23e28)
+
+Volvemos a intentar subir el archivo e interceptamos la petición con BurpSuite para cambiarle la extensión de subida de **.jpg** a **.php**, dejamos correr la petición.
+
+![image](https://github.com/user-attachments/assets/2957d3c0-c1c0-4eb0-a403-338c47eb0252)
+
+![image](https://github.com/user-attachments/assets/520afcc6-923f-44a9-9341-17fb2431e53c)
+
+Accedemos a **/upload/h998ds74ey.php** y vemos que podemos ejecutar comandos.
+
+![image](https://github.com/user-attachments/assets/e8b43927-4a1e-4b4e-bf47-dbb2f19aee15)
+
+Visualizamos la contraseña de **natas14** que está en **/etc/natas_webpass/natas14** con el comando **cat**
+
+![image](https://github.com/user-attachments/assets/d324c811-80fa-40ee-a75f-19634eb69d72)
+
+### Level 14 -> Level 15
+* **Contraseña natas15:** SdqIqBsFcz3yotlNYErZSZwblkm0lrvx
+* **URL:** http://natas14.natas.labs.overthewire.org
+* **Misión:** Obtener la contraseña de natas15 a través de un SQLInjection
+
+Observamos un panel donde se nos permite introducir un usuario y una contraseña.
+
+![image](https://github.com/user-attachments/assets/37ce9807-c985-462f-8460-5200388ae8f2)
+
+Introducimos un usuario y contraseña de prueba por ejemplo **test:test**
+
+![image](https://github.com/user-attachments/assets/ec7785cf-086b-4295-a2d5-46de54afaa44)
+
+Obtenemos el mensaje donde se nos indica que tenemos el acceso denegado ya que las credenciales son inválidas.
+
+![image](https://github.com/user-attachments/assets/ecdb0461-80ad-4e3e-ab74-21e0b2736b6b)
+
+Revisamos el código PHP y de primeras ya vemos una variable llamada **$query**, a través de está se tramita una consulta **SQL** vulnerable a **SQLInjection** ya que concatena directamente la entrada del usuario **($_REQUEST["username"]** y **$_REQUEST["password"])** en la consulta SQL sin ninguna sanitización. 
+
+![image](https://github.com/user-attachments/assets/268f8096-3a9b-45d5-ad26-27d76aba0dd2)
+
+Podemos incluir una comilla en el login para comprobar si es vulnerable a inyección SQL basada en error, incluir una comilla rompera la consulta SQL
+
+![image](https://github.com/user-attachments/assets/ab85952d-6736-4da2-94ad-b1c4a033b615)
+
+Observamos un error de MySQL lo cual es que la web es vulnerable a SQLInjection Error Based.
+
+![image](https://github.com/user-attachments/assets/57d88290-fc99-4eaf-9f4c-f58fe2c262fe)
+
+Podemos realizar una inyección SQL básica como **OR 1=1 #** que lo que hara es que la consulta SQL se evalue siempre como veradera pudiendo asi bypassear el login
+
+![image](https://github.com/user-attachments/assets/4f16af96-c94f-4433-9a71-cbcdce8b2f8b)
+
+Obtenemos la contraseña de **natas15** con éxito.
+
+![image](https://github.com/user-attachments/assets/432b649d-26f8-4c7d-9996-fdde7a4695ab)
