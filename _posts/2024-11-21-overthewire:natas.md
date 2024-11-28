@@ -385,3 +385,8 @@ Podemos realizar una inyección SQL básica como **OR 1=1 #** que lo que hara es
 Obtenemos la contraseña de **natas15** con éxito.
 
 ![image](https://github.com/user-attachments/assets/432b649d-26f8-4c7d-9996-fdde7a4695ab)
+
+### Level 15 -> Level 16
+* **Contraseña natas16:** 
+* **URL:** http://natas15.natas.labs.overthewire.org
+* **Misión:**
