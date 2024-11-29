@@ -378,7 +378,7 @@ Observamos un error de MySQL lo cual es que la web es vulnerable a SQLInjection 
 
 ![image](https://github.com/user-attachments/assets/57d88290-fc99-4eaf-9f4c-f58fe2c262fe)
 
-Podemos realizar una inyección SQL básica como **OR 1=1 #** que lo que hara es que la consulta SQL se evalue siempre como veradera pudiendo asi bypassear el login
+Podemos realizar una inyección SQL básica como **OR 1=1 #** que lo que hara es que la consulta SQL se evalue siempre como verdadera, con la almohadilla **"#"** conseguiriamos omitir el campo password, pudiendo asi bypassear el login
 
 ![image](https://github.com/user-attachments/assets/4f16af96-c94f-4433-9a71-cbcdce8b2f8b)
 
