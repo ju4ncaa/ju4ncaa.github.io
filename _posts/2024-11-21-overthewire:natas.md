@@ -352,7 +352,7 @@ Visualizamos la contraseña de **natas14** que está en **/etc/natas_webpass/nat
 ### Level 14 -> Level 15
 * **Contraseña natas15:** SdqIqBsFcz3yotlNYErZSZwblkm0lrvx
 * **URL:** http://natas14.natas.labs.overthewire.org
-* **Misión:** Obtener la contraseña de natas15 a través de un SQLInjection
+* **Misión:** Obtener la contraseña de natas15 a través de un SQLInjection Error Based
 
 Observamos un panel donde se nos permite introducir un usuario y una contraseña.
 
@@ -389,4 +389,4 @@ Obtenemos la contraseña de **natas15** con éxito.
 ### Level 15 -> Level 16
 * **Contraseña natas16:** 
 * **URL:** http://natas15.natas.labs.overthewire.org
-* **Misión:**
+* **Misión:** Obtener la contraseña de natas16 a través de un Blind SQLInjection
