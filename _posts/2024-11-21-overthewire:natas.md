@@ -387,7 +387,40 @@ Obtenemos la contraseña de **natas15** con éxito.
 ![image](https://github.com/user-attachments/assets/432b649d-26f8-4c7d-9996-fdde7a4695ab)
 
 ### Level 15 -> Level 16
-* **Contraseña natas16:** 
+* **Contraseña natas16:** hPkjKYviLQctEW33QmuXL6eDVfMW4sGo
 * **URL:** http://natas15.natas.labs.overthewire.org
-* **Misión:** Obtener la contraseña de natas16 a través de un Blind SQLInjection
+* **Misión:** Obtener la contraseña de natas16 a través de un Blind SQLInjection Boolean Based
 
+Observamos un panel donde se nos permite introducir un usuario para verificar su existencia
+
+![image](https://github.com/user-attachments/assets/5c5c642c-d747-447d-b596-620deb0550da)
+
+Introducimos el usuario **natas16**, ya que es el usuario objetivo, obtenemos la respuesta de que el usuario si existe.
+
+![image](https://github.com/user-attachments/assets/91fd9cba-03bd-41e2-b600-377c0abb0a80)
+
+![image](https://github.com/user-attachments/assets/ac6588b4-3ef9-43b2-8548-24461c6eb930)
+
+Intorducimos un parámetro **"?debug=test"** en el **action** del formulario para poder debugear y observar cual es la query que se esta procesando por detrás.
+
+![image](https://github.com/user-attachments/assets/81948cac-c978-48f3-94b9-8b354cfaf49b)
+
+Introducimos de nuevo el usuario **natas16**, pero esta vez podemos ver cual es la query que se está realizando para validar si el usuario es correcto. **SELECT * from users where username="natas16"**, introduciendo una comilla seriamos capaces de romper la consulta y comprobar si es vulnerable a inyeccion SQL
+
+![image](https://github.com/user-attachments/assets/78a0b2b7-65b6-4184-a743-3b398a011c8c)
+
+![image](https://github.com/user-attachments/assets/57c4c5ba-6eae-4110-b24c-435cae36ff05)
+
+Podemos ver que es una inyeccion SQL blind basada en condiciones booleanas ya que a través de si el usuario existe podemos concatenar diferentes consultas con el operador **AND** y obtener por ejemplo la longitud de la contraseña del usuario **natas16**, para agilizar el proceso creamos un script en Python que automatize el proceso.
+
+![image](https://github.com/user-attachments/assets/7539ee3d-2732-4e4d-aed5-477053486668)
+
+![image](https://github.com/user-attachments/assets/0b389b61-324e-471f-9a56-c0544b7f3277)
+
+![image](https://github.com/user-attachments/assets/e43f1a96-2c01-4192-9ad6-d2809b23ec34)
+
+Obtenemos que la longitud del usuario **natas16** es de **32 carácteres**, ahora nos queda adivinar cual es la contraseña del usuario, para ello creamos un script en Python que automatize el proceso. Utilizaremos la siguiente query: **natas16"and password like "W%"#**
+
+![image](https://github.com/user-attachments/assets/9f3d2164-b1d1-465f-8db8-169b0be9c68e)
+
+![image](https://github.com/user-attachments/assets/529d3d8f-17eb-41c8-be9d-99d59b71b233)
