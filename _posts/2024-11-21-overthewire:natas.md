@@ -3,7 +3,7 @@ title: Resolución CTF OverTheWire:Natas, Level 0-34 Write-Up
 description: En este apartado se resuleven los 34 niveles del CTF de OverTheWire Natas.
 date: 2024-11-21
 categories: [CTFs, Hacking Web]
-tags: [CTFs, Linux]
+tags: [CTFs, Linux, Hacking web]
 img_path: https://i.ibb.co/NsS3QzS/natas.png
 image: https://i.ibb.co/NsS3QzS/natas.png
 ---
@@ -390,3 +390,4 @@ Obtenemos la contraseña de **natas15** con éxito.
 * **Contraseña natas16:** 
 * **URL:** http://natas15.natas.labs.overthewire.org
 * **Misión:** Obtener la contraseña de natas16 a través de un Blind SQLInjection
+
