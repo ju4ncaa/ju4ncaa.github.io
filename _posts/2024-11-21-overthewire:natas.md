@@ -428,7 +428,7 @@ Obtenemos que la longitud del usuario **natas16** es de **32 carácteres**, ahor
 ### Level 16 -> Level 17
 * **Contraseña natas17:** EqjHJbo7LFNb8vwhHb9s75hokh5TF0OC
 * **URL:** http://natas16.natas.labs.overthewire.org
-* **Misión:** Obtener la contraseña de natas17 a través de un blind command injection boolean based
+* **Misión:** Obtener la contraseña de natas17 a través de un Blind Command Injection Boolean Based
 
 Al igual que en el **nivel 10** podemos observar un campo que nos permite buscar palabras que contengan las letras que le indiquemos, pero ahora se realizan mas validaciones de seguridad.
 
@@ -452,3 +452,8 @@ Para aligerar el proceso crearemos un script en Python para obtener los carácte
 ![image](https://github.com/user-attachments/assets/1241abf7-440e-40e4-bb12-46896e69df5d)
 
 ![image](https://github.com/user-attachments/assets/8954fece-b893-44d5-b9c2-827378655be5)
+
+### Level 16 -> Level 17
+* **Contraseña natas17:** 
+* **URL:** http://natas16.natas.labs.overthewire.org
+* **Misión:** Obtener la contraseña de natas16 a través de un Blind SQLInjection Time Based
