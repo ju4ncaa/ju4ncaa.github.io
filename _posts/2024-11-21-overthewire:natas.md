@@ -167,7 +167,7 @@ Introducimos la frase secreta y obtenemos ls contraseña de **natas9**
 ### Level 9 -> Level 10
 * **Contraseña natas10:** t7I5VHvpa14sJTUGV0cbEsbYfFP2dmOu
 * **URL:** http://natas9.natas.labs.overthewire.org
-* **Misión:** Obtener la contraseá de natas10 a través de una inyección de comandos
+* **Misión:** Obtener la contraseña de natas10 a través de una inyección de comandos
 
 Observamos un campo que nos permite buscar palabras que contengan que contenga las letras que le indiquemos.
 
@@ -424,3 +424,31 @@ Obtenemos que la longitud del usuario **natas16** es de **32 carácteres**, ahor
 ![image](https://github.com/user-attachments/assets/9f3d2164-b1d1-465f-8db8-169b0be9c68e)
 
 ![image](https://github.com/user-attachments/assets/529d3d8f-17eb-41c8-be9d-99d59b71b233)
+
+### Level 16 -> Level 17
+* **Contraseña natas17:** EqjHJbo7LFNb8vwhHb9s75hokh5TF0OC
+* **URL:** http://natas16.natas.labs.overthewire.org
+* **Misión:** Obtener la contraseña de natas17 a través de un blind command injection boolean based
+
+Al igual que en el **nivel 10** podemos observar un campo que nos permite buscar palabras que contengan las letras que le indiquemos, pero ahora se realizan mas validaciones de seguridad.
+
+![image](https://github.com/user-attachments/assets/436967a5-1efc-4dd7-9f9f-b1e6d75080cc)
+
+![image](https://github.com/user-attachments/assets/7d10bbbf-f326-4deb-8043-784c5a7330a8)
+
+Si revisamos el **codigo PHP** podemos ver que se aplica una validación con la función **preg_match()**, si se encuentra en el input los carácteres **/[;|&`\'"]/** se nos muestra por pantalla el mensaje **"Input contains an illegal character!"**
+
+![image](https://github.com/user-attachments/assets/d4c07cc1-5e9f-4456-b95a-ae2dcb570ebf)
+
+No se está filtrando adecuadamente los carácteres que no se pueden utilizar, por ello podemo aprovecharnos de **$(command)** para realizar un **Blind Command Injection Boolean Based**, nos aprovecharemos de una palabra, la cual si la letra que grepeamos no existe en el archivo **/etc/natas_webpass/natas17** se mostrará, de lo contrario no se mostrará nada en la parte del cliente, pero si en la parte del servidor.
+
+**Payload:** doomed$(grep ' + char + ' /etc/natas_webpass/natas17)
+**Ejemplo:** doomed$(grep a /etc/natas_webpass/natas17)
+
+![image](https://github.com/user-attachments/assets/82de10f6-b372-45c7-b3ff-8ad927e70470)
+
+Para aligerar el proceso crearemos un script en Python para obtener los carácteres y una vez obtenidos ordenar la password con **grep** y la expresion regular **^** para indicar si la password comienza por dicho carácter.
+
+![image](https://github.com/user-attachments/assets/1241abf7-440e-40e4-bb12-46896e69df5d)
+
+![image](https://github.com/user-attachments/assets/8954fece-b893-44d5-b9c2-827378655be5)
