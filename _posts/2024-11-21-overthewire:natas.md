@@ -457,3 +457,7 @@ Para aligerar el proceso crearemos un script en Python para obtener los carácte
 * **Contraseña natas17:** 
 * **URL:** http://natas16.natas.labs.overthewire.org
 * **Misión:** Obtener la contraseña de natas16 a través de un Blind SQLInjection Time Based
+
+![image](https://github.com/user-attachments/assets/bfcd7085-88bb-4f51-a756-1ea34c983ee5)
+
+![image](https://github.com/user-attachments/assets/df64c1df-e27f-48dd-8838-a52744ee047b)
