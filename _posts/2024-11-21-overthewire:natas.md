@@ -499,7 +499,7 @@ Una vez hemos obtenido la longitud de la contraseña del usuario **natas18**, no
 ![image](https://github.com/user-attachments/assets/09432e97-cab9-4254-b9f9-dfc833bdb3cf)
 
 ### Level 18 -> Level 19
-* **Contraseña natas19:** 
+* **Contraseña natas19:** tnwER7PdfWkxsG4FNWUtoAZ9VyZTJqJr
 * **URL:** http://natas18.natas.labs.overthewire.org
 * **Misión:** Obtener la contraseña de natas19 a través de un Brute-Force Session Hijacking
 
@@ -526,5 +526,16 @@ La siguiente función se llama **CreateID()**, esta se encarga de asignar un **i
 
 ![image](https://github.com/user-attachments/assets/069f328a-3dcd-407c-8899-b9eabf793069)
 
-Interceptamos la petición con **BurpSuite**, podemos ver que se tramtia una cookie de sesión.
+Interceptamos la petición con **BurpSuite** siendo ya el usuario normal **admin:admin**, podemos ver que se tramtia una cookie de sesión con un valor **PHPSESSID=552**
 
+![image](https://github.com/user-attachments/assets/c81a3eb2-8621-4e0d-9420-c115712f0ebb)
+
+Relizaremos un ataque de fuerza bruta en el **Intruder** contra el id de la cookie, con un payload de números desde el **1 hasta el 640**
+
+![image](https://github.com/user-attachments/assets/9cb5588c-cd19-42f4-b18b-f374d66e87fc)
+
+![image](https://github.com/user-attachments/assets/05e62559-831f-4ce3-a0de-d772c57f7b2c)
+
+Filtramos por la longitud de la respuesta y observamos que con **PHPSESSID=119** obtenemos la contraseña del usuario **natas19**
+
+![image](https://github.com/user-attachments/assets/7fd5e30a-2f44-45f7-a95e-cf9a70567c94)
