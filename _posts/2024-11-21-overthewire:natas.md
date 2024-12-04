@@ -539,3 +539,38 @@ Relizaremos un ataque de fuerza bruta en el **Intruder** contra el id de la cook
 Filtramos por la longitud de la respuesta y observamos que con **PHPSESSID=119** obtenemos la contraseña del usuario **natas19**
 
 ![image](https://github.com/user-attachments/assets/7fd5e30a-2f44-45f7-a95e-cf9a70567c94)
+
+### Level 19 -> Level 20
+* **Contraseña natas20:** p5mCvP7GS2K6Bmt3gqhM2Fc1A5T8MVyw
+* **URL:** http://natas19.natas.labs.overthewire.org
+* **Misión:** Obtener la contraseña de natas20 a través de un Brute-Force Session Hijacking
+
+Observamos un panel donde se nos indica que debemos de iniciar sesion con la cuenta de administrador para obtener las credenciales del usuario **natas20**, Por otra lado un mensaje que dice que la página utiliza prácticamente el mismo código que el nivel anterior, pero los identificadores de sesión ya no son secuenciales.
+
+![image](https://github.com/user-attachments/assets/a09ca10a-bf04-4e57-84b3-959a0bd60ae7)
+
+Introducimos **admin:admin**, obtenemos como respuesta que hemos iniciado sesion como un usuario normal que debemos de iniciar sesion como el usuario **admin** para obtener las credenciales de **natas19**
+
+![image](https://github.com/user-attachments/assets/f821a506-fe79-4dcb-8a36-559fdd73c6cd)
+
+![image](https://github.com/user-attachments/assets/c44caa1e-12c1-43d8-88ea-a3c8caf0e610)
+
+Interceptamos la petición con **BurpSuite** siendo ya el usuario normal **admin:admin**, podemos ver que se tramtia una cookie de sesión con un valor **PHPSESSID=3539372d61646d696e**
+
+![image](https://github.com/user-attachments/assets/7b5a62ed-065d-46bc-8e5d-94efec59ff76)
+
+Utilizamos el **Decoder** para descifrar la cookie de sesion. Podemos ver que el valor de la cookie es **597-admin**
+
+![image](https://github.com/user-attachments/assets/3d917ab5-ba6e-478a-a6ba-1e4c3efdec47)
+
+Realizarmos un ataque de fuerza bruta en el **Intruder** contra el id de la cookie, con un payload de números desde el **1 hasta el 640** que tiene que quedar algo así **1-640-admin**
+
+![image](https://github.com/user-attachments/assets/5ac6e15f-f854-4da6-8c0f-a94f1b51fb2e)
+
+![image](https://github.com/user-attachments/assets/d49b8e9e-afd9-4673-ab95-afbd951e8520)
+
+![image](https://github.com/user-attachments/assets/b059ed67-db03-45ba-ae27-daa55c9e0d6b)
+
+Filtramos por la longitud de la respuesta y observamos que con **PHPSESSID=3238312d61646d696e** obtenemos la contraseña del usuario **natas20**
+
+![image](https://github.com/user-attachments/assets/5ce38356-bb72-47fa-b251-759b1e090aa9)
