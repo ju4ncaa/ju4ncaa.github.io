@@ -458,6 +458,73 @@ Para aligerar el proceso crearemos un script en Python para obtener los carácte
 * **URL:** http://natas17.natas.labs.overthewire.org
 * **Misión:** Obtener la contraseña de natas16 a través de un Blind SQLInjection Time Based
 
+Observamos un panel donde se nos permite introducir un usuario para verificar su existencia
+
+![image](https://github.com/user-attachments/assets/21c47b4a-8936-46ba-832c-d3b35fc2eb5b)
+
+Introducimos el usuario **natas18**, ya que es el usuario objetivo, no obtenemos ninguna respuesta visible en la parte del cliente.
+
+![image](https://github.com/user-attachments/assets/459ed269-afe6-4dd2-b18a-b9fa59d289d4)
+
+![image](https://github.com/user-attachments/assets/906ac8d9-7439-4019-a709-c33bbf5a445d)
+
+Intorducimos un parámetro **"?debug=test"** en el **action** del formulario para poder debugear y observar cual es la query que se esta procesando por detrás.
+
+![image](https://github.com/user-attachments/assets/edb648a8-e2cc-4701-89b3-ae908348f1ae)
+
+Introducimos de nuevo el usuario **natas18**, pero esta vez podemos ver cual es la query que se está realizando para validar si el usuario es correcto. **SELECT * from users where username="natas16"**, introduciendo una comilla seriamos capaces de romper la consulta y comprobar si es vulnerable a inyeccion SQL
+
+![image](https://github.com/user-attachments/assets/db96f3d5-8f72-4d00-9c60-8212db002395)
+
+Introducimos de nuevo el usuario **natas18** pero con una comilla al final para romper la query, pero no obtenemos ninguna respuesta de error.
+
+![image](https://github.com/user-attachments/assets/c16a27e1-b5b0-4803-a1f4-eaff1a09f6a0)
+
+![image](https://github.com/user-attachments/assets/04a4f3dc-c3d4-462e-b303-3d1f900fa15e)
+
+Revisamos el codigo PHP, podemos observar que es vulnerable a SQLInjection, pero deberemos de jugar con el tiempo, es decir, Blind SQLInjection Time Based ya que al no obtener ningun tipo de respuesta por que los **echo** se encuentran comentados, jugando con el tiempo seriamos capaces de determinar si la query es correcta.
+
+![image](https://github.com/user-attachments/assets/c5288b4b-5393-438c-8259-d28144e627b4)
+
+Para jugar con el tiempo usaremos la función sleep(), empezaremos detectando la longitud de la contraseña del usuario **natas18**, el payload que usaremos es **natas18"and length(password) = {length} and sleep(seconds)#**. Para automatizar el proceso creamos un script en Python.
+
 ![image](https://github.com/user-attachments/assets/bfcd7085-88bb-4f51-a756-1ea34c983ee5)
 
 ![image](https://github.com/user-attachments/assets/df64c1df-e27f-48dd-8838-a52744ee047b)
+
+Una vez hemos obtenido la longitud de la contraseña del usuario **natas18**, nos interesa obtener la contraseña del mismo, para ello usaremos el payload **natas18"and password like binary '{char}%' and sleep(seconds)#**. Para automatizar el proceso creamos un script en Python.
+
+![image](https://github.com/user-attachments/assets/8cb5366f-0612-48e2-958e-536a8118faef)
+
+![image](https://github.com/user-attachments/assets/09432e97-cab9-4254-b9f9-dfc833bdb3cf)
+
+### Level 18 -> Level 19
+* **Contraseña natas19:** 
+* **URL:** http://natas18.natas.labs.overthewire.org
+* **Misión:** Obtener la contraseña de natas19 a través de un Brute-Force Session Hijacking
+
+Observamos un panel donde se nos indica que debemos de iniciar sesion con la cuenta de administrador para obtener las credenciales del usuario **natas19**
+
+![image](https://github.com/user-attachments/assets/7d1e2c6b-6dcc-4b42-b124-f33ca759e862)
+
+Introducimos **admin:admin**, obtenemos como respuesta que hemos iniciado sesion como un usuario normal que debemos de iniciar sesion como el usuario **admin** para obtener las credenciales de **natas19**
+
+![image](https://github.com/user-attachments/assets/cfa71d8d-787a-402b-b40e-b6a0e188f03a)
+
+![image](https://github.com/user-attachments/assets/6993f1ca-eee3-44da-85e0-bed70d013d46)
+
+
+Revisamos el codigo PHP, podemos observar una variable llamada **$maxid** con un valor de **640**, al lado tiene un comentario que dice: **Deberian de bastar para todos**
+
+![image](https://github.com/user-attachments/assets/70a51f5b-1b0e-49c4-95f1-45ab7305c765)
+
+Por otro lado tenemos una función llamada **isValidID()**, esta verifica que el **id** sea vaĺido es decir que se encuentra en el rango de **1-640**
+
+![image](https://github.com/user-attachments/assets/ae391099-b42d-4025-8352-89d1946baa51)
+
+La siguiente función se llama **CreateID()**, esta se encarga de asignar un **id** aleatorio al usuario que se encuentre entre **1 y $maxid**
+
+![image](https://github.com/user-attachments/assets/069f328a-3dcd-407c-8899-b9eabf793069)
+
+Interceptamos la petición con **BurpSuite**, podemos ver que se tramtia una cookie de sesión.
+
