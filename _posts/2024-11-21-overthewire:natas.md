@@ -453,9 +453,9 @@ Para aligerar el proceso crearemos un script en Python para obtener los carácte
 
 ![image](https://github.com/user-attachments/assets/8954fece-b893-44d5-b9c2-827378655be5)
 
-### Level 16 -> Level 17
-* **Contraseña natas17:** 
-* **URL:** http://natas16.natas.labs.overthewire.org
+### Level 17 -> Level 18
+* **Contraseña natas18:** 
+* **URL:** http://natas17.natas.labs.overthewire.org
 * **Misión:** Obtener la contraseña de natas16 a través de un Blind SQLInjection Time Based
 
 ![image](https://github.com/user-attachments/assets/bfcd7085-88bb-4f51-a756-1ea34c983ee5)
