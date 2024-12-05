@@ -1,4 +1,4 @@
----
+![image](https://github.com/user-attachments/assets/c3f363db-986d-4993-9b8d-f51892894835)---
 title: Resolución CTF OverTheWire:Natas, Level 0-34 Write-Up
 description: En este apartado se resuleven los 34 niveles del CTF de OverTheWire Natas.
 date: 2024-11-21
@@ -621,3 +621,154 @@ Tenemos que cambiar **name=test** para que sea **test\nadmin 1** para que no de 
 Obtenemos en la respuesta la contraseña de **natas21**
 
 ![image](https://github.com/user-attachments/assets/88eea806-9e10-4d1a-8a62-9d423f0241c0)
+
+### Level 21 -> Level 22
+* **Contraseña natas22:** d8rwGBl0Xslg3b76uh3fEbSlnOUBlozz
+* **URL:** http://natas21.natas.labs.overthewire.org
+* **Misión:** Obtener la contraseña de natas22 a través de la manipulación de sesiones
+
+Observamos una página la cual nos indica que estamos logueados como un usuario normal, que debemos de ser **admin** para ver la contraseña de **natas22**, por otro lado se nos indica que la página está vinculada con **"http://natas21-experimenter.natas.labs.overthewire.org"**
+
+![image](https://github.com/user-attachments/assets/7caa1452-000d-43b0-81b6-450b5a603a5e)
+
+Antes de acceder a **"http://natas21-experimenter.natas.labs.overthewire.org"** revisamos el código fuente de la página principal, podemos observar que simplemente se encarga de validar que la variable $_SESSION sea **admin** con valor **1** y si es así nos muestra las credenciales de **natas22**
+
+![image](https://github.com/user-attachments/assets/0afd3b06-9d1a-4381-a87a-b8c63ff09089)
+
+Accedemoos a **"http://natas21-experimenter.natas.labs.overthewire.org"** podemos observar diferentes campos que nos permiten modificar propiedades css y se ven reflejadas en pantalla.
+
+![image](https://github.com/user-attachments/assets/5f737200-574e-4e9c-b0dd-5ee05225cf68)
+
+Revisamos el codigo PHP, podemos observar que el código itera sobre todos los elementos de **$_REQUEST**, que es un array que contiene todos los parámetros recibidos en la solicitud y sin ninguna validación ni sanitización, asigna los valores recibidos directamente en la variable global **$_SESSION**
+
+![image](https://github.com/user-attachments/assets/6826246a-8a21-4b3c-8f81-dab2f6c0bc9a)
+
+Esto nos va a permitir inyectar claves arbitrarias en **$_SESSION**, en este caso **admin=1**, interceptamos la petición con **BurpSuite** y la enviamos al **Repeater**
+
+![image](https://github.com/user-attachments/assets/f689a700-b160-4b81-b363-1d30a9962ea7)
+
+Añadimos **?debug** para observar que sucede al inyectar el nuevo valor.
+
+![image](https://github.com/user-attachments/assets/36000ed8-df26-4faa-9f78-269a4a91e0c5)
+
+Inyectamos el valor con el operador and, es decir, **&admin=1**, por ultimo enviamos la petición.
+
+![image](https://github.com/user-attachments/assets/2ea0b57e-2880-4e43-a1d8-d9bf58c806e8)
+
+En la respuesta observamos que hemos inyectado el valor admin=1 satisfactoriamente
+
+![image](https://github.com/user-attachments/assets/59daf6b8-0716-463e-a773-ada160806fa0)
+
+Ahora tenemos que utilizar la misma cookie de sesión de la página **"http://natas21-experimenter.natas.labs.overthewire.org"** para tramitar una petición a **"http://natas21.natas.labs.overthewire.org/"** ya que se encuentran vinculadas.
+
+![image](https://github.com/user-attachments/assets/e8c8435d-038c-4f45-b4f2-56f359191686)
+
+Tramitamos la petición y obtenemos la contraseña de **natas22**
+
+![image](https://github.com/user-attachments/assets/db631c6e-792f-41ba-90fa-b76bb68d69b3)
+
+### Level 22 -> Level 23
+* **Contraseña natas23:** dIUQcI3uSus1JEOSSWRAEXBG8KbR8tRs
+* **URL:** http://natas22.natas.labs.overthewire.org
+* **Misión:** Obtener la contraseña de natas23 a través de un parámetro GET
+
+No observamos aparentemente nada en la parte web
+
+![image](https://github.com/user-attachments/assets/c705a009-f654-4202-a10c-88d54dd54992)
+
+Revisamos el código de la página, podemos ver que si se tramita el parámetro **?revelio** por GET obtenemos la contraseña de **natas23**
+
+![image](https://github.com/user-attachments/assets/7fd07fcb-e51a-45ff-a4b6-54d7fa91d2c3)
+
+Interceptamos la petición con **BurpSuite** y la enviamos al **Repeater** añadimos el parámetro y tramitamos la solicitud
+
+![image](https://github.com/user-attachments/assets/65334ef2-5433-4b0f-a18b-2082df4d10a7)
+
+Obtenemos con exito la contraseña de **natas23**
+
+![image](https://github.com/user-attachments/assets/35571e37-f1c0-41db-bef4-c9e3e7518f72)
+
+### Level 23 -> Level 24
+* **Contraseña natas24:** MeuqmfJ8DDKuTr5pcvzFKSwlxedZYEWd
+* **URL:** http://natas23.natas.labs.overthewire.org
+* **Misión:** Obtener la contraseña de natas24 a través de una mala validación del input
+
+Observamos un campo donde se nos permite introducir una contraseña.
+
+![image](https://github.com/user-attachments/assets/ffc1a414-78e2-45a6-b5bf-f3324fb4a373)
+
+Introducimos una contraseña por ejemplo **test**, observamos que por pantalla obtenemos el mensaje **Wrong!**
+
+![image](https://github.com/user-attachments/assets/edc38380-da14-4c44-8ffe-651236f89257)
+
+Revisamos el código PHP, podemos observamos que se verifica si el parámetro **passwd** existe, si es así verifica que passwd contiene el valor **iloveyou**, por ultimo compara el valor de **passwd** con el número **10**, si es mayor que 10 será true y se mostrará la contraseña.
+
+![image](https://github.com/user-attachments/assets/15ea5024-e637-4230-a43d-e95eb28d78e3)
+
+Una vez comprendido inyectamos en el input **11iloveyou** y obtenemos la contraseña de **natas24**
+
+![image](https://github.com/user-attachments/assets/156019f5-3f3e-408b-8ae7-8ba12fe68726)
+
+### Level 24 -> Level 25
+* **Contraseña natas25:** ckELKUWZUfpOv6uxS6M7lXBpBssJZ4Ws
+* **URL:** http://natas24.natas.labs.overthewire.org
+* **Misión:** Obtener la contraseña de natas25 a través de la mala validación del input
+
+Observamos un campo donde se nos permite introducir una contraseña, introducimos una contraseña por ejemplo **test**, observamos que por pantalla obtenemos el mensaje **Wrong!**
+
+![image](https://github.com/user-attachments/assets/ae4e978b-36ee-46f6-bc2a-5a18f48b8210)
+
+Revisamos el código PHP, podemos ver que la contraseña que introducimos se valida con la función **strcmp()**, es un función delicada y vulnerable, ya que si conseguimos inyectar un valor nulo evitaremos la validación de la contraseña.
+
+![image](https://github.com/user-attachments/assets/d6f963f7-5ea1-4643-be3f-4059ade329ea)
+
+Si usamos **passwd[]** en la URL, convierte el array a NULL para la comparación con strcmp(), esto genera un comportamiento inesperado y permitir eludir la verificación de la contraseña.
+
+![image](https://github.com/user-attachments/assets/4234b1be-c07b-4f26-bf02-6b673726dc32)
+
+Obtenemos la contraseña de **natas25**, al inyectar **passwd[]=test**
+
+![image](https://github.com/user-attachments/assets/bd855be9-3459-40db-93a0-ab857fb38fe1)
+
+### Level 25 -> Level 26
+* **Contraseña natas26:** cVXXwxMS3Y26n5UZU89QgpGmWCelaQlE
+* **URL:** http://natas25.natas.labs.overthewire.org
+* **Misión:** Obtener la contraseña de natas26 a través de un LFI
+
+Observamos un texto con un desplegable que nos permite cambiar el idioma del mismo.
+
+![image](https://github.com/user-attachments/assets/627f167a-dbe6-4fc9-9a06-35e3a7cf9dbf)
+
+Revisamos el codigo PHP y observamos que nos encontramos ante la vulnerabilidad **Path Traversal** que nos permite incluir archivos locales del sistema interno, pero se realizan algunas validaciones como que no podemos realizar **../** y que si accedemos a **natas_webpass** no imprimira un texto de error
+
+![image](https://github.com/user-attachments/assets/5cd3175a-8944-40e6-aa84-3bb4860e4daf)
+
+Para comprobar que es vulnerable comenzamos mostrande el archivo **/etc/passwd** pero tenemos que añadir doble puntos y doble barras ya que se reemplaza al añadir solo **../** tiene que se **....//**
+
+![image](https://github.com/user-attachments/assets/379727ab-4eb4-4d63-ad75-959f03b19f2b)
+
+![image](https://github.com/user-attachments/assets/fb858731-0d2d-4ead-a34e-01f04a16deb5)
+
+Conseguimos listar correctamente el archivo **/etc/passwd** ahora nos queda bypassear que no podemos acceder a **/etc/natas_webpass/natas26**, si revisamos de nuevo el codigo PHP, observamos que las peticiones que realizamos se estan almacenando en **/var/www/natas/natas25/logs/natas25_** el **session_id()** y **.log**, es decir, en **/var/www/natas/natas25/logs/natas25_d6l9qdfb6gp73cd0q8d2i27vmp.log**
+
+![image](https://github.com/user-attachments/assets/0825c3b0-f979-413b-ba7f-69a992015473)
+
+![image](https://github.com/user-attachments/assets/13863e09-fa2f-4486-a8f3-cac506743b0a)
+
+![image](https://github.com/user-attachments/assets/8bcb8e92-973a-43d2-abba-da854b51c291)
+
+Podemos interceptar la petición con **BurpSuite*** y enviar una cabecera con codigo PHP malicioso que nos permite ejecutar comandos, así convertimos el **LFI en RCE**
+
+![image](https://github.com/user-attachments/assets/92ea1302-0e59-4507-8fd5-a3ca42dd2909)
+
+Ahora podemos ejecutar comandos a través del parámetro **cmd**, por ejemplo el comando **id**
+
+![image](https://github.com/user-attachments/assets/71f75087-3355-4877-adbf-ff6a0dc41888)
+
+![image](https://github.com/user-attachments/assets/198402fd-33d3-48b7-a891-b1aa94cf00e6)
+
+Visualizamos la contraseña de **natas26** en /etc/natas_webpass/natas26 usando el comando **cat**
+
+![image](https://github.com/user-attachments/assets/e89a9b9e-e85d-41c2-a79e-9b3347415efd)
+
+![image](https://github.com/user-attachments/assets/9ee6eaa9-9989-4ea3-9cad-ac8920d4d42b)
