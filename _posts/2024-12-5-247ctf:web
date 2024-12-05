@@ -7,3 +7,5 @@ tags: [CTFs, Hacking web]
 img_path: https://i.ibb.co/XSHwd6S/247.png
 image: https://i.ibb.co/XSHwd6S/247.png
 ---
+
+En este apartado se resuelven los 14 desafíos web disponibles en la plataforma 247CTF. Estos retos están diseñados para principiantes y personas con conocimientos intermedios, con el objetivo de enseñar y mejorar las habilidades necesarias para la seguridad en aplicaciones web. A lo largo de estos niveles, podrás familiarizarte con una variedad de técnicas y herramientas esenciales en el ámbito de la ciberseguridad, como pruebas de penetración en aplicaciones web, análisis de vulnerabilidades comunes (como inyección SQL, Cross-Site Scripting, etc.), manipulación de sesiones, y técnicas de explotación. Cada desafío tiene un objetivo específico que va desde tareas básicas como identificar vulnerabilidades simples hasta retos más complejos que requieren de habilidades avanzadas en seguridad web, hacking ético, análisis de código y explotación de fallos en aplicaciones en línea.
