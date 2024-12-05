@@ -574,3 +574,50 @@ Realizarmos un ataque de fuerza bruta en el **Intruder** contra el id de la cook
 Filtramos por la longitud de la respuesta y observamos que con **PHPSESSID=3238312d61646d696e** obtenemos la contraseña del usuario **natas20**
 
 ![image](https://github.com/user-attachments/assets/5ce38356-bb72-47fa-b251-759b1e090aa9)
+
+### Level 20 -> Level 21
+* **Contraseña natas21:** BPhv63cKE1lkQl04cE5CuFTzXe15NfiH
+* **URL:** http://natas20.natas.labs.overthewire.org
+* **Misión:** Obtener la contraseña de natas21 a través de la manipulación de sesiones
+
+Observamos un panel donde ya nos encontramos logueados como un usuario normal y debemos de ser administrador para obtener las contraseña de natas21, tambien hay un campo donde podemos introducir nuestro nombre para cambiarlo.
+
+![image](https://github.com/user-attachments/assets/ed0e5290-de7a-43c4-898d-229a2d6db6ef)
+
+Introducimos el nombre admin en el campo input, al darle clic a simple vista no sucede nada
+
+![image](https://github.com/user-attachments/assets/ee657d41-ac5a-4e95-a773-0fb8064cad56)
+
+Intorducimos un parámetro **"?debug=test"** en el **action** del formulario para poder debugear y observar que es lo que está sucediendo por detrás.
+
+![image](https://github.com/user-attachments/assets/e6132865-c658-4abd-b4a6-d950e2a18870)
+
+Introducimos nuevamente el nombre admin en el campo input, al darle podemos observar
+
+![image](https://github.com/user-attachments/assets/750355fd-f698-4bc1-a7ce-9779b1e5cae3)
+
+![image](https://github.com/user-attachments/assets/255fd623-aff2-44f8-b8eb-c628114f2404)
+
+El objetivo es loguearse como **admin** para obtener las credenciales de **natas21**. Revisamos el código PHP de la página y eso sucede en la función **print_credentials()**, observamos que para ver la contraseña de **natas21** necesitamos tener la variable **$_SESSION** con un par **clave-valor** que sea **admin:1**
+
+![image](https://github.com/user-attachments/assets/a07819c9-df6f-4a80-9341-de771d6d7e37)
+
+Observamos que la función **myread()** se encarga de leer los archivos de sesión y convertirlos de vuelta en el array $_SESSION.
+
+![image](https://github.com/user-attachments/assets/9a39df5a-4f21-4bce-9cda-fe9ed0254b7a)
+
+En la función **mywrite()**, se guarda la sesión en el archivo tomando el array **$_SESSION**, lo convierte en una serie de pares **clave-valor** y lo guarda en el archivo de sesión, esto es explotable, ya que no está sucediendo ningún filtrado en nuestra entrada de nombre.
+
+![image](https://github.com/user-attachments/assets/79d9aafc-cdf4-410b-94f2-669e43b968b5)
+
+Interceptamos la petición con **BurpSuite** y la enviamos al **Repeater**
+
+![image](https://github.com/user-attachments/assets/e500f1bc-6948-442a-b2d3-e9e2e8f36264)
+
+Tenemos que cambiar **name=test** para que sea **test\nadmin 1** para que no de ningun error URL encodearlo, por ultimo enviamos la petición.
+
+![image](https://github.com/user-attachments/assets/d88c4391-2ccc-4a7c-86f1-eda2bc880773)
+
+Obtenemos en la respuesta la contraseña de **natas21**
+
+![image](https://github.com/user-attachments/assets/88eea806-9e10-4d1a-8a62-9d423f0241c0)
