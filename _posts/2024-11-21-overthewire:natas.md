@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/c3f363db-986d-4993-9b8d-f51892894835)---
+---
 title: Resolución CTF OverTheWire:Natas, Level 0-34 Write-Up
 description: En este apartado se resuleven los 34 niveles del CTF de OverTheWire Natas.
 date: 2024-11-21
