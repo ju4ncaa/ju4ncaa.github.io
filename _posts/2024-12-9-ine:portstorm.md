@@ -39,3 +39,6 @@ Utilizamos la herramienta de fuzzing **Gobuster** para realizar un descubrimient
 
 ![image](https://github.com/user-attachments/assets/fc395502-1f40-4e9e-9fe6-0f6949c65e19)
 
+Intentamos acceder a **https://10.2.30.147:8443/marketing** y **https://10.2.30.147:8443/accounting**, obtenemos un **500 Internal Server Error** con el mensaje adjunto en la captura.
+
+![image](https://github.com/user-attachments/assets/a2da4bac-5c60-4f7d-b8c2-7c9272c46b08)
