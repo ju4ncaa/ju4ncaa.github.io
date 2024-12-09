@@ -1,5 +1,5 @@
 ---
-title: Resolución INE CTF Arena 
+title: Resolución INE CTF Arena PortStorm
 description: Resolución del CTF PortStorm de INE Security
 date: 2024-12-9
 categories: [CTFs, Hacking]
