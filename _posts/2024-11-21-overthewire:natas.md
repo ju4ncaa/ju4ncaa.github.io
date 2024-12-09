@@ -774,12 +774,45 @@ Visualizamos la contraseña de **natas26** en /etc/natas_webpass/natas26 usando 
 ![image](https://github.com/user-attachments/assets/9ee6eaa9-9989-4ea3-9cad-ac8920d4d42b)
 
 ### Level 26 -> Level 27
-* **Contraseña natas27:** 
+* **Contraseña natas27:** u3RRffXjysjgwFU6b9xa23i6prmUsYne
 * **URL:** http://natas26.natas.labs.overthewire.org
-* **Misión:** Obtener la contraseña de natas27 a través de un ataque de deserialización.
+* **Misión:** Obtener la contraseña de natas27 a través de un ataque de deserialización insegura.
 
 Accedemos y podemos observar que se nos permite insertar unos valores y se nos dibuja una figura.
 
 ![image](https://github.com/user-attachments/assets/05508af5-4d1a-4939-86db-93e14e43ac08)
 
-Inspeccionamos el codigo fuente, podemos observar que 
+Inspeccionamos el codigo fuente, observar que el código es vulnerable a un ataque de deserialización insegura .
+
+![image](https://github.com/user-attachments/assets/0759e833-e36b-47b3-81f7-2c76fc743180)
+
+Podemos crear un objeto Logger serializado con un archivo de log modificado, como **/tmp/natas26_../../etc/passwd**, y deserializarlo en el servidor. En este caso nos aprovecharemos para obtener las contraseña de **natas27** en **/etc/natas_webpass/natas27**
+
+![image](https://github.com/user-attachments/assets/a0101e96-dcaa-4a81-b012-9f926e864a5d)
+
+![image](https://github.com/user-attachments/assets/37dd078b-5267-41ed-a3c7-e77cc334e284)
+
+Interceptamos una petición con BurpSuite la enviamos al Repeater.
+
+![image](https://github.com/user-attachments/assets/e0e9748d-84c4-4558-9909-8f2520f13f35)
+
+Podemos utilizar el siguiente codigo PHP para deserializar los datos y observar que se está tramitando.
+
+![image](https://github.com/user-attachments/assets/bff7e2c1-436d-4265-b0bf-5cb05e4121c9)
+
+![image](https://github.com/user-attachments/assets/a45bd497-897a-4648-9a34-0e5770aa2a53)
+
+Cambiamos la data serializada por la que hemos generado con el código PHP.
+
+![image](https://github.com/user-attachments/assets/e353e2ed-555a-4b8c-ade0-db7760b69ce0)
+
+Obtenemos un error PHP, pero al acceder a **http://natas26.natas.labs.overthewire.org/img/ju4ncaa.php** obtenemos la contraseña de **natas27**
+
+![image](https://github.com/user-attachments/assets/538362cf-db07-45ff-b6b1-e4f6fcac86fa)
+
+![image](https://github.com/user-attachments/assets/acddf116-7922-488b-8c14-5e5f0e3e681b)
+
+### Level 27 -> Level 28
+* **Contraseña natas28:** 
+* **URL:** http://natas27.natas.labs.overthewire.org
+* **Misión:** Obtener la contraseña de natas28 a través de un SQL Truncation
