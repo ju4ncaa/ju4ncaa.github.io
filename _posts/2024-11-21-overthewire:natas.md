@@ -772,3 +772,14 @@ Visualizamos la contraseña de **natas26** en /etc/natas_webpass/natas26 usando 
 ![image](https://github.com/user-attachments/assets/e89a9b9e-e85d-41c2-a79e-9b3347415efd)
 
 ![image](https://github.com/user-attachments/assets/9ee6eaa9-9989-4ea3-9cad-ac8920d4d42b)
+
+### Level 26 -> Level 27
+* **Contraseña natas27:** 
+* **URL:** http://natas26.natas.labs.overthewire.org
+* **Misión:** Obtener la contraseña de natas27 a través de un ataque de deserialización.
+
+Accedemos y podemos observar que se nos permite insertar unos valores y se nos dibuja una figura.
+
+![image](https://github.com/user-attachments/assets/05508af5-4d1a-4939-86db-93e14e43ac08)
+
+Inspeccionamos el codigo fuente, podemos observar que 
