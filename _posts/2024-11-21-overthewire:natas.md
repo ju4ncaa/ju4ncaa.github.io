@@ -813,22 +813,40 @@ Obtenemos un error PHP, pero al acceder a **http://natas26.natas.labs.overthewir
 ![image](https://github.com/user-attachments/assets/acddf116-7922-488b-8c14-5e5f0e3e681b)
 
 ### Level 27 -> Level 28
-* **Contraseña natas28:** 
+* **Contraseña natas28:** 1JNwQM1Oi6J6j1k49Xyw7ZN6pXMQInVj
 * **URL:** http://natas27.natas.labs.overthewire.org
-* **Misión:** Obtener la contraseña de natas28 a través de un SQL Truncation
+* **Misión:** Obtener la contraseña de natas28 a través de un SQL Truncation Attack
+
+Observamos un panel donde se nos permite  introducir **usuario** y **contraseña**
 
 ![image](https://github.com/user-attachments/assets/18d9fc71-52c6-4a64-aabe-4d4010185780)
 
+Probamos por ejemplo con **test:test**
+
 ![image](https://github.com/user-attachments/assets/c6c3c18a-7c5a-4889-a8b9-72129d691636)
+
+Obtenemos la respuesta de que se ha creado el usuario **test** correctamente
 
 ![image](https://github.com/user-attachments/assets/c9028271-4715-44b4-b45b-cbe216d86412)
 
+Si introducimos de nuevo la credenciales **test:test** vemos que se nos muestra la información que hemos introducido antes al crear el usuario **test** es decir nombre de usuario y contraseña
+
 ![image](https://github.com/user-attachments/assets/d2ca41ce-2f70-4c38-9f50-14ac514413ec)
+
+Podemos probar con el usuario **natas28** y una contraseña aleatoria
 
 ![image](https://github.com/user-attachments/assets/6510d236-a354-4451-8961-4150b42c64e6)
 
+Obtenemos como respuesta que la contraseña para el usuario **natas28** es incorrecta
+
 ![image](https://github.com/user-attachments/assets/306942b4-6ebf-4058-849a-0c40574400dd)
 
-![image](https://github.com/user-attachments/assets/a9137d31-c393-42c1-a8e8-b50772928a2d)
+Inspeccionamos el codigo PHP y vemos que en la función **createUser()** se utiliza **substr($usr, 0, 64)** para truncar el nombre de usuario **($usr)** a 6**4 caracteres. Esto significa que cualquier entrada que supere los 64 caracteres se cortará automáticamente.
 
-![image](https://github.com/user-attachments/assets/ab03977f-6024-4529-bed5-2b0aee057115)
+![image](https://github.com/user-attachments/assets/fcb60790-736b-43aa-91ef-7ca34a2abc01)
+
+Podemos crear un script en Python que automatize el SQL Truncation Attack y que nos permita obtener la contraseña de **natas28**
+
+![image](https://github.com/user-attachments/assets/c177c63f-d4e0-4f5b-a284-9672f70626a3)
+
+![image](https://github.com/user-attachments/assets/8387a6fc-0a59-4339-89df-661b399cdcbf)
