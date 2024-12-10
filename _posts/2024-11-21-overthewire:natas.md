@@ -816,3 +816,19 @@ Obtenemos un error PHP, pero al acceder a **http://natas26.natas.labs.overthewir
 * **Contraseña natas28:** 
 * **URL:** http://natas27.natas.labs.overthewire.org
 * **Misión:** Obtener la contraseña de natas28 a través de un SQL Truncation
+
+![image](https://github.com/user-attachments/assets/18d9fc71-52c6-4a64-aabe-4d4010185780)
+
+![image](https://github.com/user-attachments/assets/c6c3c18a-7c5a-4889-a8b9-72129d691636)
+
+![image](https://github.com/user-attachments/assets/c9028271-4715-44b4-b45b-cbe216d86412)
+
+![image](https://github.com/user-attachments/assets/d2ca41ce-2f70-4c38-9f50-14ac514413ec)
+
+![image](https://github.com/user-attachments/assets/6510d236-a354-4451-8961-4150b42c64e6)
+
+![image](https://github.com/user-attachments/assets/306942b4-6ebf-4058-849a-0c40574400dd)
+
+![image](https://github.com/user-attachments/assets/a9137d31-c393-42c1-a8e8-b50772928a2d)
+
+![image](https://github.com/user-attachments/assets/ab03977f-6024-4529-bed5-2b0aee057115)
