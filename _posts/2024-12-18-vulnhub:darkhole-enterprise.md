@@ -1,5 +1,5 @@
 ---
-title: VulnHub DarkHole Enterprise Pentesting Report
+title: VulnHub, DarkHole Enterprise Pentesting Report
 description: DarkHole Enterprise Pentesting Report
 date: 2024-12-18
 categories: [Writeup's]
