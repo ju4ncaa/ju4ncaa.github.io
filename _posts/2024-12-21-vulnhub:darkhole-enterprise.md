@@ -40,7 +40,7 @@ Se adjunta un informe donde se resume el proceso de pentesting, donde se captura
 * Bash history - Fuga de Información [User pivoting]
 * Abuso de privilegios sudoers [Privilege escalation]
 
-## **Enumeración** (192.168.2.129)
+## **Enumeración (192.168.2.129)**
 
 ### **Descubrimiento de hosts**
 
