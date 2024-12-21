@@ -7,10 +7,6 @@ img_path: https://github.com/user-attachments/assets/e360d62b-370f-4135-9d39-06d
 image: https://github.com/user-attachments/assets/7de8a25c-9cfb-4764-a7ac-ded02d10831e
 ---
 
-## **Informe Pentesting**
-
-Se adjunta un informe donde se resume el proceso de pentesting, donde se capturan los hallazgos, la metodología utilizada y las recomendaciones para mejorar la seguridad de la infraestructura.
-
 ## **Habilidades empleadas**
 
 * Enumeración Web
