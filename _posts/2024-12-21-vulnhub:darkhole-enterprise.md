@@ -106,7 +106,7 @@ Utilizamos la herramienta **WhatWeb**, esta nos permite obtener información det
 
 ![imagen](https://github.com/user-attachments/assets/68e1d273-d6fb-4405-a5f7-662751f5dbbb)
 
-#### Reconocimiento web inicial
+#### **Reconocimiento web inicial**
 
 Accedemos al servicio web HTTP a través de `http://192.168.2.129`, podemos identificar que existe una opción **Login**.
 
@@ -130,9 +130,9 @@ Probamos a cambiar el valor del **parámetro GET id** de **3** a **1**, obtenemo
 
 ![imagen](https://github.com/user-attachments/assets/007aa67e-07d4-472c-b525-20c2d6548d9c)
 
-## Explotación (192.168.2.129)
+## **Explotación (192.168.2.129)**
 
-### IDOR (Insecure Direct Object Reference)
+### **IDOR (Insecure Direct Object Reference)**
 
 Interceptamos la petición de cambio de contraseña con **BurpSuite**, podemos observar que se tramitan dos parámetros por **POST** **password** e **id** 
 
@@ -152,7 +152,7 @@ Accedemos como el usuario **admin** y la contraseña que hemos establecido **adm
 
 ![imagen](https://github.com/user-attachments/assets/f637d5aa-1272-4748-99e9-ca7a94bd072c)
 
-### File Upload
+### **File Upload**
 
 Accedemos con exito como el usuario **admin**, disponemos de un campo de subida de archivos.
 
@@ -186,4 +186,14 @@ La extensione **.phar** interpreta codigo PHP, por lo que si empleamos el **par�
 
 ![imagen](https://github.com/user-attachments/assets/5e9557a3-02ff-4af7-bad1-8df695b751bd)
 
-## Ganando acceso (192.168.2.129)
+## **Ganando acceso (192.168.2.129)**
+
+Utilizamos la herramienta **netcat** y nos ponemos por escucha en el puerto que utilizaremos en la Reverse Shell.
+
+![imagen](https://github.com/user-attachments/assets/d055cb29-3401-4f5e-aed4-577adca3ce00)
+
+Puediendo ejecutar comandos como el usuario **www-data** entablamos una Reveser Shell para ganar acceso al sistema victima **192.168.2.129**
+
+![imagen](https://github.com/user-attachments/assets/27551ab0-795b-49ea-8bc9-b692c35dac94)
+
+![imagen](https://github.com/user-attachments/assets/1cfb3270-98cb-4c3b-9ea9-723662794932)
