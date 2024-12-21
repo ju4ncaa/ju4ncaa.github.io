@@ -21,7 +21,7 @@ Este laboratorio simula un "**entorno empresarial pequeño**" con una infraestru
 
 Se adjunta un informe donde se resume el proceso de pentesting, donde se capturan los hallazgos, la metodología utilizada y las recomendaciones para mejorar la seguridad de la infraestructura.
 
-## Habilidades empleadas
+## **Habilidades empleadas**
 
 ### DarkHole 1
 
@@ -40,7 +40,7 @@ Se adjunta un informe donde se resume el proceso de pentesting, donde se captura
 * Bash history - Fuga de Información [User pivoting]
 * Abuso de privilegios sudoers [Privilege escalation]
 
-## Enumeración
+## **Enumeración**
 
 ### Descubrimiento de hosts
 
