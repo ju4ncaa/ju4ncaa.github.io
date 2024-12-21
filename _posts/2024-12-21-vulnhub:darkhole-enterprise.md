@@ -23,7 +23,7 @@ Se adjunta un informe donde se resume el proceso de pentesting, donde se captura
 
 ## **Habilidades empleadas**
 
-### DarkHole 1
+### **DarkHole 1**
 
 * Enumeración Web
 * Abuso del panel de cambio de contraseña - Cambio de contraseña para el usuario administrador
@@ -31,7 +31,7 @@ Se adjunta un informe donde se resume el proceso de pentesting, donde se captura
 * Abuso de un binario SUID personalizado - [User pivoting]
 * Abuso de privilegios sudoers - Manipulación de scripts en Python [Privilege escalation]
 
-### DarkHole 2
+### **DarkHole 2**
 
 * Fuga de Información
 * Enumeración de proyecto en GitHub
@@ -42,7 +42,7 @@ Se adjunta un informe donde se resume el proceso de pentesting, donde se captura
 
 ## **Enumeración**
 
-### Descubrimiento de hosts
+### **Descubrimiento de hosts**
 
 Utilizamos **arp-scan** para descubrir los dispositivos activos en nuestra red, fijamos como objetivo el host **192.168.2.129**
 
@@ -52,13 +52,13 @@ Usamos **ping** para verificar la conectividad del host **192.168.2.129**, envia
 
 ![imagen](https://github.com/user-attachments/assets/38ed40c1-8f61-41f0-abdf-6b6a1f791f03)
 
-### Identificación del sistema operativo
+### **Identificación del sistema operativo**
 
 Una alternativa para identificar el sistema operativo al que nos estamos enfrentando es la herramienta **whichSystem.py**, esta herramienta es un pequeño script en python que nos permite saber si estamos ante un sistema operativo Windows o Linux en base al TTL. **Windows tiene un ttl=128** y **Linux tiene un ttl=64** por defecto.
 
 ![imagen](https://github.com/user-attachments/assets/c45068ba-2b06-4972-9946-293092cfd888)
 
-### Nmap (Network Mapper)
+### **Nmap (Network Mapper)**
 
 Utilizamos la herramienta **Nmap** para realizar un escaneo inicial de puertos sobre la dirección IP objetivo **192.168.2.129**, usando los siguientes parámetros:
 
@@ -93,4 +93,3 @@ En el escaneo realizado a la dirección IP objetivo **192.168.2.129**, se han id
 |------------|---------------|----------------|
 | 22         | SSH           | OpenSSH 8.2p1 Ubuntu 4ubuntu0.2 (Ubuntu Linux) |
 | 80         | HTTP          | Apache HTTPD 2.4.41 (Ubuntu) |
-
