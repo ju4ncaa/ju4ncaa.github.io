@@ -40,7 +40,7 @@ Se adjunta un informe donde se resume el proceso de pentesting, donde se captura
 * Bash history - Fuga de Información [User pivoting]
 * Abuso de privilegios sudoers [Privilege escalation]
 
-## **Enumeración**
+## **Enumeración** (192.168.2.129)
 
 ### **Descubrimiento de hosts**
 
@@ -85,7 +85,7 @@ Una vez obtenido los puertos abiertos, utilizamos **Nmap** para realizar un esca
 
 ![imagen](https://github.com/user-attachments/assets/d6f4a8ed-17ad-4505-883f-66d663e0ebab)
 
-#### Detalles del escaneo
+#### **Detalles del escaneo**
 
 En el escaneo realizado a la dirección IP objetivo **192.168.2.129**, se han identificado los siguientes puertos abiertos, servicios en ejecución y sus respectivas versiones.
 
@@ -93,3 +93,97 @@ En el escaneo realizado a la dirección IP objetivo **192.168.2.129**, se han id
 |------------|---------------|----------------|
 | 22         | SSH           | OpenSSH 8.2p1 Ubuntu 4ubuntu0.2 (Ubuntu Linux) |
 | 80         | HTTP          | Apache HTTPD 2.4.41 (Ubuntu) |
+
+### **Enumeración de servicios (SSH - Puerto 22)**
+
+La versión de **OpenSSH 8.2p1** no es vulnerable a la enumeración de usuarios, y no se encontraron usuarios accesibles para realizar ataques de fuerza bruta.
+
+### **Enumeración de servicios (HTTP - Puerto 80)**
+
+#### **WhatWeb**
+
+Utilizamos la herramienta **WhatWeb**, esta nos permite obtener información detallada sobre el servidor web, incluyendo el software utilizado, tecnologías relacionadas y posibles vulnerabilidades.
+
+![imagen](https://github.com/user-attachments/assets/68e1d273-d6fb-4405-a5f7-662751f5dbbb)
+
+#### Reconocimiento web inicial
+
+Accedemos al servicio web HTTP a través de `http://192.168.2.129`, podemos identificar que existe una opción **Login**.
+
+![imagen](https://github.com/user-attachments/assets/e5c660dd-ec5c-4a40-b29d-ded6fb1318b9)
+
+Accedemos a **Login** y probamos combinaciones típicas de credenciales por defecto como: **admin-admin, admin-password, root-admin, user-user**, pero no obtenemos acceso exitoso.
+
+![imagen](https://github.com/user-attachments/assets/dbc79a5c-c263-4056-89a4-b7a9a30dffc6)
+
+Disponemos de un opción de Registro, por lo que accedemos a la misma y registramos un nuevo usuario **ju4ncaa-ju4ncaa1234**.
+
+![imagen](https://github.com/user-attachments/assets/f0453d03-f7e0-4375-90df-4a227318a50f)
+
+## **Análisis de vulnerabilidades** (192.168.2.129)
+
+Accedemos a la web como el usuario **ju4ncaa-ju4ncaa1234** y la vista inicial es un panel donde se muestran nuestros datos de usuarios y un campo en el cual se nos permite cambiar la contraseña. Por otro lado tambien podemos observar que en la URL se utiliza un **parámetro GET** llamado **id** el cual tiene como valor **3**
+
+![imagen](https://github.com/user-attachments/assets/55194279-90a2-43d9-96fd-a5eb9cc5a06d)
+
+Probamos a cambiar el valor del **parámetro GET id** de **3** a **1**, obtenemos como respuesta **Your Not Allowed To Access another user information** por lo que se encuentra bien sanitizado y no se permite listar información de otros usuarios.
+
+![imagen](https://github.com/user-attachments/assets/007aa67e-07d4-472c-b525-20c2d6548d9c)
+
+## Explotación (192.168.2.129)
+
+### IDOR (Insecure Direct Object Reference)
+
+Interceptamos la petición de cambio de contraseña con **BurpSuite**, podemos observar que se tramitan dos parámetros por **POST** **password** e **id** 
+
+![imagen](https://github.com/user-attachments/assets/4e7349a3-7a91-4719-99e5-5a3a33f788c4)
+
+![imagen](https://github.com/user-attachments/assets/5a28d14a-9e91-49d0-b032-cbf0c2661955)
+
+Nos encontramos ante la vulnerabilidad **Insecure Direct Object Reference (IDOR)**, donde se nos permite modificar directamente recursos o datos de otros usuarios simplemente manipulando identificadores que no están adecuadamente protegidos. Esto quiere decir que si suponemos que el usuario admin posee el **id=1** le cambiamos la contraseña y posteriormente accedemos a su panel.
+
+![imagen](https://github.com/user-attachments/assets/c2d4e712-13dc-4c78-a35e-e6ac5dd041c7)
+
+Podemos ver que no hemos obtenido aparentemente ningun error para cambiar la contraseña del usuario que posee el **id=1**.
+
+![imagen](https://github.com/user-attachments/assets/30f39136-1c75-4ce7-90d5-7380c99d00c0)
+
+Accedemos como el usuario **admin** y la contraseña que hemos establecido **admin1234**
+
+![imagen](https://github.com/user-attachments/assets/f637d5aa-1272-4748-99e9-ca7a94bd072c)
+
+### File Upload
+
+Accedemos con exito como el usuario **admin**, disponemos de un campo de subida de archivos.
+
+![imagen](https://github.com/user-attachments/assets/2abb9fca-b4a8-4369-8bfc-4105ca2e35c7)
+
+Vamos directamente al grano e intentamos subir un archivo PHP malicioso, el cual nos permite ejecuta un comando del sistema operativo pasado como parámetro **?cmd=** en la URL y muestra el resultado en el navegador.
+
+![imagen](https://github.com/user-attachments/assets/1460f152-ecaa-4753-a4e6-25b959dea560)
+
+Obtenemos como respuesta que unicamente se permiten subir archivo con extensión: **jpg,png,gif**
+
+![imagen](https://github.com/user-attachments/assets/64c7bd5a-73e6-4cc3-ae62-fea8bfc642a1)
+
+Puede que en el codigo se contemple que la extensión **.php** no es valida para subir, pero existen otras extensiones php que tambien son válidas e interpretan el código y puede que no estén contempladas como: **.php2, .php3, .php4, .php5, .php6, .php7, .phps, .pht, .phtm, .phtml, .phar**, por ello interceptamos con **BurpSuite** la petición de subido del archivo **cmd.php** y utilizamos el Intruder para comprobar si se permite subir alguna de estas extensiones.
+
+![imagen](https://github.com/user-attachments/assets/1bd447ec-fdcb-420a-bc68-247ed34b09d6)
+
+![imagen](https://github.com/user-attachments/assets/c6dd9a8a-bf16-4374-b27a-84851e75aaae)
+
+![imagen](https://github.com/user-attachments/assets/d671c1c1-4e05-4d8a-97af-4ae32a2e90ab)
+
+Una vez terminado el ataque **Intruder**, visualizamos por ejemplo la subida del archivo **cmd.phar**, podemos ver que nos ha permitido subir el fichero malicioso en `http://192.168.2.129/upload`
+
+![imagen](https://github.com/user-attachments/assets/770b3935-4ede-46de-b7a4-8aab8844a062)
+
+Accedemos a `http://192.168.2.129/upload` donde podemos ver que nos ha permitido subir todas las extensiones, esto no quiere decir que todas nos interpreten el codigo PHP por ello debemos de ir una a una comprobando.
+
+![imagen](https://github.com/user-attachments/assets/1cb0f88f-cade-44e2-a260-48fc29faa089)
+
+La extensione **.phar** interpreta codigo PHP, por lo que si empleamos el **parámetro GET** **?cmd=** y por ejemplo usamos el comando **id** este se ejecuta y nos muestra el resultado en el navegador.
+
+![imagen](https://github.com/user-attachments/assets/5e9557a3-02ff-4af7-bad1-8df695b751bd)
+
+## Ganando acceso (192.168.2.129)
