@@ -7,23 +7,11 @@ img_path: https://github.com/user-attachments/assets/e360d62b-370f-4135-9d39-06d
 image: https://github.com/user-attachments/assets/7de8a25c-9cfb-4764-a7ac-ded02d10831e
 ---
 
-## **Introducción**
-
-![imagen](https://github.com/user-attachments/assets/4fbfab85-4434-48e7-97b3-cea058cb1e28)
-
-Este laboratorio simula un "**entorno empresarial pequeño**" con una infraestructura básica dividida en dos redes, una red externa y una red interna
-
-1. **Kali (192.168.2.x):** Máquina atacante ubicada en la red externa, el objetivo es comprometer los sistemas internos de la empresa.
-2. **Darkhole 1 (192.168.2.x / 10.0.2.x):** Servidor en la red perimetral que actúa como puente entre la red externa e interna, permite el movimiento lateral hacia la red interna.
-3. **Darkhole 2 (10.0.2.x):** Servidor crítico ubicado exclusivamente en la red interna, objetivo final.
-
 ## **Informe Pentesting**
 
 Se adjunta un informe donde se resume el proceso de pentesting, donde se capturan los hallazgos, la metodología utilizada y las recomendaciones para mejorar la seguridad de la infraestructura.
 
 ## **Habilidades empleadas**
-
-### **DarkHole 1**
 
 * Enumeración Web
 * Abuso del panel de cambio de contraseña - Cambio de contraseña para el usuario administrador
@@ -31,16 +19,8 @@ Se adjunta un informe donde se resume el proceso de pentesting, donde se captura
 * Abuso de un binario SUID personalizado - [User pivoting]
 * Abuso de privilegios sudoers - Manipulación de scripts en Python [Privilege escalation]
 
-### **DarkHole 2**
 
-* Fuga de Información
-* Enumeración de proyecto en GitHub
-* SQLI (Inyección SQL)
-* Chisel (Remote Port Forwarding) + Abuso del Servidor Web Interno
-* Bash history - Fuga de Información [User pivoting]
-* Abuso de privilegios sudoers [Privilege escalation]
-
-## **Enumeración (192.168.2.129)**
+## **Enumeración**
 
 ### **Descubrimiento de hosts**
 
@@ -120,7 +100,7 @@ Disponemos de un opción de Registro, por lo que accedemos a la misma y registra
 
 ![imagen](https://github.com/user-attachments/assets/f0453d03-f7e0-4375-90df-4a227318a50f)
 
-## **Análisis de vulnerabilidades** (192.168.2.129)
+## **Análisis de vulnerabilidades**
 
 Accedemos a la web como el usuario **ju4ncaa-ju4ncaa1234** y la vista inicial es un panel donde se muestran nuestros datos de usuarios y un campo en el cual se nos permite cambiar la contraseña. Por otro lado tambien podemos observar que en la URL se utiliza un **parámetro GET** llamado **id** el cual tiene como valor **3**
 
@@ -130,7 +110,7 @@ Probamos a cambiar el valor del **parámetro GET id** de **3** a **1**, obtenemo
 
 ![imagen](https://github.com/user-attachments/assets/007aa67e-07d4-472c-b525-20c2d6548d9c)
 
-## **Explotación (192.168.2.129)**
+## **Explotación**
 
 ### **IDOR (Insecure Direct Object Reference)**
 
@@ -186,7 +166,7 @@ La extensione **.phar** interpreta codigo PHP, por lo que si empleamos el **par�
 
 ![imagen](https://github.com/user-attachments/assets/5e9557a3-02ff-4af7-bad1-8df695b751bd)
 
-## **Ganando acceso (192.168.2.129)**
+## **Ganando acceso**
 
 Utilizamos la herramienta **netcat** y nos ponemos por escucha en el puerto que utilizaremos en la Reverse Shell.
 
@@ -198,7 +178,7 @@ Puediendo ejecutar comandos como el usuario **www-data** entablamos una Reveser 
 
 ![imagen](https://github.com/user-attachments/assets/1cfb3270-98cb-4c3b-9ea9-723662794932)
 
-## **User Pivoting (192.168.2.129)**
+## **User Pivoting**
 
 Hemos ganado acceso como el usuario **www-data** es una cuenta de baja prioridad con permisos limitados usada por servidores web como Apache o Nginx para ejecutar aplicaciones web. Sin embargo, este acceso inicial puede ser una puerta de entrada para pivotar a otros usuarios.
 
@@ -222,7 +202,7 @@ Si no se contempla la ruta entera **/usr/bin/id** y se utiliza **id** directamen
 
 ![imagen](https://github.com/user-attachments/assets/3c4fa443-5d1e-4663-ae82-ba41d2ee7163)
 
-## **Escalada de privilegios (192.168.2.129)**
+## **Escalada de privilegios**
 
 ### Abuso de privilegios sudoers
 
@@ -235,5 +215,3 @@ Modificamos el fichero **file.py** y añadimos un código que nos establezca un 
 ![imagen](https://github.com/user-attachments/assets/0b7b01d7-0032-460a-81bd-c943845d5259)
 
 ![imagen](https://github.com/user-attachments/assets/0a27da1c-fc4c-4bca-8c6b-fcf050c402c5)
-
-## **Persistencia (192.168.2.129)**
