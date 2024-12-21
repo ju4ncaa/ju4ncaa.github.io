@@ -197,3 +197,43 @@ Puediendo ejecutar comandos como el usuario **www-data** entablamos una Reveser 
 ![imagen](https://github.com/user-attachments/assets/27551ab0-795b-49ea-8bc9-b692c35dac94)
 
 ![imagen](https://github.com/user-attachments/assets/1cfb3270-98cb-4c3b-9ea9-723662794932)
+
+## **User Pivoting (192.168.2.129)**
+
+Hemos ganado acceso como el usuario **www-data** es una cuenta de baja prioridad con permisos limitados usada por servidores web como Apache o Nginx para ejecutar aplicaciones web. Sin embargo, este acceso inicial puede ser una puerta de entrada para pivotar a otros usuarios.
+
+### **Permisos SUID**
+
+Durante la enumeración de archivos con el bit SUID activado, hemos identificado un binario inusual en la ruta **/home/john/toto**
+
+![imagen](https://github.com/user-attachments/assets/b16c9bb9-05f4-44e8-8ebd-be9e451d4b4a)
+
+Ejecutamos **/home/john/toto** y vemos que ejecuta el comando id como el usuario **john** 
+
+![imagen](https://github.com/user-attachments/assets/877638d1-9340-4d67-8c12-2e6ff0cb03bf)
+
+### **Path Hijacking**
+
+Utilizamos **strings** para analizar el binario **toto** y observamos que se está usando **system** para ejecutar el comando **id**.
+
+![imagen](https://github.com/user-attachments/assets/061f6f31-0688-4735-ad57-3f978209ab11)
+
+Si no se contempla la ruta entera **/usr/bin/id** y se utiliza **id** directamente, podriamos realizar un **Path Hijacking** y crar un fichero que se llame **id** que nos establezca una **bash** como el usuario **john**.
+
+![imagen](https://github.com/user-attachments/assets/3c4fa443-5d1e-4663-ae82-ba41d2ee7163)
+
+## **Escalada de privilegios (192.168.2.129)**
+
+### Abuso de privilegios sudoers
+
+Revisamos los privilegios sudo, y observamos que el usuario **john** tiene permiso para ejecutar como **root** el fichero **/home/john/file.py**
+
+![imagen](https://github.com/user-attachments/assets/f1037125-df44-48bf-8f54-4d5bbd27048e)
+
+Modificamos el fichero **file.py** y añadimos un código que nos establezca un shell como **root**.
+
+![imagen](https://github.com/user-attachments/assets/0b7b01d7-0032-460a-81bd-c943845d5259)
+
+![imagen](https://github.com/user-attachments/assets/0a27da1c-fc4c-4bca-8c6b-fcf050c402c5)
+
+## **Persistencia (192.168.2.129)**
