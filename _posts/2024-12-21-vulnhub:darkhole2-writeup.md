@@ -7,10 +7,6 @@ img_path: https://i.ibb.co/5RvhKwb/darkhole2.png
 image: https://i.ibb.co/5RvhKwb/darkhole2.png
 ---
 
-## **Informe Pentesting**
-
-Se adjunta un informe donde se resume el proceso de pentesting, donde se capturan los hallazgos, la metodología utilizada y las recomendaciones para mejorar la seguridad de la infraestructura.
-
 ## **Habilidades empleadas**
 
 * Fuga de información
