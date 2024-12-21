@@ -204,7 +204,7 @@ Si no se contempla la ruta entera **/usr/bin/id** y se utiliza **id** directamen
 
 ## **Escalada de privilegios**
 
-### Abuso de privilegios sudoers
+### **Abuso de privilegios sudoers**
 
 Revisamos los privilegios sudo, y observamos que el usuario **john** tiene permiso para ejecutar como **root** el fichero **/home/john/file.py**
 
