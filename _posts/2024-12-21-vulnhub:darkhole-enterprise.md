@@ -1,5 +1,5 @@
 ---
-title: VulnHub, DarkHole Enterprise Pentesting WriteUp
+title: VulnHub, DarkHole Enterprise Pentesting, WriteUp
 date: 2024-12-21
 categories: [Writeup's]
 tags: [Hacking, Pentesting]
