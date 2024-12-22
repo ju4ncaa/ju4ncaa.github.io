@@ -4,8 +4,8 @@ date: 2024-12-22
 description: WriteUp de las máquina Symfonos1 y Symfonos2 de la página VulnHub
 categories: [Writeup's]
 tags: [Hacking, Pentesting]
-img_path: https://github.com/user-attachments/assets/deb59b71-3b97-4a68-8fe1-8d9dca8b343a
-image: https://github.com/user-attachments/assets/deb59b71-3b97-4a68-8fe1-8d9dca8b343a
+img_path: https://i.ibb.co/RBJXzZW/symfonos1-2.png
+image: https://i.ibb.co/RBJXzZW/symfonos1-2.png
 ---
 
 ## **Introducción**
