@@ -8,6 +8,12 @@ img_path: https://github.com/user-attachments/assets/e360d62b-370f-4135-9d39-06d
 image: https://github.com/user-attachments/assets/7de8a25c-9cfb-4764-a7ac-ded02d10831e
 ---
 
+## **Introducción**
+
+![imagen](https://github.com/user-attachments/assets/0fdc0ea5-05d7-4cc9-8d16-a630d99999a2)
+
+En la imagen podemos ver representado el entorno al que nos vamos a enfrentar, por un parte tenemos la máquina atacante es Kali Linux, con dirección IP 192.168.2.128, que sirve como base para realizar análisis, escaneos y explotación de vulnerabilidades. Por otro lado, la máquina víctima es DarkHole1, con dirección IP 192.168.2.129. Ambas máquinas están conectadas en la misma red local privada (192.168.2.0/24).
+
 ## **Habilidades empleadas**
 
 * Enumeración Web
