@@ -1,6 +1,6 @@
 ---
 title: VulnHub, DarkHole2 Pentesting, WriteUp
-date: 2024-12-21
+date: 2024-12-22
 description: WriteUp de la máquina DarkHole 2 de la página VulnHub
 categories: [Writeup's]
 tags: [Hacking, Pentesting]
