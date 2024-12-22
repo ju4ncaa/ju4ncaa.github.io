@@ -8,7 +8,7 @@ img_path: https://i.ibb.co/5RvhKwb/darkhole2.png
 image: https://i.ibb.co/5RvhKwb/darkhole2.png
 ---
 
-## Introducción
+## **Introducción**
 
 ![imagen](https://github.com/user-attachments/assets/edd3bc69-c49d-433f-93a5-931896b0eb25)
 
