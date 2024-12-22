@@ -10,8 +10,9 @@ image: https://i.ibb.co/RBJXzZW/symfonos1-2.png
 
 ## **Introducción**
 
-![imagen](https://github.com/user-attachments/assets/16a58501-81af-41dc-9300-12427bc36990)
+![imagen](https://github.com/user-attachments/assets/b58af12e-5a40-47db-a87e-c2e4064ff2bf)
 
+En la imagen podemos ver representado el entorno al que nos vamos a enfrentar. Por una parte, tenemos la máquina atacante, Kali Linux, con dirección IP 192.168.2.128, por otro lado, se encuentran las máquinas víctimas: Symfonos1 con direcciones IP dentro del rango (192.168.2.0/24) y (10.0.2.0/24) y Symfonos2 con dirección IP dentro del rango (10.0.2.0/24) En este escenario inicial, solo podemos ver y acceder a Symfonos1 desde Kali Linux, lo que indica que es nuestra primera máquina objetivo. Una vez comprometamos Symfonos1, deberemos realizar un pivoting para acceder a Symfonos2, que no es directamente visible desde Kali Linux.
 
 ## **Habilidades empleadas**  
 
