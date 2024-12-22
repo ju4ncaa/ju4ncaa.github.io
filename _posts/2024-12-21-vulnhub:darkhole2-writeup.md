@@ -4,9 +4,15 @@ date: 2024-12-21
 description: WriteUp de la máquina DarkHole 2 de la página VulnHub
 categories: [Writeup's]
 tags: [Hacking, Pentesting]
-img_path: https://github.com/user-attachments/assets/1a121111-d9f3-4e18-bc4f-28e2ca1ba8fe
+img_path: https://i.ibb.co/5RvhKwb/darkhole2.png
 image: https://i.ibb.co/5RvhKwb/darkhole2.png
 ---
+
+## Introducción
+
+![imagen](https://github.com/user-attachments/assets/edd3bc69-c49d-433f-93a5-931896b0eb25)
+
+En la imagen podemos ver representado el entorno al que nos vamos a enfrentar, por un parte tenemos la máquina atacante es Kali Linux, con dirección IP 192.168.2.128, que sirve como base para realizar análisis, escaneos y explotación de vulnerabilidades. Por otro lado, la máquina víctima es DarkHole2, con dirección IP 192.168.2.131. Ambas máquinas están conectadas en la misma red local privada (192.168.2.0/24).
 
 ## **Habilidades empleadas**
 
