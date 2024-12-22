@@ -27,5 +27,6 @@ En la imagen podemos ver representado el entorno al que nos vamos a enfrentar. P
 * Explotación de FTP - Abuso de SITE CPFR/CPTO
 * Abuso de FTP y SMB - Obtención de archivos de la máquina
 * SSH (Local Port Forwarding) + Abuso de LibreNMS
+* Reutilización de credenciales
 * Explotación de LibreNMS a través de un RCE (User Pivoting)
 * Abuso de privilegios sudoers (MySQL) [Privilege escalation]
