@@ -13,8 +13,8 @@ image: https://i.ibb.co/5RvhKwb/darkhole2.png
 * Fuga de información
 * Enumeración de Proyectos en Github
 * Inyección SQL (SQL Injection)
-* Chisel (Remote Port Forwarding) + Abuso de Servidor Web Interno
 * Bash history - Fugas de información [User Pivoting]
+* SSH (Local Port Forwarding) + Abuso de Servidor Web Interno
 * Abuso de privilegios sudoers -  [Privilege escalation]
 
 ## **Enumeración**
@@ -136,13 +136,15 @@ Cambiamos el parámetro GET **?id=** de valor **1** a **2**. Podemos observar qu
 
 ![imagen](https://github.com/user-attachments/assets/c0d2018e-3d33-4f00-9da3-ef4b919818d2)
 
-### SQLi (SQL Injection)
-
 Utilizamos **BurpSuite** para de manera cómoda realizar diferentes pruebas sobre el parámetro **?id=**, comenzamos introduciendo una sola comilla donde obtenemos un **Error 500 Internal Server Error**
 
 ![imagen](https://github.com/user-attachments/assets/a8d017f3-ecdb-44bf-8c4d-a05415fe8f8e)
 
 ![imagen](https://github.com/user-attachments/assets/951682b5-c642-4f1b-963b-bf93da740a9e)
+
+## **Explotación**
+
+### SQLi (SQL Injection)
 
 Realizamos un ordenamiento de columnas con **order by**, por ejemplo si introducimos **order by 100** obtenemos el **Error 500 Internal Server Error**, pero si cuando introducimos **order by 6** no obtenemos el **error 500**, por lo que llegamos a la conclusión de que existen 6 columnas en la tabla actual que se está haciendo uso en la base de datos.
 
@@ -184,5 +186,64 @@ Listamos los valores de las columnas **user** y **pass** de la tabla **ssh** la 
 
 ![imagen](https://github.com/user-attachments/assets/243975d6-2388-4d35-8533-17ead9de533e)
 
+## **Ganando acceso**
+
+Utilizamos **ssh** para autenticarnos con las credenciales obtenidas a través de la inyección SQL `jehad:fool`, consiguiendo ganar acceso de forma exitosa.
 
 ![imagen](https://github.com/user-attachments/assets/8cf44f63-ab3a-46bc-931a-cfa094bdc9f9)
+
+## **User Pivoting**
+
+Hemos ganado acceso como el usuario **jehad** pero existen otros usuarios en el sistema a los cuales debemos de intentar pivotar de alguna manera.
+
+![imagen](https://github.com/user-attachments/assets/471723b0-3bbc-41bf-b18b-bc2de8149e5b)
+
+Visualizamos el **historico de bash** y observamos que existe un servicio interno en el **puerto 9999** alojado en **/opt/web**
+
+![imagen](https://github.com/user-attachments/assets/6ff62955-1789-45e5-9040-fe3b9b53544b)
+
+![imagen](https://github.com/user-attachments/assets/ad6e8cb3-569e-4255-b610-62842c2b70a9)
+
+![imagen](https://github.com/user-attachments/assets/5706ecbe-1542-44f5-adbb-dfced59cbcb2)
+
+Observamos el codigo del servicio web en **/opt/web/index.php** y podemos ver que se nos permite ejecutar comando a través del parámetro **?cmd=** ya que hace uso de la función **system()**
+
+![imagen](https://github.com/user-attachments/assets/768b3e01-9414-4ed9-880c-79b904e7bf1b)
+
+Ejecutamos el comando **id** y observamos que el comando ejecutado se realiza como el usuario **losy**
+
+![imagen](https://github.com/user-attachments/assets/b34051a3-2f8a-42e5-8857-ceb8e50ef71e)
+
+Realizamos un **Local Port Forwarding** con **SSH** para trabajar de manera mas cómoda.
+
+![imagen](https://github.com/user-attachments/assets/215069be-23d5-4d6c-be72-e3cd7af039ef)
+
+Una vez realizado el **Local Port Forwarding** accedemos al servico en **http://127.0.0.1:9999**
+
+![imagen](https://github.com/user-attachments/assets/915ed158-899d-4a55-bc5e-ac954aa229ac)
+
+Nos ponemos en escucha con netcat para obtener una **Reverse Shell** y ganar acceso como **losy**.
+
+![imagen](https://github.com/user-attachments/assets/ef8b721b-cf82-4139-b2ac-07073c459f27)
+
+A través del parámetro GET **?cmd=** nos entablamos una **Reverse Shell** hacia nuestra máquina de atacante, obteniendo acceso al sistema como **losy**.
+
+![imagen](https://github.com/user-attachments/assets/0d801816-496d-478b-90ac-1d055da78dc6)
+
+![imagen](https://github.com/user-attachments/assets/8873279b-796e-4565-9ef5-26835a685b1d)
+
+## **Escalada de privilegios**
+
+### **Abuso de privilegios sudoers**
+
+Al igual que con el usuario **jehad** somos capaces de visualizar el **histórico de bash** donde al final del mismo podemos ver una información bastante curiosa que dice `password:gang`
+
+![imagen](https://github.com/user-attachments/assets/3a798e8b-3ba6-431b-9fac-99eab28c8f23)
+
+Utilzo la contraseña **gang** para listar los **permisos sudo** y se permite satisfactoriamente, donde podemos ver que podemos ejecutar como root **/usr/bin/python3**
+
+![imagen](https://github.com/user-attachments/assets/3f0bd213-6ee2-42b9-acf6-e8222f0f19e9)
+
+Es bastante sencillo como ejecutar **python3** como sudo e importar la librería **os** para otrorgarnos una **bash** como **root**.
+
+![imagen](https://github.com/user-attachments/assets/07d99dce-a71f-4342-908a-b5da64a1a25d)
