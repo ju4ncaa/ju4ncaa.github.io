@@ -132,3 +132,57 @@ Accedemos a la web como el usuario `lush@admin.com - 321` y la vista inicial es 
 
 ![imagen](https://github.com/user-attachments/assets/fb405603-c41f-4012-aa4a-58c9f8fd84a8)
 
+Cambiamos el parámetro GET **?id=** de valor **1** a **2**. Podemos observar que no se muestra ningun dato en los campos cuando anteriormente con el valor **?id=1** si se mostraban datos.
+
+![imagen](https://github.com/user-attachments/assets/c0d2018e-3d33-4f00-9da3-ef4b919818d2)
+
+### SQLi (SQL Injection)
+
+Utilizamos **BurpSuite** para de manera cómoda realizar diferentes pruebas sobre el parámetro **?id=**, comenzamos introduciendo una sola comilla donde obtenemos un **Error 500 Internal Server Error**
+
+![imagen](https://github.com/user-attachments/assets/a8d017f3-ecdb-44bf-8c4d-a05415fe8f8e)
+
+![imagen](https://github.com/user-attachments/assets/951682b5-c642-4f1b-963b-bf93da740a9e)
+
+Realizamos un ordenamiento de columnas con **order by**, por ejemplo si introducimos **order by 100** obtenemos el **Error 500 Internal Server Error**, pero si cuando introducimos **order by 6** no obtenemos el **error 500**, por lo que llegamos a la conclusión de que existen 6 columnas en la tabla actual que se está haciendo uso en la base de datos.
+
+![imagen](https://github.com/user-attachments/assets/dbb04078-9d64-44bc-b3eb-5b3bb36fc63e)
+
+![imagen](https://github.com/user-attachments/assets/54d33e9a-549f-45f3-8550-5d46a9fafad5)
+
+![imagen](https://github.com/user-attachments/assets/60c5119f-8f40-4a70-8fdb-2728e47db6a4)
+
+![imagen](https://github.com/user-attachments/assets/f1d00f8b-0af4-4328-9ac9-3087a014988b)
+
+Sabemos que existen 6 columnas, por lo que vamos a combinar datos los cuales se deben de ver representados en alguno de los campos disponibles en la web.
+
+![imagen](https://github.com/user-attachments/assets/d447ecce-413e-4e7a-9b21-11713e66480a)
+
+![imagen](https://github.com/user-attachments/assets/eea4fa0d-e87c-455c-a3df-d2c57b0b59f6)
+
+Una vez comprobado, comenzaremos enumerando todas las bases de datos existentes utilzando la siguiente query: **union+select+1,group_concat(schema_name),3,4,5,6+from+information_schema.schemata--+-**. La base de datos **darkhole_2** se ve bastante interesante
+
+![imagen](https://github.com/user-attachments/assets/efffc7ff-1e39-402c-997f-272fa1e75cb8)
+
+![imagen](https://github.com/user-attachments/assets/223418c2-01c6-41b8-8ec6-a63cff1235f4)
+
+Enumeramos las tablas existentes en la base de datos **darkhole_2** utilizando la siguiente query: **union+select+1,2,group_concat(table_name),4,5,6+from+information_schema.tables+where+table_schema%3d'darkhole_2'--+-**. La tabla **ssh** promete bastante
+
+![imagen](https://github.com/user-attachments/assets/08a8213e-249f-4a02-99ab-5dba74487b09)
+
+![imagen](https://github.com/user-attachments/assets/b5ec9a5c-3baa-4849-b8dd-bbcef81d1833)
+
+Enumeramos las columnas existentes de la tabla ssh haciendo uso de la siguiente query: **union+select+1,2,group_concat(column_name),4,5,6+from+information_schema.columns+where+table_schema%3d'darkhole_2'+and+table_name%3d'ssh'--+-**, podemos ver que tenemos **id,user,pass**
+
+![imagen](https://github.com/user-attachments/assets/fa9143db-5b86-4982-a157-fc787b4a5cea)
+
+![imagen](https://github.com/user-attachments/assets/246f0c69-c1dd-4430-a4db-48a81b9375e5)
+
+Listamos los valores de las columnas **user** y **pass** de la tabla **ssh** la cual se encuentra en la base de datos **darkhole_2**, haciendo uso de la siguiente query: **union+select+1,2,concat(user,0x3a,pass),4,5,6+from+darkhole_2.ssh--+-**. Obtnemos una credenciales de acceso ssh **jehad:fool**
+
+![imagen](https://github.com/user-attachments/assets/039d17ca-2ca1-411c-b59a-5dde535a2666)
+
+![imagen](https://github.com/user-attachments/assets/243975d6-2388-4d35-8533-17ead9de533e)
+
+
+![imagen](https://github.com/user-attachments/assets/8cf44f63-ab3a-46bc-931a-cfa094bdc9f9)
