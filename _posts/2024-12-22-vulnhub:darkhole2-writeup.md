@@ -4,8 +4,8 @@ date: 2024-12-22
 description: WriteUp de la máquina DarkHole 2 de la página VulnHub
 categories: [Writeup's]
 tags: [Hacking, Pentesting]
-img_path: https://github.com/user-attachments/assets/5a8c3a99-2eb3-4747-b59a-a32040852e1d
-image: https://github.com/user-attachments/assets/5a8c3a99-2eb3-4747-b59a-a32040852e1d
+img_path: https://github.com/user-attachments/assets/d72e90e6-cbd7-416b-b5cd-3aabedf6dbb4
+image: https://github.com/user-attachments/assets/d72e90e6-cbd7-416b-b5cd-3aabedf6dbb4
 ---
 
 ## **Introducción**
