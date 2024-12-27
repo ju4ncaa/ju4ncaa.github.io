@@ -10,7 +10,9 @@ image: https://github.com/user-attachments/assets/2543b3fa-fc24-4772-a554-4aeb71
 
 ## **Introducción**
 
-En la imagen podemos ver representado el entorno al que nos vamos a enfrentar, por un parte tenemos la máquina atacante es Kali Linux, con dirección IP 10.10.14.21, que sirve como base para realizar análisis, escaneos y explotación de vulnerabilidades. Por otro lado, la máquina víctima es UnderPass, con dirección IP 
+![imagen](https://github.com/user-attachments/assets/8293287e-087c-4f61-a5ba-29c6462cd608)
+
+En la imagen podemos ver representado el entorno al que nos vamos a enfrentar, por un parte tenemos la máquina atacante es Kali Linux que sirve como base para realizar análisis, escaneos y explotación de vulnerabilidades. Por otro lado, la máquina víctima es UnderPass, con dirección IP 10.10.11.48
 
 ## **Habilidades empleadas**
 
