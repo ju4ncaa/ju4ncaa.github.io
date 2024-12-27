@@ -5,7 +5,7 @@ description: Writeup de la máquina UnderPass de la página HackTheBox
 categories: [Writeup's]
 tags: [Hacking, Pentesting]
 img_path: https://github.com/user-attachments/assets/2543b3fa-fc24-4772-a554-4aeb7184da61
-image: https://github.com/user-attachments/assets/2543b3fa-fc24-4772-a554-4aeb7184da61
+image: https://zweilosec.github.io/assets/img/late_0_infocard.png
 ---
 
 ## **Introducción**
