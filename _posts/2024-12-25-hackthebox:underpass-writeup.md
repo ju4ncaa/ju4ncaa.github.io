@@ -4,7 +4,6 @@ date: 2024-12-25
 description: Writeup de la máquina UnderPass de la página HackTheBox
 categories: [Writeup's]
 tags: [Hacking, Pentesting]
-show_image_post: true
 image: https://github.com/user-attachments/assets/2543b3fa-fc24-4772-a554-4aeb7184da61
 ---
 ## **Introducción**
