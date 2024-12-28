@@ -99,7 +99,7 @@ Accedemos a **Login** y probamos diferentes combinaciones de credenciales para i
 
 ![imagen](https://github.com/user-attachments/assets/dc2961fb-942a-41c8-9f48-6f058e1a2cab)
 
-Intentamos difentes inyecciones SQL típicas, sin exito ninguno.
+Intentamos diferentes inyecciones SQL típicas, sin exito ninguno.
 
 ![imagen](https://github.com/user-attachments/assets/8d0dffc2-d35a-4093-9062-bfd77f1a47cc)
 
