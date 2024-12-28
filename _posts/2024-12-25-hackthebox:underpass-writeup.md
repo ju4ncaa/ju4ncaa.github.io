@@ -15,7 +15,7 @@ En la imagen podemos ver representado el entorno al que nos vamos a enfrentar, p
 
 ## **Información de la máquina**
 
-<div align="center"><img src="https://github.com/user-attachments/assets/f19c3768-4d63-4934-8074-702cb6ccfd19" width=700px></div>
+<div align="center"><img src="https://github.com/user-attachments/assets/f19c3768-4d63-4934-8074-702cb6ccfd19" alt="machine info" width=700px></div>
 
 ## **Habilidades empleadas**
 
