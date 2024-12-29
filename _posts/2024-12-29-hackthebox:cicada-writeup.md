@@ -2,7 +2,7 @@
 title: HackTheBox, Cicada Pentesting, WriteUp
 date: 2024-12-25
 description: Writeup de la máquina UnderPass de la página HackTheBox
-categories: Writeup's ActiveDirectory
+categories: [Writeup's, Active Directory]
 tags: [Hacking, Pentesting, Active Directory]
 image_path: https://github.com/user-attachments/assets/a5fd9492-c574-40df-9fa4-0952ae30b6c4
 image: https://github.com/user-attachments/assets/a5fd9492-c574-40df-9fa4-0952ae30b6c4
