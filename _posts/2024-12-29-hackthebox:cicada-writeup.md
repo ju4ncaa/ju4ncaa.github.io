@@ -22,6 +22,7 @@ En la imagen podemos ver representado el entorno al que nos vamos a enfrentar, p
 
 * Ataque Domain Zone Transfer - AXFR (Fallido)
 * Enumeración anónima RPC (Fallido)
+* RID Brute-Force para identificar usuarios válidos (netexec)
 * Enumeración SMB (netexec + smbclient)
 * Password Spraying (Netexec)
 * Enumeracion LDAP + Obtencion de credenciales (ldapsearch)
