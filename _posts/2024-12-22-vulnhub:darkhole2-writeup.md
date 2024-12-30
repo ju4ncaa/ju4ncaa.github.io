@@ -16,7 +16,7 @@ En la imagen podemos ver representado el entorno al que nos vamos a enfrentar, p
 
 ## **Habilidades empleadas**
 
-* Fuga de información
+* Fugas de información
 * Enumeración de Proyectos en Github
 * Inyección SQL (SQL Injection)
 * Bash history - Fugas de información [User Pivoting]
