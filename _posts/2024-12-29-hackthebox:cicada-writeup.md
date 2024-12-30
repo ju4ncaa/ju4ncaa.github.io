@@ -10,7 +10,7 @@ image: https://github.com/user-attachments/assets/a5fd9492-c574-40df-9fa4-0952ae
 
 ## **Introducción**
 
-En la imagen podemos ver representado el entorno al que nos vamos a enfrentar, por un parte tenemos la máquina atacante es Kali Linux que sirve como base para realizar análisis, escaneos y explotación de vulnerabilidades. Por otro lado, la máquina víctima es Cicada, con dirección IP 0.0.0.0
+En la imagen podemos ver representado el entorno al que nos vamos a enfrentar, por un parte tenemos la máquina atacante es Kali Linux que sirve como base para realizar análisis, escaneos y explotación de vulnerabilidades. Por otro lado, la máquina víctima es Cicada, con dirección IP 10.10.11.35
 
 ## **Información de la máquina**
 
@@ -19,10 +19,16 @@ En la imagen podemos ver representado el entorno al que nos vamos a enfrentar, p
 ## **Habilidades empleadas**
 
 * Ataque Domain Zone Transfer - AXFR (Fallido)
-* 
+* Enumeración anónima RPC (Fallido)
+* Enumeración SMB (netexec + smbclient)
+* Password Spraying (Netexec)
+* Enumeracion LDAP + Obtencion de credenciales (ldapsearch)
+* Abuso del privilegio SeBackupPrivilege [Privilege escalation]
+* Volcado de contraseñas en formato hash (impacket-secretsdump)
+* Pass The Hass (evil-winrm)
 
 ## **Enumeración**
 
 ### **Descubrimiento de hosts**
 
-Usamos ping para verificar la conectividad del host 0.0.0.0, enviando un paquete ICMP obtenemos respuesta, lo que nos indica que el dispositivo está disponible en la red. A través del TTL (Time To Live) también podemos identificar que se trata de un equipo Linux.
+Usamos ping para verificar la conectividad del host 10.10.11.35, enviando un paquete ICMP obtenemos respuesta, lo que nos indica que el dispositivo está disponible en la red. A través del TTL (Time To Live) también podemos identificar que se trata de un equipo Linux.
