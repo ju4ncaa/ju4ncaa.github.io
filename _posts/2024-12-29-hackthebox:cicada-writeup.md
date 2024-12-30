@@ -18,6 +18,9 @@ En la imagen podemos ver representado el entorno al que nos vamos a enfrentar, p
 
 ## **Habilidades empleadas**
 
+* Ataque Domain Zone Transfer - AXFR (Fallido)
+* 
+
 ## **Enumeración**
 
 ### **Descubrimiento de hosts**
