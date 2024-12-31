@@ -10,7 +10,7 @@ image: https://github.com/user-attachments/assets/35f56dce-9bf4-48bb-bd05-0890c0
 
 ## **Introducción**
 
-
+![imagen](https://github.com/user-attachments/assets/0d181dc1-362d-4c80-a352-4d5b83ee3ad4)
 
 En la imagen podemos ver representado el entorno al que nos vamos a enfrentar, por un parte tenemos la máquina atacante es Kali Linux que sirve como base para realizar análisis, escaneos y explotación de vulnerabilidades. Por otro lado, la máquina víctima es Cicada, con dirección IP 10.10.11.50
 
