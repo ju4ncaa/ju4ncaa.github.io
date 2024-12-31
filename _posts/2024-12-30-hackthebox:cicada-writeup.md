@@ -25,7 +25,7 @@ En la imagen podemos ver representado el entorno al que nos vamos a enfrentar, p
 * Enumeración SMB (netexec + smbclient)
 * Fugas de información
 * RID Brute-Force para identificar usuarios válidos (netexec)
-* Password Spraying (Netexec)
+* Password Spraying (netexec)
 * AS-REP Roasting con impacket (Fallido)
 * Enumeracion LDAP + Obtencion de credenciales (ldapsearch)
 * Abuso del privilegio SeBackupPrivilege [Privilege escalation]
