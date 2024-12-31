@@ -85,8 +85,8 @@ En el escaneo de puertos TCP realizado a la dirección IP objetivo **10.10.11.35
 | 135        | MSRPC         | Microsoft Windows RPC |
 | 139        | NETBIOS-SSN   | Microsoft Windows netbios-ssn |
 | 389        | LDAP          | Microsoft Windows Active Directory LDAP |
-| 445        | MICROSOFT-DS  | <div align="center">-</div> |
-| 464        | KPASSWD5      | <div align="center">-</div> |
+| 445        | MICROSOFT-DS  | - |
+| 464        | KPASSWD5      | - |
 | 593        | NCACN_HTTP    | Microsoft Windows RPC over HTTP 1.0 |
 | 636        | SSL/LDAP      | Microsoft Windows Active Directory LDAP |
 | 3268       | LDAP          | Microsoft Windows Active Directory LDAP |
