@@ -1,6 +1,6 @@
 ---
 title: HackTheBox, Cicada Pentesting, WriteUp
-date: 2024-12-25
+date: 2024-12-30
 description: Writeup de la máquina UnderPass de la página HackTheBox
 categories: [Writeup's, Active Directory]
 tags: [Hacking, Pentesting, Active Directory]
