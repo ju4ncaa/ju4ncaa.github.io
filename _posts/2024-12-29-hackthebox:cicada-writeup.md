@@ -32,23 +32,22 @@ En la imagen podemos ver representado el entorno al que nos vamos a enfrentar, p
 * Volcado de contraseñas en formato hash (impacket-secretsdump)
 * Pass The Hass (evil-winrm)
 
-## **Enumeración**
 
-### **Descubrimiento de hosts**
+## **Descubrimiento de hosts**
 
 Usamos ping para verificar la conectividad del host 10.10.11.35, enviando un paquete ICMP obtenemos respuesta, lo que nos indica que el dispositivo está disponible en la red. A través del TTL (Time To Live) también podemos identificar que se trata de un equipo Windows.
 
 ![image](https://github.com/user-attachments/assets/e9f217dd-deea-4cbe-bd46-e8f63d24ede1)
 
-### **Identificación del sistema operativo**
+## **Identificación del sistema operativo**
 
 Una alternativa para identificar el sistema operativo al que nos estamos enfrentando es la herramienta whichSystem.py, esta herramienta es un pequeño script en python que nos permite saber si estamos ante un sistema operativo Windows o Linux en base al TTL. Windows tiene un ttl=128 y Linux tiene un ttl=64 por defecto.
 
 ![image](https://github.com/user-attachments/assets/50368221-909d-48a6-97ea-61433f955ae4)
 
-### **Nmap (Network Mapper)**
+## **Nmap (Network Mapper)**
 
-#### **Escaneo de Puertos TCP**
+### **Escaneo de Puertos TCP**
 
 Utilizamos la herramienta **Nmap** para realizar un escaneo inicial de puertos TCP sobre la dirección IP objetivo **10.10.11.35**, usando los siguientes parámetros:
 
@@ -75,7 +74,7 @@ Una vez obtenido los puertos abiertos, utilizamos **Nmap** para realizar un esca
 
 ![image](https://github.com/user-attachments/assets/a4964f32-9af7-439c-999f-f9b9cde370a2)
 
-#### **Detalles del escaneo**
+### **Detalles del escaneo**
 
 En el escaneo de puertos TCP realizado a la dirección IP objetivo **10.10.11.35**, se han identificado los siguientes puertos abiertos, servicios en ejecución y sus respectivas versiones.
 
@@ -99,19 +98,19 @@ También se han encontrado dos dominios los cuales son **"cicada.htb"** y **"CIC
 
 ![image](https://github.com/user-attachments/assets/43914c23-8b79-42e0-b7bf-8e12e5af0bae)
 
-### **Enumeración de servicios (DNS - Puerto 53)**
+## **Enumeración de servicios (DNS - Puerto 53)**
 
 Intentamos realizar una transferencia de zona con **dig** para obtener toda la información de la base de datos de registros DNS, el resultado que obtenemos es una transferencia fallida.
 
 ![image](https://github.com/user-attachments/assets/8a280c4a-e856-46f8-92b0-4b5bbe215ae1)
 
-### **Enumeración de servicios (RPC - Puerto 139)**
+## **Enumeración de servicios (RPC - Puerto 139)**
 
 Usamos la herramienta **rpcclient** conectándonos de forma anónima e intentando enumerar los usuarios del dominio **cicada.htb**, la operación resulta fallida.
 
 ![image](https://github.com/user-attachments/assets/056bf9f9-e127-4876-ad12-6abfda9100d5)
 
-### **Enumeración de servicios (SMB - Puerto 445)**
+## **Enumeración de servicios (SMB - Puerto 445)**
 
 Utilizamos la herramienta netexec utilizando usuario nulo y contraseña nula para comprobar si el servidor admite conexiones anónimas.
 
@@ -151,7 +150,7 @@ Disponemos de una lista potencial de usuarios, con la cual podemos intentar real
 
 ![image](https://github.com/user-attachments/assets/cb4608fb-fb7b-47a7-ba9d-29015beea1af)
 
-### **Enumeración de servicios (LDAP - Puerto 389)**
+## **Enumeración de servicios (LDAP - Puerto 389)**
 
 Aunque ya hemos obtenido los usuarios con el módulo **rid-brute** de la herramienta **netexec** también lo realizaré con ldap para una mayor claridad.
 
@@ -161,7 +160,7 @@ Enumeramos para buscar contraseñas con **ldapsearch** y obtenemos la credencial
 
 ![image](https://github.com/user-attachments/assets/0454500c-9919-44af-9c33-44b1ef78cc63)
 
-### **Enumeración de servicios (SMB - Puerto 445)**
+## **Enumeración de servicios (SMB - Puerto 445)**
 
 Utilizamos la herramienta **netexec** para realizar un **Password Spraying** y validar para que usuarios es válida la credencial **"aRt$Lp#7t*VQ!3"**. Obtenemos como respuesta que la contraseña es válida para el usuario **"david.orelious"**
 
@@ -195,7 +194,7 @@ Utilizamos evil-winrm para autenticarnos y ganar acceso al sistema como el usuar
 
 ## Escalada de privilegios
 
-### Abuso de los privilegios asociados al usuarios
+### Abuso de los privilegios asociados al usuario
 
 Utilizamos el comando **whoami /priv** para listar los permisos asociados el usuarios actual. Podemos observar que unos de los privilegios es SeBackupPrivilege el cual permite hacer copias de seguridad de archivos y directorios, incluso si el usuario no tiene permisos explícitos sobre esos archivos. 
 
@@ -209,6 +208,6 @@ Utilizamos la herramienta **impacket-secretsdump** para realizar un volcado de c
 
 ![image](https://github.com/user-attachments/assets/d4045264-9d44-45cb-8115-1c0c2efadb47)
 
-Utilizamos el hash de **Administrator** para realizar un **Pass The Hash** con **evil-winrm**.
+Utilizamos el hash de **Administrator** para realizar un **Pass The Hash** con **evil-winrm** y ganar acceso al sistema con privilegios de administrador.
 
 ![image](https://github.com/user-attachments/assets/48233f1a-8069-42a7-9e0d-8991550590e0)
