@@ -50,7 +50,7 @@ Una alternativa para identificar el sistema operativo al que nos estamos enfrent
 
 ### **Escaneo de Puertos TCP**
 
-Utilizamos la herramienta **Nmap** para realizar un escaneo inicial de puertos TCP sobre la dirección IP objetivo **10.10.11.35**, usando los siguientes parámetros:
+Utilizamos la herramienta **Nmap** para realizar un escaneo inicial de puertos TCP sobre la dirección IP objetivo **192.168.1.132**, usando los siguientes parámetros:
 
 | **Parámetro** | **Uso**                                                                 |
 |---------------|-------------------------------------------------------------------------|
