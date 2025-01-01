@@ -196,7 +196,7 @@ Utilizamos evil-winrm para autenticarnos y ganar acceso al sistema como el usuar
 
 ### Abuso de los privilegios asociados al usuario
 
-Utilizamos el comando **whoami /priv** para listar los permisos asociados el usuarios actual. Podemos observar que unos de los privilegios es SeBackupPrivilege el cual permite hacer copias de seguridad de archivos y directorios, incluso si el usuario no tiene permisos explícitos sobre esos archivos. 
+Utilizamos el comando **whoami /priv** para listar los permisos asociados el usuarios actual. Podemos observar que unos de los privilegios es **SeBackupPrivilege** el cual permite hacer copias de seguridad de archivos y directorios, incluso si el usuario no tiene permisos explícitos sobre esos archivos. 
 
 ![image](https://github.com/user-attachments/assets/da7ce58d-cb0c-4bc8-9f8a-7ffd760ea6fe)
 
