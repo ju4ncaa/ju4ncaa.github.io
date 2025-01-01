@@ -250,5 +250,22 @@ Conseguimos ganar acceso al sistema como **nt authority\system**
 
 ## Post Explotación
 
-Una vez hemos conseguido ganar acceso al sistema victima utilizaremos **mimikatz.exe** para dumpear la **sam** del sistema donde se encuentran
+Creamos un servidor en Python y compartimos mimikatz.exe
 
+![imagen](https://github.com/user-attachments/assets/5d8e5187-7e51-4293-aa73-fac53a18b85c)
+
+En la máquina victima nos descargamos con **certutil** el **mimikatz.exe**
+
+![imagen](https://github.com/user-attachments/assets/cb84340f-c2ee-476e-944e-ccfce00e66b9)
+
+Iniciamos **mimikatz.exe** y ejecutamos `privilege::debug`, debemos de obtener como respuesta `Privilege '20' OK`, esto nos garantiza que estamos corriendo mimikatz como administrador.
+
+![imagen](https://github.com/user-attachments/assets/7077fea8-fb74-4e25-85e7-2413cd3097e9)
+
+Ejecutamos el comando `lsadump::lsa /patch` para modificar el proceso LSASS y extraer los hashes de las contraseñas de los usuarios.
+
+![imagen](https://github.com/user-attachments/assets/79593c84-4aa8-4a88-a2ed-f651bda33e21)
+
+Por ultimo habiendo obtenido el **Hash NTLM** de todos los usuarios podríamos crackearlos con herramientas como **hashcat** o realizar un **Pass The Hash** con herramientas como **impacket-psexec** o **evil-winrm**.
+
+![imagen](https://github.com/user-attachments/assets/f14dd395-59b6-4dfa-833d-520b8a752830)
