@@ -250,7 +250,7 @@ Conseguimos ganar acceso al sistema como **nt authority\system**
 
 ## **Post Explotación**
 
-Creamos un servidor en Python y compartimos mimikatz.exe
+Creamos un servidor en Python y compartimos **mimikatz.exe**
 
 ![imagen](https://github.com/user-attachments/assets/5d8e5187-7e51-4293-aa73-fac53a18b85c)
 
