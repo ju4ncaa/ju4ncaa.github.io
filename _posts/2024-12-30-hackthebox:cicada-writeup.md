@@ -112,7 +112,7 @@ Usamos la herramienta **rpcclient** conectándonos de forma anónima e intentand
 
 ## **Enumeración de servicios (SMB - Puerto 445)**
 
-Utilizamos la herramienta netexec utilizando usuario nulo y contraseña nula para comprobar si el servidor admite conexiones anónimas.
+Utilizamos la herramienta netexec usando usuario nulo y contraseña nula para comprobar si el servidor admite conexiones anónimas.
 
 ![image](https://github.com/user-attachments/assets/5a3beb5a-acdd-449d-a00d-56cd747b5322)
 
@@ -124,7 +124,7 @@ Tenemos capacidad de lectura en dos recursos compartidos los cuales son **"IPC$"
 
 ![image](https://github.com/user-attachments/assets/0bde7660-f59b-4743-83cb-893013fc22c0)
 
-Visualizamos el archivo **"Notice from HR.txt"** en el cual podemos ver una fuga de información sensible, en este caso una contraseña la cual es **Cicada$M6Corpb*@Lp#nZp!8**
+Visualizamos el archivo **"Notice from HR.txt"** en el cual podemos ver una fuga de información sensible, en este caso una contraseña la cual es `Cicada$M6Corpb*@Lp#nZp!8`
 
 ![image](https://github.com/user-attachments/assets/79d12f99-fb69-4566-a3be-e1dbb6633bd1)
 
@@ -136,11 +136,11 @@ Obtenemos los usuarios y los almacenamos en un archivo llamado **users.txt**
 
 ![image](https://github.com/user-attachments/assets/88ae2850-35fc-447f-87ff-2de8d9dbbd46)
 
-Con la lista de usuarios obtenida realizamos un **Password Spraying** con **netexec** para comprobar si la contraseña **Cicada$M6Corpb*@Lp#nZp!8** es válida para alguno de los usuarios. El resultado obtenido indica que la contraseña es válida para el usuario **"michael.wrightson"**
+Con la lista de usuarios obtenida realizamos un **Password Spraying** con **netexec** para comprobar si la contraseña `Cicada$M6Corpb*@Lp#nZp!8` es válida para alguno de los usuarios. El resultado obtenido indica que la contraseña es válida para el usuario **"michael.wrightson"**
 
 ![image](https://github.com/user-attachments/assets/744211f0-90dd-4799-b05d-87d196c3bb29)
 
-Comprobamos con **netexec** si con el usuario **"michael.wrightson"** y la contraseña **"Cicada$M6Corpb*@Lp#nZp!8"**, tenemos permisos de lectura sobre mas recursos uno de ellos **SYSVOL**, al tratarse de un Windows Server 2022 omitimos la parte de intentar buscar el archivo **Groups.xml** y descifrar la contraseña con **gpp-decrypt**
+Comprobamos con **netexec** si con el usuario **"michael.wrightson"** y la contraseña `Cicada$M6Corpb*@Lp#nZp!8` tenemos permisos de lectura sobre mas recursos,  tenemos permisos de lectura sobre **SYSVOL**, al tratarse de un Windows Server 2022 omitimos la parte de intentar buscar el archivo **Groups.xml** y descifrar la contraseña con **gpp-decrypt**
 
 ![image](https://github.com/user-attachments/assets/b92156f1-e93d-449d-ad19-9fc7539ccefa)
 
