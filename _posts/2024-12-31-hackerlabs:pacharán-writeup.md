@@ -29,9 +29,10 @@ En la imagen podemos ver representado el entorno al que nos vamos a enfrentar, p
 * Password Spraying (netexec)
 * AS-REP Roasting con impacket (Fallido)
 * Kerberoasting con impacket (Fallido)
-* Enumeración de impresores RPC (fuga de información)
+* Enumeración de impresores RPC (fuga de información) [Gain access]
 * Abuso del privilegio SeLoadDriverPrivilege [Privilege escalation]
-* 
+* Volcado de contraseñas en formato hash (mimikatz)
+* Pass The Hass (evil-winrm)
 
 ## **Descubrimiento de hosts**
 
@@ -243,6 +244,11 @@ Ejecutamos **ExploitCapcom.exe** e indicamos donde se aloja la reverse shell.
 
 ![imagen](https://github.com/user-attachments/assets/ecf96a20-c5e2-4b30-b2d9-156b3b5f0868)
 
-Finalmente conseguimos ganar acceso al sistema como **nt authority\system**
+Conseguimos ganar acceso al sistema como **nt authority\system**
 
 ![imagen](https://github.com/user-attachments/assets/4309b253-6bb4-431f-8648-efcd176da4c7)
+
+## Post Explotación
+
+Una vez hemos conseguido ganar acceso al sistema victima utilizaremos **mimikatz.exe** para dumpear la **sam** del sistema donde se encuentran
+
