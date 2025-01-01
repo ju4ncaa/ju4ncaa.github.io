@@ -209,7 +209,7 @@ Usamos la herramienta **evil-winrm** para autenticarnos y ganar acceso al sistem
 
 ![imagen](https://github.com/user-attachments/assets/5e426d7d-b0a7-4b81-8112-275ec855eeef)
 
-## Escalada de privilegios
+## **Escalada de privilegios**
 
 ### Abuso de los privilegios asociados al usuario
 
@@ -248,7 +248,7 @@ Conseguimos ganar acceso al sistema como **nt authority\system**
 
 ![imagen](https://github.com/user-attachments/assets/4309b253-6bb4-431f-8648-efcd176da4c7)
 
-## Post Explotación
+## **Post Explotación**
 
 Creamos un servidor en Python y compartimos mimikatz.exe
 
