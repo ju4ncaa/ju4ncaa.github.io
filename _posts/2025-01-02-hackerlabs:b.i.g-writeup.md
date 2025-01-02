@@ -3,7 +3,7 @@ title: TheHackersLabs, B.I.G Pentesting, WriteUp
 date: 2025-01-02
 description: Writeup de la máquina B.I.G de la página TheHackerLabs
 categories: [Writeup's, Active Directory]
-tags: [Hacking, Pentesting]
+tags: [Hacking, Pentesting, Active Directory]
 image_path: https://github.com/user-attachments/assets/e89004dd-95c1-40ab-a2b3-fc59b236d233
 image: https://github.com/user-attachments/assets/e89004dd-95c1-40ab-a2b3-fc59b236d233
 ---
