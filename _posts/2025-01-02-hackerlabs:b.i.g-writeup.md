@@ -146,3 +146,31 @@ Utilizamos la herramienta **Gobuster** para realizar un escaneo de directorios y
 | `-t`          | Permite definir el número de hilos que Gobuster utilizará para ejecutar el escaneo en paralelo. |
 
 ![imagen](https://github.com/user-attachments/assets/d2de0df9-1530-4045-957d-8b54f98eca1d)
+
+En el escaneo de directorios y archivos realizado con **Gobuster** a la dirección IP objetivo **192.168.1.138**, se han identificado las siguientes rutas accesibles, así como posibles archivos y directorios presentes en el servidor.
+
+| **Ruta**             | **Estado** | Redirección                          |
+|----------------------|------------|--------------------------------------|
+| /images              | 301        | `http://192.168.1.138/images/`       |
+| /Images              | 301        | `http://192.168.1.138/Images/`       |
+| /contents            | 301        | `http://192.168.1.138/contents/`     |
+| /IMAGES              | 301        | `http://192.168.1.138/IMAGES/`       |
+| /songs               | 301        | `http://192.168.1.138/songs/`        |
+| /Contents            | 301        | `http://192.168.1.138/Contents/`     |
+| /Songs               | 301        | `http://192.168.1.138/Songs/`        |
+
+### **Inspección de directorios**
+
+Comenzamos accediendo al directorio **/images** podemos observar 4 imagenes **big[1,2,3,4].jpg** y un archivo **web.config** al cual si intentamos acceder obtenemos un **404 - Not Found**. Nos descargamos las 4 imágenes a nuestro equipo local para inspeccionarlas mas tarde.
+
+![imagen](https://github.com/user-attachments/assets/ce18bd63-a0e5-4877-b59b-b741f2046a16)
+
+![imagen](https://github.com/user-attachments/assets/ec24370a-2127-45cd-8f54-6581d3cd4641)
+
+Accedemos tambien al directorio **/contents**, en este podemos observar un fichero llamado **notify.txt** y el archivo **web.config**, al cual si intentamos acceder obtenemos un **404 - Not Found**, si visualizamos el fichero **notify.txt** podemos leer una nota donde se quejan de que hay alguien que esta ocultando claves en formato **MD5**
+
+![imagen](https://github.com/user-attachments/assets/0f29f826-5bf6-4088-88ef-217635b9f1bf)
+
+Por último accedemos al directorio **/songs** donde podemos osbervar diferentes canciones, pero si accedemos al utlimo archivo llamado **Skyisthelimit.txt** vemos lo que es una lista de posibles contraseñas potenciales. Nos descargamos todos los archivos del directorio.
+
+![imagen](https://github.com/user-attachments/assets/d1c402e0-e637-4c3f-8e8c-a2d490b6fbeb)
