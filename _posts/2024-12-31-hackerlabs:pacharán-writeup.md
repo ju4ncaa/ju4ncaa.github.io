@@ -10,7 +10,7 @@ image: https://github.com/user-attachments/assets/9d118570-9421-4d26-918a-b396af
 
 ## **Introducción**
 
-![imagen](https://github.com/user-attachments/assets/c33b41e5-a79f-4066-b063-1830a0620ea9)
+![imagen](https://github.com/user-attachments/assets/be9df6c2-bbd4-417a-98db-eec6e13f38b2)
 
 En la imagen podemos ver representado el entorno al que nos vamos a enfrentar, por un parte tenemos la máquina atacante es Kali Linux, con dirección IP 192.168.1.133, que sirve como base para realizar análisis, escaneos y explotación de vulnerabilidades. Por otro lado, la máquina víctima es Pacharán, con dirección IP 192.168.1.132. Ambas máquinas están conectadas en la misma red local privada (192.168.1.0/24).
 
