@@ -12,7 +12,6 @@
 
 - type: rss
   icon: "fas fa-cube"
-  url: 'http://google.es'
   noblank: true
 # Uncomment and complete the url below to enable more contact options
 #
