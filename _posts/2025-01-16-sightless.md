@@ -2,7 +2,7 @@
 description: >-
   Writeup de la máquina de dificultad fácil Sightless de la página https://hackthebox.eu
 title: Hack The Box - Sightless | (Difficulty Easy) - Linux
-date: 2025-01-15 00:00:00 +0800
+date: 2025-01-16
 categories: [Hack the Box, Writeup]
 tags: [htb, hacking, hack the box, linux, easy, writeup, redteam, pentesting]
 image_post: true
@@ -92,3 +92,5 @@ Accediendo a la página en http://sightless.htb/ se puede observar una web de un
 
 ![imagen](https://github.com/user-attachments/assets/0bbc6ad5-d426-4d78-8882-91bf492d9e93)
 
+
+![imagen](https://github.com/user-attachments/assets/e8b9c0a5-e01c-449e-a4c9-a01e71dbba80)
