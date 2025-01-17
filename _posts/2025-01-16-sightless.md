@@ -12,7 +12,7 @@ image: https://github.com/user-attachments/assets/3369b1c5-339a-4c19-abb3-aa5b82
 ## Useful Skills
 
 * Web enumeration
-* Abusing Template Injection to RCE (SQLPad 6.10.0 - CVE-2022-0944) [Gain access]
+* Abusing Template Injection to RCE (SQLPad 6.10.0 - CVE-2022-0944)
 * Cracking /etc/shadow users hashes to escape the container
 * Hydra brute force to validate passwords
 * Monitoring system process with pspy
