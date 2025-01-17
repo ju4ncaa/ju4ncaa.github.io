@@ -224,10 +224,3 @@ jekyll-archives:
   permalinks:
     tag: /tags/:name/
     category: /categories/:name/
-
-plugins:
-  - jekyll-polyglot
-
-# polyglot configuration
-languages: ["es", "en-EN"]
-default_lang: "es"
