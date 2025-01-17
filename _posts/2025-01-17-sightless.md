@@ -4,7 +4,7 @@ description: >-
 title: Hack The Box - Sightless | (Difficulty Easy) - Linux
 date: 2025-01-17
 categories: [Hack the Box, Writeup]
-tags: [htb, hacking, hack the box, linux, easy, writeup, redteam, pentesting]
+tags: [htb, hacking, hack the box, linux, easy, sqlpad, froxlor, writeup, redteam, pentesting]
 image_post: true
 image: https://github.com/user-attachments/assets/3369b1c5-339a-4c19-abb3-aa5b8226b4ea
 ---
