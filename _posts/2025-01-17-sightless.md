@@ -95,7 +95,7 @@ http://10.10.11.32 [302 Found] Country[RESERVED][ZZ], HTTPServer[Ubuntu Linux][n
 http://sightless.htb/ [200 OK] Country[RESERVED][ZZ], Email[sales@sightless.htb], HTML5, HTTPServer[Ubuntu Linux][nginx/1.18.0 (Ubuntu)], IP[10.10.11.32], Title[Sightless.htb], X-UA-Compatible[IE=edge], nginx[1.18.0]
 ```
 
-Accediendo a la página en http://sightless.htb/ se puede observar una web de una empresa que se dedidca a la gestión de bases de datos y servidores.
+Accediendo a la página en http://sightless.htb/ puedo observar una web de una empresa que se dedidca a la gestión de bases de datos y servidores.
 
 ![imagen](https://github.com/user-attachments/assets/0bbc6ad5-d426-4d78-8882-91bf492d9e93)
 
