@@ -447,7 +447,7 @@ Vuelvo a entrar y activo php-fpm y guardo los cambios
 
 ![imagen](https://github.com/user-attachments/assets/0210ab7c-ecaf-4cd5-a51d-8fb23cc8f489)
 
-Por ultimo compruebo que se hayan otorgado los permisos SUID y spawneeo un shell como root
+Por ultimo compruebo que se hayan otorgado los permisos SUID al binario /bin/bash y spawneeo un shell como root
 
 ```bash
 michael@sightless:/tmp$ ls -la /bin/bash
