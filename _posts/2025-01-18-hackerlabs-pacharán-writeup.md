@@ -4,7 +4,7 @@ description: >-
 title: The Hackers Labs - Pacharán | (Difficulty Hard) - Windows
 date: 2025-01-18
 categories: [The Hackers Labs, Writeup]
-tags: [htb, hacking, hackerlabs, windows, hard, writeup, redteam, pentesting]
+tags: [htb, hacking, hackerlabs, windows, active directory, hard, writeup, redteam, pentesting]
 image_post: true
 image: https://github.com/user-attachments/assets/5c6000b7-d9e4-4a95-8507-1843ba434fbc
 ---
