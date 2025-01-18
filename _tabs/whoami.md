@@ -12,6 +12,6 @@ order: 4
 
 Página dedicada al pentesting y hacking ético, donde subo máquinas y CTFs para practicar y mejorar mis habilidades de seguridad mientras comparto lo que voy aprendiendo.
 
-* **Blog:** [https://zweilosec.github.io](https://ju4ncaa.github.io)
-* **GitHub:** [https://github.com/zweilosec](https://github.com/ju4ncaa)
-* **Hacking Notes:** [https://zweilosec.gitbook.io](https://ju4ncaa.gitbook.io)
+* **Blog:** [https://ju4ncaa.github.io](https://ju4ncaa.github.io)
+* **GitHub:** [https://github.com/ju4ncaa](https://github.com/ju4ncaa)
+* **Hacking Notes:** [https://ju4ncaa.gitbook.io](https://ju4ncaa.gitbook.io)
