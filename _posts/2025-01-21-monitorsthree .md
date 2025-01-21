@@ -6,7 +6,7 @@ date: 2025-01-21
 categories: [Hack the Box, Writeup]
 tags: [htb, hacking, hack the box, linux, medium, writeup, redteam, pentesting]
 image_post: true
-image: 
+image: https://github.com/user-attachments/assets/c5f79db4-c798-43f1-a916-4634a30f219d
 ---
 
 ## Enumeration
