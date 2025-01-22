@@ -9,6 +9,13 @@ image_post: true
 image: https://github.com/user-attachments/assets/c5f79db4-c798-43f1-a916-4634a30f219d
 ---
 
+## Useful Skills
+
+* Web enumeration
+* Subdomain enumeration
+* SQLInjection
+* Abusing Authenticated RCE (Cacti 1.2.26 - CVE-2024-25641)
+
 ## Enumeration
 
 ### TCP Scan
@@ -107,3 +114,15 @@ ID           Response   Lines    Word       Chars       Payload
 > Hay que añadir el dominio cacti.monitorsthree.htb en el archivo de configuración /etc/hosts para que se puede resolver el nombre de dominio a la dirección IP 10.10.11.30
 {: .prompt-tip }
 
+Accedo a http://cacti.monitorsthree.htb, la primera visión que obtengo es un panel de login para el software cacti, en la parte inferior del login observo la versión del software, la cual es Versión 1.2.26
+
+> Sabiendo que es Cacti y que la versión es 1.2.26 puedo buscar información sobre posibles vulnerabilidades existentes
+{: .prompt-info }
+
+## Vulnerability analysis
+
+### ¿Qué es Cacti?
+
+Antes de comenzar con el análisis de vulnerabilidades debo de comprender que es cacti y para que se usa
+
+![imagen](https://github.com/user-attachments/assets/1af79f96-c730-4235-8b97-9d861ed138b2)
