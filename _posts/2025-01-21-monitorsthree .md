@@ -69,4 +69,41 @@ whatweb http://monitorsthree.htb
 http://monitorsthree.htb [200 OK] Bootstrap, Country[RESERVED][ZZ], Email[sales@monitorsthree.htb], HTTPServer[Ubuntu Linux][nginx/1.18.0 (Ubuntu)], IP[10.10.11.30], JQuery, Script, Title[MonitorsThree - Networking Solutions], X-UA-Compatible[IE=edge], nginx[1.18.0]
 ```
 
-Accediendo a la página en http://monitosthree.htb/ puedo observar
+Accediendo a la página en http://monitorsthree.htb/ puedo observar una web de una empresa que se dedidca a la gestión y securización de red. La página contiene una opción de login
+
+![imagen](https://github.com/user-attachments/assets/639ad92e-5129-4782-a0a7-68dc0f1d72f1)
+
+Accedo a Login e intento diferentes credenciales pero sin exito nignuno, accedo tambien a reset password e interceptando peticiones con burpsuite no obtengo nada de interés
+
+![imagen](https://github.com/user-attachments/assets/407e9960-c5ff-4672-905c-d0198d63edc7)
+
+![imagen](https://github.com/user-attachments/assets/0464a8b9-2cb9-4804-b231-a708a6b16244)
+
+Utilizo gobuster para realizar enumeración de directorios
+
+```bash
+gobuster dir -u http://monitorsthree.htb/ -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt -
+/images               (Status: 301) [Size: 178] [--> http://monitorsthree.htb/images/]
+/admin                (Status: 301) [Size: 178] [--> http://monitorsthree.htb/admin/]
+/css                  (Status: 301) [Size: 178] [--> http://monitorsthree.htb/css/]
+/js                   (Status: 301) [Size: 178] [--> http://monitorsthree.htb/js/]
+/fonts                (Status: 301) [Size: 178] [--> http://monitorsthree.htb/fonts/]
+```
+
+La unica ruta que encuentro de interés es /admin pero al acceder obtengo un codigo de estado 403 Forbidden
+
+![imagen](https://github.com/user-attachments/assets/ecba2719-65e8-4679-99dc-4a9c5533a450)
+
+Utilizo wfuzz para realizar enumeración de subdominios
+
+```bash
+wfuzz -c --hw=982 --hc=404 -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt -u http://monitorsthree.htb/ -H "Host: FUZZ.monitorsthree.htb"
+=====================================================================
+ID           Response   Lines    Word       Chars       Payload                                                                                                                       
+=====================================================================
+000000246:   302        0 L      0 W        0 Ch        "cacti"
+```
+
+> Hay que añadir el dominio cacti.monitorsthree.htb en el archivo de configuración /etc/hosts para que se puede resolver el nombre de dominio a la dirección IP 10.10.11.30
+{: .prompt-tip }
+
