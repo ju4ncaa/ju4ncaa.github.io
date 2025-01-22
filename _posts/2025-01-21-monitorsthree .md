@@ -13,7 +13,7 @@ image: https://github.com/user-attachments/assets/c5f79db4-c798-43f1-a916-4634a3
 
 * Web enumeration
 * Subdomain enumeration
-* SQLi Time Based (SQLmap + Python Script)
+* Blind SQLi in Forgot Password panel
 * Abusing Authenticated RCE (Cacti 1.2.26 - CVE-2024-25641)
 
 ## Enumeration
