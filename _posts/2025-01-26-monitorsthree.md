@@ -186,6 +186,16 @@ Podría utilizar herramientas como SQLmap o Ghauri para automatizar la inyecció
 
 ![imagen](https://github.com/user-attachments/assets/7b289c5d-0f41-4d35-b35f-2796120c9714)
 
+Comienzo enumerando las bases de datos existentes
+
+![imagen](https://github.com/user-attachments/assets/1713f0d1-f7da-4cea-97b9-ad2d31d91688)
+
+![imagen](https://github.com/user-attachments/assets/8ab7b9d2-c473-43a6-b0c5-d1074828cd1b)
+
+![imagen](https://github.com/user-attachments/assets/32f8cfc5-3777-4482-970e-371539b0297c)
+
+![imagen](https://github.com/user-attachments/assets/19db35c4-d152-4507-9bb3-03d0288b74f6)
+
 ### Abusing Cacti 1.2.26 Authenticated RCE Vulnerability (CVE-2024-25641)
 
 En GitHub encuentro un repositorio sobre la vulnerabilidad CVE-2024-25641 el cual me sirven de guía para realizar la explotación de forma manual y entender como funciona todo.
