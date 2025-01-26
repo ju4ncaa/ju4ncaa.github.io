@@ -158,3 +158,31 @@ Al acceder a http://cacti.monitorsthree.htb observo un panel de login de cacti, 
 
 ### CVE-2024-25641 (Cacti 1.2.26 Authenticated RCE)
 
+Una pequeña búsqueda en internet me permite dar con la vulnerabilidad CVE-2024-25641, se trata de una ejecución remota de comandos (RCE) disponiendo de un usuario autenticado.
+
+* [NVD Explanation CVE-2024-25641](https://nvd.nist.gov/vuln/detail/CVE-2024-25641)
+
+## Exploitation
+
+### SQLi password recovery panel
+
+Necesito disponder de un usuario autenticado para llevar a cabo la explotación de la ejecución remota de comandos, probe a realizar inyección SQL en el panel de login, pero no probe a testar si el panel de recuperación de contraseña es vulnerable a SQLi. Introduzco una comilla y obtengo una error de sintaxis SQL, lo cual me indica que es vulnerable
+
+![imagen](https://github.com/user-attachments/assets/9640c304-164f-4f53-bb33-6450cceafa6f)
+
+Utilizo order by para detectar cuantas columnas existen, existen nueve columnas.
+
+![imagen](https://github.com/user-attachments/assets/91f07568-f8f8-45cf-a9a1-b8798319881f)
+
+Intercepto la petición con BurpSuite y la envío al Repeater, al realizar union select observo que no se refleja ninguno de los números
+
+![imagen](https://github.com/user-attachments/assets/a0158dc9-dd61-443f-b169-66e1cfe35f17)
+
+
+### Abusing Cacti 1.2.26 Authenticated RCE Vulnerability (CVE-2024-25641)
+
+En GitHub encuentro un repositorio sobre la vulnerabilidad CVE-2024-25641 el cual me sirven de guía para realizar la explotación de forma manual y entender como funciona todo.
+
+* [CVE-2024-25641](https://github.com/Safarchand/CVE-2024-25641)
+
+![imagen](https://github.com/user-attachments/assets/d3447fc4-82cb-4615-ad3d-e0160445f5af)
