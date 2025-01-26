@@ -174,10 +174,17 @@ Utilizo order by para detectar cuantas columnas existen, existen nueve columnas.
 
 ![imagen](https://github.com/user-attachments/assets/91f07568-f8f8-45cf-a9a1-b8798319881f)
 
-Intercepto la petición con BurpSuite y la envío al Repeater, al realizar union select observo que no se refleja ninguno de los números
+Intercepto la petición con BurpSuite y la envío al Repeater, al realizar union select observo que no se refleja ninguno de los datos en ninguna de las columnas
 
 ![imagen](https://github.com/user-attachments/assets/a0158dc9-dd61-443f-b169-66e1cfe35f17)
 
+![imagen](https://github.com/user-attachments/assets/2f3f95e4-c612-45ca-ab26-b42a3dc63e1c)
+
+Podría utilizar herramientas como SQLmap o Ghauri para automatizar la inyección SQL, pero existe una forma más rapida de realizar la inyección a través de la función EXTRACTVALUE(), esta función permite generar errores cuando se proporciona una consulta XPath malformada o con datos inesperados, revelando información de la base de datos.
+
+![imagen](https://github.com/user-attachments/assets/e03ad5db-67de-4252-9124-553ce728c065)
+
+![imagen](https://github.com/user-attachments/assets/7b289c5d-0f41-4d35-b35f-2796120c9714)
 
 ### Abusing Cacti 1.2.26 Authenticated RCE Vulnerability (CVE-2024-25641)
 
