@@ -82,7 +82,7 @@ PORT      STATE  SERVICE
 
 En el puerto 21/TCP observo un servidor ProFTPD asociado a un nombre de dominio llamado sightless.htb. Por otra parte no se puede visualizar en el escaneo la versión y no se detecta anonymous login
 
-> Hay que añadir el dominio sightless.htb en el archivo de configuración /etc/hosts para que se puede resolver el nombre de dominio a la dirección IP 10.10.11.32
+> Hay que añadir el dominio sightless.htb en el archivo de configuración /etc/hosts para que se pueda resolver el nombre de dominio a la dirección IP 10.10.11.32
 {: .prompt-tip }
 
 ### HTTP Enumeration
