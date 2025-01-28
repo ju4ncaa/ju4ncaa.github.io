@@ -69,7 +69,7 @@ PORT      STATE  SERVICE
 Nmap done: 1 IP address (1 host up) scanned in 0.89 seconds
 ```
 
-> Hay que añadir el dominio monitorsthree.htb en el archivo de configuración /etc/hosts para que se puede resolver el nombre de dominio a la dirección IP 10.10.11.30
+> Hay que añadir el dominio monitorsthree.htb en el archivo de configuración /etc/hosts para que se pueda resolver el nombre de dominio a la dirección IP 10.10.11.30
 {: .prompt-tip }
 
 ### HTTP Enumeration
