@@ -13,6 +13,9 @@ image: https://github.com/user-attachments/assets/9d60c834-3318-4bfd-910e-a6c5fe
 
 * 
 
+> En este escenario, comenzaremos con las siguientes credenciales (usuario: Olivia, contraseña: ichliebedich)
+{: .prompt-info }
+
 ## Enumeration
 
 ### TCP Scan
