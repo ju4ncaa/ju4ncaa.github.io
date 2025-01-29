@@ -101,7 +101,7 @@ Nmap done: 1 IP address (1 host up) scanned in 0.82 seconds
 
 > Esta máquina sigue activa en HackTheBox. Una vez que se retire, este artículo se publicará para acceso público, de acuerdo con la política de HackTheBox sobre la publicación de contenido de su plataforma.
 {: .prompt-danger }
-
+<!--
 > Hay que añadir el dominio administrator.htb en el archivo de configuración /etc/hosts para que se pueda resolver el nombre de dominio a la dirección IP 10.10.11.42
 {: .prompt-tip }
 
@@ -427,3 +427,4 @@ Info: Establishing connection to remote endpoint
 En BloodHound observo que Emily tiene el permiso GenericWrite sobre Ethan, este permiso puede ser explotado para actualizar atributos como permisos de cuenta, o incluso ejecutar la escalada de privilegios modificando scripts de inicio de sesión o directores de servicio.
 
 ![imagen](https://github.com/user-attachments/assets/850405bf-dddb-4e96-9a09-0055958aec32)
+-->
