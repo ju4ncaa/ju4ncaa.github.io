@@ -69,7 +69,6 @@ Host script results:
 Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
 Nmap done: 1 IP address (1 host up) scanned in 64.83 seconds
 ```
-<!--
 
 ### UDP Scan
 
@@ -88,6 +87,14 @@ PORT      STATE  SERVICE
 Nmap done: 1 IP address (1 host up) scanned in 0.82 seconds
 ```
 
+> Esta máquina sigue activa en HackTheBox. Una vez que se retire, este artículo se publicará para acceso público, de acuerdo con la política de HackTheBox sobre la publicación de contenido de su plataforma.
+{: .prompt-danger }
+
+<!--
+
 > Hay que añadir el dominio administrator.htb en el archivo de configuración /etc/hosts para que se pueda resolver el nombre de dominio a la dirección IP 10.10.11.42
 {: .prompt-tip }
+
+
+
 -->
