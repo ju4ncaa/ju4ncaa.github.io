@@ -11,14 +11,16 @@ image: https://github.com/user-attachments/assets/9d60c834-3318-4bfd-910e-a6c5fe
 
 ## Useful Skills
 
-* 
+* Enumeración DNS (dig)
+* Domain Zone Transfer AXRF (failed)
+* RPC Enumeration (rpcclient)
+* SMB Enumeration (netexec)
+* LDAP Enumeration (netexec + ldapsearch)
 
 > En este escenario, comenzaremos con las siguientes credenciales (usuario: Olivia, contraseña: ichliebedich)
 {: .prompt-info }
 
-## Enumeration
-
-### TCP Scan
+## TCP Scan
 
  ```bash
 rustscan -a 10.10.11.42 --ulimit 5000 -g
@@ -73,7 +75,7 @@ Service detection performed. Please report any incorrect results at https://nmap
 Nmap done: 1 IP address (1 host up) scanned in 64.83 seconds
 ```
 
-### UDP Scan
+## UDP Scan
 
  ```bash
 nmap -sU --top-ports 1500 --min-rate 5000 -n -Pn 10.10.11.42 -oN udpScan
@@ -93,11 +95,117 @@ Nmap done: 1 IP address (1 host up) scanned in 0.82 seconds
 > Esta máquina sigue activa en HackTheBox. Una vez que se retire, este artículo se publicará para acceso público, de acuerdo con la política de HackTheBox sobre la publicación de contenido de su plataforma.
 {: .prompt-danger }
 
-<!--
-
 > Hay que añadir el dominio administrator.htb en el archivo de configuración /etc/hosts para que se pueda resolver el nombre de dominio a la dirección IP 10.10.11.42
 {: .prompt-tip }
 
+## DNS Enumeration
 
+Intento obtener información adicional sobre el dominio a través de consultas DNS con dig, donde intento obtener los registros NS, MX, CNAME entre otros, posteriormente, trato de realizar una transferencia de zona, pero esta resulta fallida.
 
--->
+```bash
+dig administrator.htb@10.10.11.42 axfr
+
+; <<>> DiG 9.18.28-1~deb12u2-Debian <<>> administrator.htb@10.10.11.42 axfr
+;; global options: +cmd
+; Transfer failed.
+```
+
+## SMB Enumeration
+
+Utilizo NetExec para realizar un escaneo de SMB y obtener información clave como el sistema operativo, nombre del servidor, dominio, si la firma smb está habilita y si la versión antigua SMBv1 está activada o desactivada.
+
+```bash
+netexec smb 10.10.11.42
+SMB  10.10.11.42 445  DC  [*] Windows Server 2022 Build 20348 x64 (name:DC)(domain:administrator.htb)  (signing:True)  (SMBv1:False)
+```
+
+Utilizo NetExec para enumerar los recursos compartidos del sistema a través del protocolo SMB, ejecutando el comando con el usuario Olivia y la contraseña ichliebedich y así poder identificar qué recursos pueden ser accedidos. No obtengo nada interesante.
+
+```bash
+netexec smb 10.10.11.42 -u 'olivia' -p 'ichliebedich' --shares
+SMB         10.10.11.42     445    DC               [*] Windows Server 2022 Build 20348 x64 (name:DC) (domain:administrator.htb) (signing:True) (SMBv1:False)
+SMB         10.10.11.42     445    DC               [+] administrator.htb\olivia:ichliebedich 
+SMB         10.10.11.42     445    DC               [*] Enumerated shares
+SMB         10.10.11.42     445    DC               Share           Permissions     Remark
+SMB         10.10.11.42     445    DC               -----           -----------     ------
+SMB         10.10.11.42     445    DC               ADMIN$                          Remote Admin
+SMB         10.10.11.42     445    DC               C$                              Default share
+SMB         10.10.11.42     445    DC               IPC$            READ            Remote IPC
+SMB         10.10.11.42     445    DC               NETLOGON        READ            Logon server share 
+SMB         10.10.11.42     445    DC               SYSVOL          READ            Logon server share 
+```
+
+## RPC Enumeration
+
+Haciendo uso de las credenciales válidas, intento enumerar los usuarios usando la herramienta rpcclient. Obtengo con éxito los nombres de usuarios del sistema.
+
+```bash
+rpcclient -U administrator.htb/olivia%ichliebedich 10.10.11.42 -c enumdomusers | grep -oP '\[.*?\]' | tr -d '[]' | grep -v 0x
+Administrator
+Guest
+krbtgt
+olivia
+michael
+benjamin
+emily
+ethan
+alexander
+emma
+```
+
+> Sabiendo los usuarios del sistema, una de las posibles vías de ataque a considerar sería el AS-REP Roasting
+{: .prompt-tip }
+
+## LDAP Enumeration
+
+Utilizo NetExec para verificar si las credenciales (olivia:ichliebedich) son válidas para conectarme al servicio LDAP.
+
+```bash
+netexec ldap 10.10.11.42 -u 'olivia' -p 'ichliebedich'
+SMB         10.10.11.42     445    DC               [*] Windows Server 2022 Build 20348 x64 (name:DC) (domain:administrator.htb) (signing:True) (SMBv1:False)
+LDAP        10.10.11.42     389    DC               [+] administrator.htb\olivia:ichliebedich 
+```
+
+Haciendo uso de las credenciales válidas (olivia:ichliebedich), intento enumerar los usuarios del sistema utilizando la herramienta ldapsearch, este método es una alternativa a la enumeración de usuarios mediante rpcclient.
+
+```bash
+ldapsearch "objectclass=user" -x -H ldap://10.10.11.42 -b "dc=administrator,dc=htb" -D "olivia@administrator.htb" -w "ichliebedich" | grep sAMAccountName | cut -d : -f 2
+ Administrator
+ Guest
+ DC$
+ krbtgt
+ olivia
+ michael
+ benjamin
+ emily
+ ethan
+ alexander
+ emma
+```
+
+## Gain access
+
+Haciendo uso de las credenciales válidas (olivia:ichliebedich), intento verificar con NetExec si puedo acceder al sistema mediante el servicio WinRM. Obtengo un (Pwned!) lo que indica que las credenciales proporcionadas son válidas
+
+```bash
+netexec winrm 10.10.11.42 -u 'olivia' -p 'ichliebedich'
+WINRM       10.10.11.42     5985   DC               [*] Windows Server 2022 Build 20348 (name:DC) (domain:administrator.htb)
+WINRM       10.10.11.42     5985   DC               [+] administrator.htb\olivia:ichliebedich (Pwn3d!)
+```
+
+Accedo al sistema con evil-winrm como el usuario olivia
+
+```bash
+evil-winrm -i 10.10.11.42 -u olivia -p ichliebedich
+                                        
+Evil-WinRM shell v3.5
+                                        
+Warning: Remote path completions is disabled due to ruby limitation: quoting_detection_proc() function is unimplemented on this machine
+                                        
+Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+                                        
+Info: Establishing connection to remote endpoint
+*Evil-WinRM* PS C:\Users\olivia\Documents>
+```
+
+## Privilege escalation
