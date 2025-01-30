@@ -11,8 +11,7 @@ image: https://github.com/user-attachments/assets/898dbeb2-0635-42de-809f-da03b3
 
 ## Useful Skills
 
-* Web enumeration
-* 
+
 
 ## Enumeration
 
