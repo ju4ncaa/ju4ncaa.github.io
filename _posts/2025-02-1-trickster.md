@@ -4,7 +4,7 @@ description: >-
 title: Hack The Box - Trickster | (Difficulty Medium) - Linux
 date: 2025-02-1
 categories: [Hack the Box, Writeup]
-tags: [htb, hacking, hack the box, linux, medium, writeup, redteam, pentesting]
+tags: [htb, hacking, hack the box, linux, medium, prestashop, changedetection, prusaslicer, writeup, redteam, pentesting]
 image_post: true
 image: https://github.com/user-attachments/assets/68c7e29e-5394-442f-b624-df3200f6c713
 
