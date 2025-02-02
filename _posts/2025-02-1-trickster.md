@@ -15,7 +15,7 @@ image: https://github.com/user-attachments/assets/68c7e29e-5394-442f-b624-df3200
 * Web enumeration
 * Extracting the contents of .git directory (git-dumper)
 * Abusing PrestaShop 8.1.5 XSS to RCE (CVE-2024-34716)
-* Information lekeage
+* Lateral Movement to james via Information lekeage (parameters.php)
 * Cracking hashes (hashcat)
 * Internal Host Discovery Docker Container
 * Internal Port Discovery Docker Container
