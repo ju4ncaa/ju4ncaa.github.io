@@ -13,6 +13,8 @@ image: https://github.com/user-attachments/assets/68c7e29e-5394-442f-b624-df3200
 ## Useful Skills
 
 * Web enumeration
+* Extracting the contents of .git directory (git-dumper)
+* 
 
 ## Enumeration
 
@@ -102,6 +104,117 @@ gobuster dir -u http://shop.trickster.htb/ -w /usr/share/seclists/Discovery/Web-
 
 Utilizo la herramienta git-dumper para dumpear todo el repositorio git del sitio web
 
+* [Git Dumper tool](https://github.com/arthaud/git-dumper.git)
+
 ```bash
 python3 git_dumper.py http://shop.trickster.htb/.git/ .
 ```
+
+Observo los logs del repositorio git con el comando git log, no consigo observar nada interesante, simplemente una actualización del panel de administración, también consigo observar un dirección email la cual es adam@trickster.htb
+
+```bash
+git log
+
+commit 0cbc7831c1104f1fb0948ba46f75f1666e18e64c (HEAD -> admin_panel)
+Author: adam <adam@trickster.htb>
+Date:   Fri May 24 04:13:19 2024 -0400
+update admin pannel
+```
+
+```bash
+git show 0cbc7831c1104f1fb0948ba46f75f1666e18e64c
+
+diff --git a/.php-cs-fixer.dist.php b/.php-cs-fixer.dist.php
+new file mode 100644
+index 0000000..4f6c2eb
+--- /dev/null
++++ b/.php-cs-fixer.dist.php
+@@ -0,0 +1,52 @@
++<?php
++
++ini_set('memory_limit','256M');
++
++$finder = PhpCsFixer\Finder::create()->in([
++    __DIR__.'/src',
++    __DIR__.'/classes',
++    __DIR__.'/controllers',
++    __DIR__.'/tests',
++    __DIR__.'/tools/profiling',
++])->notPath([
++    'Unit/Resources/config/params.php',
++    'Unit/Resources/config/params_modified.php',
++]);
++
++return (new PhpCsFixer\Config())
++    ->setRiskyAllowed(true)
++    ->setRules([
++        '@Symfony' => true,
++        'array_indentation' => true,
++        'cast_spaces' => [
++            'space' => 'single',
++        ],
++        'combine_consecutive_issets' => true,
++        'concat_space' => [
++            'spacing' => 'one',
++        ],
++        'error_suppression' => [
++            'mute_deprecation_error' => false,
++            'noise_remaining_usages' => false,
++            'noise_remaining_usages_exclude' => [],
++        ],
++        'function_to_constant' => false,
++        'method_chaining_indentation' => true,
++        'no_alias_functions' => false,
++        'no_superfluous_phpdoc_tags' => false,
++        'non_printable_character' => [
++            'use_escape_sequences_in_strings' => true,
++        ],
++        'phpdoc_align' => [
++            'align' => 'left',
++        ],
++        'phpdoc_summary' => false,
++        'protected_to_private' => false,
++        'psr_autoloading' => false,
++        'self_accessor' => false,
++        'yoda_style' => false,
++        'single_line_throw' => false,
++        'no_alias_language_construct_call' => false,
++    ])
++    ->setFinder($finder)
++    ->setCacheFile(__DIR__.'/var/.php_cs.cache');
+```
+
+Al hacer ls para observar los directorios y archivos que existen, veo un directorio que me llama la atención, el cual es admin634ewutrx1jgitlooaj
+
+```bash
+ls
+admin634ewutrx1jgitlooaj  autoload.php  error500.html  git-dumper  index.php  init.php  Install_PrestaShop.html  INSTALL.txt  LICENSES  Makefile
+```
+
+Me dirijo a http://shop.trickster.htb/admin634ewutrx1jgitlooaj/ para observar si existe el directorio, para mi sorpresa me encuentro con un panel de administración de login de PrestaShop, donde consigo ver la versión de PrestaShop, la cual es 8.1.5
+
+![imagen](https://github.com/user-attachments/assets/f2015668-94e5-42e0-bf84-95a138ac2e76)
+
+> Sabiendo que es PrestaShop y que la versión es 8.1.5 puedo buscar información sobre posibles vulnerabilidades existentes
+{: .prompt-info }
+
+## Vulnerability analysis
+
+### CVE-2024-34716 (PrestaShop 8.1.5 XSS to RCE)
+
+Una pequeña búsqueda en internet me permite dar con la vulnerabilidad CVE-2024-34716, se trata de un XSS que deriva en una Ejecución Remota de comandos.
+
+* [NVD Explanation CVE-2024-34716](https://nvd.nist.gov/vuln/detail/CVE-2024-34716)
+
+## Exploitation
+
+Encuentro un exploit asociado a un artículo sobre la vulnerabilidad CVE-2024-34716 el cual me sirve para entender como funciona todo.
+
+* [CVE-2024-34716 XSS to Remote Codeecution on PrestaShop <=8.1.5](https://ayoubmokhtar.com/post/png_driven_chain_xss_to_remote_code_execution_prestashop_8.1.5_cve-2024-34716/)
+
+![imagen](https://github.com/user-attachments/assets/c0c4d637-fc02-4c82-beaf-d1cfaa743e15)
+
+* [CVE-2024-34716_PoC_Exploit](https://github.com/aelmokhtar/CVE-2024-34716)
+
+![imagen](https://github.com/user-attachments/assets/2bfed678-8ab0-4605-9819-07c611b65c6d)
+
