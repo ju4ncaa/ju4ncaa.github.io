@@ -17,6 +17,9 @@ image: https://github.com/user-attachments/assets/68c7e29e-5394-442f-b624-df3200
 * Abusing PrestaShop 8.1.5 XSS to RCE (CVE-2024-34716)
 * Information lekeage
 * Cracking hashes (hashcat)
+* Docker Container Internal Host Discovery (bash script)
+* Docker Container Internal Port Discovery (netcat)
+* SSH Local Port Forwarding
 
 ## Enumeration
 
