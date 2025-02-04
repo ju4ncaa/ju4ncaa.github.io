@@ -1,7 +1,7 @@
 ---
 description: >-
   Writeup de la máquina de dificultad media Administrator de la página https://hackthebox.eu
-title: Hack The Box - Administrator | (Difficulty Medium) - Windows
+title: HTB - Administrator | (Difficulty Medium) - Windows
 date: 2025-01-29
 categories: [Writeup, Hack the Box]
 tags: [htb, hacking, hack the box, active directory, medium, writeup, redteam, pentesting]
