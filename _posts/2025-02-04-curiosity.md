@@ -6,10 +6,12 @@ date: 2025-02-04
 categories: [Writeup, The Hackers Labs]
 tags: [vulnhub, hacking, active directory, easy, writeup, redteam, pentesting]
 image_post: true
-image: https://github.com/user-attachments/assets/cf96a876-b227-4bdc-b61b-95dc4be6f16e
+image: https://github.com/user-attachments/assets/f355d63c-7590-4d07-9f45-b217e54cdeae
 ---
 
 ## Useful Skills
+
+* LLMNR Poisoning (responder)
 
 ## Enumeration
 
