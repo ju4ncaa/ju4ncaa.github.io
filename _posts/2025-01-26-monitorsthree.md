@@ -1,7 +1,7 @@
 ---
 description: >-
   Writeup de la máquina de dificultad media MonitorsThree de la página https://hackthebox.eu
-title: Hack The Box - MonitorsThree | (Difficulty Medium) - Linux
+title: HTB - MonitorsThree | (Difficulty Medium) - Linux
 date: 2025-01-26
 categories: [Writeup, Hack the Box]
 tags: [htb, hacking, hack the box, linux, medium, cacti, duplicati, writeup, redteam, pentesting]
