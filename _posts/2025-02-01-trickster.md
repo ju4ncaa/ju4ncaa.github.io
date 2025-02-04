@@ -2,7 +2,7 @@
 description: >-
   Writeup de la máquina de dificultad media Trickster de la página https://hackthebox.eu
 title: Hack The Box - Trickster | (Difficulty Medium) - Linux
-date: 2025-02-1
+date: 2025-02-01
 categories: [Writeup, Hack the Box]
 tags: [htb, hacking, hack the box, linux, medium, prestashop, changedetection, prusaslicer, writeup, redteam, pentesting]
 image_post: true
