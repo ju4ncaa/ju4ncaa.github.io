@@ -4,9 +4,9 @@ icon: fas fa-info
 order: 4
 ---
 
-## Juan Carlos Rodríguez (a.k.a. ju4ncaa)
+```powershell
+PS C:\>whoami
+ju4ncaa
+```
 
-Página dedicada al pentesting y hacking ético, donde subo máquinas y CTFs para practicar y mejorar mis habilidades de seguridad mientras comparto lo que voy aprendiendo.
-
-* **Apuntes:** [https://ju4ncaa.github.io](https://ju4ncaa.github.io)
-* **GitHub:** [https://github.com/ju4ncaa](https://github.com/ju4ncaa)
+Soy Juan Carlos Rodríguez y en este espacio subo máquinas y CTFs para practicar y mejorar mis habilidades en seguridad. Aquí compartiré lo que voy aprendiendo, con el objetivo de ayudar a otros a crecer en el mundo del hacking ético.
