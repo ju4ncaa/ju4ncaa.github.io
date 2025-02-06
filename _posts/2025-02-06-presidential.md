@@ -12,7 +12,7 @@ image: https://github.com/user-attachments/assets/bb94b984-cc01-4945-a8ba-7b5bd7
 ## Useful Skills
 
 * Web Enumeration
-* Subdomaim Enumeration
+* Subdomain Enumeration
 
 ## Enumeration
 
