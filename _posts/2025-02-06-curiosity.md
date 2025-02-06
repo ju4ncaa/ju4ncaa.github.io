@@ -11,6 +11,8 @@ image: https://github.com/user-attachments/assets/f355d63c-7590-4d07-9f45-b217e5
 
 ## Useful Skills
 
+* DNS Enumeration
+* SMB Enumeration
 * LLMNR Poisoning
 
 ## Enumeration
@@ -107,4 +109,19 @@ PORT      STATE  SERVICE
 MAC Address: 08:00:27:14:4E:14 (Oracle VirtualBox virtual NIC)
 
 Nmap done: 1 IP address (1 host up) scanned in 0.94 seconds
+```
+
+> Hay que añadir los dominios hackme.thl y DC.hackme.thl en el archivo de configuración /etc/hosts para que se pueda resolver el nombre de dominio a la dirección IP 192.168.56.8
+{: .prompt-tip }
+
+### DNS Enumeration
+
+Intento obtener información adicional sobre el dominio a través de consultas DNS con dig, donde intento obtener los registros NS, MX, CNAME entre otros, posteriormente, trato de realizar una transferencia de zona, pero esta resulta fallida.
+
+```bash
+dig hackme.thl@192.168.56.8 axfr
+
+; <<>> DiG 9.18.28-1~deb12u2-Debian <<>> hackme.thl@192.168.56.8 axfr
+;; global options: +cmd
+; Transfer failed.
 ```
