@@ -12,6 +12,7 @@ image: https://github.com/user-attachments/assets/bb94b984-cc01-4945-a8ba-7b5bd7
 ## Useful Skills
 
 * Web Enumeration
+* Subdomaim Enumeration
 
 ## Enumeration
 
@@ -64,3 +65,6 @@ MAC Address: 00:0C:29:CE:40:3D (VMware)
 
 Nmap done: 1 IP address (1 host up) scanned in 0.88 second
 ```
+
+> Hay que añadir el dominio votenow.local en el archivo de configuración /etc/hosts para que se pueda resolver el nombre de dominio a la dirección IP 192.168.2.142
+{: .prompt-tip }
