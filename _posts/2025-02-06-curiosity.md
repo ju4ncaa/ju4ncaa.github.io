@@ -125,3 +125,12 @@ dig hackme.thl@192.168.56.8 axfr
 ;; global options: +cmd
 ; Transfer failed.
 ```
+
+### SMB Enumeration
+
+Utilizo NetExec para realizar un escaneo de SMB y obtener información clave como el sistema operativo, nombre del servidor, dominio, si la firma smb está habilita y si la versión antigua SMBv1 está activada o desactivada.
+
+```bash
+nxc smb 192.168.56.8
+SMB  192.168.56.8  445  DC  [*] Windows 10 / Server 2016 Build 14393 x64 (name:DC) (domain:hackme.thl) (signing:True) (SMBv1:False)
+```
