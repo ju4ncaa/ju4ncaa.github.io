@@ -2,7 +2,7 @@
 description: >-
   Writeup de la máquina de dificultad media Presidential de la página https://vulnhub.com
 title: VulnHub - Presidential | (Difficulty Medium) - Linux
-date: 2025-02-06
+date: 2025-02-07
 categories: [Writeup, VulnHub]
 tags: [vulnhub, hacking, linux, medium, writeup, redteam, pentesting]
 image_post: true
@@ -164,6 +164,21 @@ Utilizo las credenciales obtenenidas en config.php.bak, usuario votebox y contra
 
 ![imagen](https://github.com/user-attachments/assets/50adfadf-fe56-41d7-ab51-d4675c83cb2a)
 
-Observo una base de datos llamada users, donde consigo ver un usuario y una contraseña hasheada en lo que parece ser bcrypt
+Observo una base de datos llamada users, donde consigo ver un usuario y una contraseña hasheada en lo que parece ser bcrypt, intento crackearla pero no es posible
 
 ![imagen](https://github.com/user-attachments/assets/ea546b7d-4fe9-4e1f-a2f5-e273dec9f9f7)
+
+Consigo ver que se está utilizando la versión 4.8.1 en phpMyAdmin
+
+![imagen](https://github.com/user-attachments/assets/298383c2-43ee-40cd-99a4-d12a581e1e55)
+
+> Sabiendo que es phpMyAdmin y que la versión es 4.8.1 puedo buscar información sobre posibles vulnerabilidades existentes
+{: .prompt-info }
+
+## Vulnerability analysis
+
+### CVE-2018-12613 (phpMyAdmin 4.8.1 RCE)
+
+Una pequeña búsqueda en internet me permite dar con la vulnerabilidad CVE-2018-12613, esta vulnerabilidad permite a un atacante autenticado ejecutar código PHP arbitrario en el servidor.
+
+* [NVD Explanation CVE-2018-12613](https://nvd.nist.gov/vuln/detail/CVE-2018-12613)
