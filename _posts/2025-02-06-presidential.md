@@ -14,7 +14,7 @@ image: https://github.com/user-attachments/assets/bb94b984-cc01-4945-a8ba-7b5bd7
 * Web Enumeration
 * Information Lekeage (config.php.bak)
 * Subdomain Enumeration
-* Abusing phpMyAdmin LFI to RCE
+* Abusing phpMyAdmin 4.8.1 LFI to RCE (CVE-2018-12613)
 
 ## Enumeration
 
