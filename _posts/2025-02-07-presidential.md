@@ -14,6 +14,8 @@ image: https://github.com/user-attachments/assets/bb94b984-cc01-4945-a8ba-7b5bd7
 * Web Enumeration
 * Information Lekeage (config.php.bak)
 * Subdomain Enumeration
+* phpMyAdmin Local File Inclusion
+* Internal Port Discovery through LFI (/proc/net/tcp)
 * Abusing phpMyAdmin 4.8.1 LFI to RCE (CVE-2018-12613)
 
 ## Enumeration
@@ -179,6 +181,36 @@ Consigo ver que se está utilizando la versión 4.8.1 en phpMyAdmin
 
 ### CVE-2018-12613 (phpMyAdmin 4.8.1 RCE)
 
-Una pequeña búsqueda en internet me permite dar con la vulnerabilidad CVE-2018-12613, esta vulnerabilidad permite a un atacante autenticado ejecutar código PHP arbitrario en el servidor.
+Una pequeña búsqueda en internet me permite dar con la vulnerabilidad CVE-2018-12613, esta vulnerabilidad permite a un atacante autenticado a través de un LFI ejecutar código PHP arbitrario en el servidor.
 
 * [NVD Explanation CVE-2018-12613](https://nvd.nist.gov/vuln/detail/CVE-2018-12613)
+
+## Explitation
+
+### Abusing phpMyAdmin 4.8.1 LFI to RCE Vulnerability (CVE-2018-12613)
+
+Encuentro en exploit-db los pasos a seguir para explotar la vulnerabilidad CVE-2018-12613 lo cual me sirven de guía para entender como funciona todo.
+
+* [phpMyAdmin 4.8.1 - (Authenticated) Local File Inclusion](https://www.exploit-db.com/exploits/44924)
+
+![imagen](https://github.com/user-attachments/assets/d34079ab-96fc-4cf2-8616-38125daf58c7)
+
+* [phpMyAdmin 4.8.1 - (Authenticated) Remote Code Execution](https://www.exploit-db.com/exploits/50457)
+
+![imagen](https://github.com/user-attachments/assets/71384abf-f93f-4102-b608-bc42fc977b01)
+
+El LFI reside en index.php, ya que según explican en la línea 61 contiene un include con un $_REQUEST['target'];, el código contiene varias medidas de seguridad para prevenir LFI, pero se proporciona un payload urlencodeado dos veces con %253f para evitar la validación. Quedaría algo así:
+
+```
+http://192.168.2.142/phpmyadmin/index.php?target=db_sql.php%253f/../../../../../../etc/passwd
+```
+
+Utilizando el payload porporcionado consigo visualizar el fichero de configuracion passwd del máquina victima
+
+![imagen](https://github.com/user-attachments/assets/784d64fb-f195-48e3-aaf2-b6dfdb6ec524)
+
+Una vez acontecido el LFI enumero puertos internos de la máquina a través de /proc/net/tcp para detectar aquellos que no he podido en el escaneo de nmap ya que no se encuentran expuestos.
+
+```bash
+
+```
