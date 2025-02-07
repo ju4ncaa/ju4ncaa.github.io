@@ -14,6 +14,7 @@ image: https://github.com/user-attachments/assets/bb94b984-cc01-4945-a8ba-7b5bd7
 * Web Enumeration
 * Information Lekeage (config.php.bak)
 * Subdomain Enumeration
+* Abusing phpMyAdmin LFI to RCE
 
 ## Enumeration
 
