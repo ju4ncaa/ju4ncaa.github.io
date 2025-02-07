@@ -2,7 +2,7 @@
 description: >-
   Writeup de la máquina de dificultad media Presidential de la página https://vulnhub.com
 title: VulnHub - Presidential | (Difficulty Medium) - Linux
-date: 2025-02-08
+date: 2025-02-07
 categories: [Writeup, VulnHub]
 tags: [vulnhub, hacking, linux, medium, lfi, rce, phpmyadmin, cap_dac_read_search+ep, writeup, redteam, pentesting]
 image_post: true
