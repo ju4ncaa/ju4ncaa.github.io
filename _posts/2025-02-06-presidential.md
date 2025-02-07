@@ -66,5 +66,16 @@ MAC Address: 00:0C:29:CE:40:3D (VMware)
 Nmap done: 1 IP address (1 host up) scanned in 0.88 second
 ```
 
+### HTTP Enumeration
+
+Whatweb reporta que se está empleando el lenguaje de programación PHP con una versión desactualizada, la cual es 5.5.38 y un servidor apache 2.2.46
+
+```bash
+whatweb http://192.168.2.142
+http://192.168.2.142 [200 OK] Apache[2.4.6], Bootstrap, Country[RESERVED][ZZ], Email[contact@example.com,contact@votenow.loca], HTML5, HTTPServer[CentOS][Apache/2.4.6 (CentOS) PHP/5.5.38], IP[192.168.2.142], JQuery, PHP[5.5.38], Script, Title[Ontario Election Services &raquo; Vote Now!]
+```
+
 > Hay que añadir el dominio votenow.local en el archivo de configuración /etc/hosts para que se pueda resolver el nombre de dominio a la dirección IP 192.168.2.142
 {: .prompt-tip }
+
+Accediendo a la página en http://votenow.local/ puedo observar
