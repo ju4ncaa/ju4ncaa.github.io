@@ -1,4 +1,4 @@
----
+  ---
 description: >-
   Writeup de la máquina de dificultad media Presidential de la página https://vulnhub.com
 title: VulnHub - Presidential | (Difficulty Medium) - Linux
@@ -288,7 +288,7 @@ admin
 
 ### Privilege escalation
 
-Utilizo el comando getcap para visualizar las capabilities, observo /usr/bin/tarS con cap_dac_read_search+ep, esto permite al proceso ignorar los permisos de lectura y búsqueda puediendo leer archivos y recorrer directorios sin importar los permisos establecidos por el propietario. Por lo que podría intentar realizar un comprimido de /roo/.ssh, si el usuario root dispone de un par de claves obtendría las misma y podría escalar mis privilegios.
+Utilizo el comando getcap para visualizar las capabilities, observo /usr/bin/tarS con cap_dac_read_search+ep, esto permite al proceso ignorar los permisos de lectura y búsqueda pudiendo leer archivos y recorrer directorios sin importar los permisos establecidos por el propietario. Por lo que podría intentar realizar un comprimido de /root/.ssh, si el usuario root dispone de un par de claves obtendría las mismas y podría escalar mis privilegios.
 
 ```bash
 [admin@votenow tmp]$ tarS -cvf pwned.tar /root/.ssh
