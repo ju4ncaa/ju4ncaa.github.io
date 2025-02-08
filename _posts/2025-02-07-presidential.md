@@ -1,4 +1,4 @@
-  ---
+---
 description: >-
   Writeup de la máquina de dificultad media Presidential de la página https://vulnhub.com
 title: VulnHub - Presidential | (Difficulty Medium) - Linux
