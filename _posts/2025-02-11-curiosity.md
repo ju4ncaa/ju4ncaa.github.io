@@ -567,7 +567,7 @@ GMSA_SVC$:aes128-cts-hmac-sha1-96:00e86b8d9bf77b1e9455852e4673aba8
 
 ### Privilege escalation
 
-Utilizo BloodHound y visualizo que la cuenta GMSA_SVC posee el permiso AlloweToAct, lo que permite obtener un TGS utilizando getST e impersonar al usuario Administrator
+Utilizo BloodHound y visualizo que la cuenta GMSA_SVC posee el permiso AllowedToAct, lo que permite obtener un TGS utilizando getST e impersonar al usuario Administrator
 
 ![image](https://github.com/user-attachments/assets/de68ae00-455e-4c77-9700-b6a09b621232)
 
