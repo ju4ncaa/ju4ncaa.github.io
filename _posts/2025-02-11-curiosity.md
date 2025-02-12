@@ -21,7 +21,7 @@ image: https://github.com/user-attachments/assets/314a021e-123d-4111-ae5c-49c919
 * BloodHound analysis
 * Abusing Force Change Password permission
 * MSSQL data lekeage (sqlcmd)
-* Abusing ReadGMSPassword permission
+* Abusing ReadGMSAPassword permission
 * Abusing AllowToAct permission
 * Pass The Ticket
   
