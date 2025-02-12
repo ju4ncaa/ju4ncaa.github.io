@@ -315,7 +315,7 @@ Data: 2075988 bytes of 2075988 bytes copied
 Info: Upload successful!
 ```
 
-Subo SharpHound a través de evil-winrm para recopila datos del controlador de dominio
+Subo SharpHound a través de evil-winrm para recopilar datos del controlador de dominio
 
 ```bash
 *Evil-WinRM* PS C:\Users\jdoe\Documents\BloodHound> .\SharpHound.exe -c All
