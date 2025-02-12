@@ -467,7 +467,7 @@ PSDrive      : HKLM
 PSProvider   : Microsoft.PowerShell.Core\Registry
 ```
 
-Visualizo que existe un servidor MSSQL llamado SQLEXPRESS, por lo que puedo comenzar a enumerar información, con la herramienta sqlcmd la cual para ejecutar consultas en terminal
+Visualizo que existe un servidor MSSQL llamado SQLEXPRESS, por lo que puedo comenzar a enumerar información, con la herramienta sqlcmd, la cual sirve para ejecutar consultas en terminal
 
 * [Trabajar con la línea de comando de SQL Server - sqlcmd](https://www.sqlshack.com/es/trabajar-con-la-linea-de-comando-de-sql-server-sqlcmd/)
 
