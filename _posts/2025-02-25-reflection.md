@@ -31,7 +31,7 @@ Intento inyectar una etiqueta HTML, por ejemplo, un título H1 de forma sencilla
 
 ![image](https://github.com/user-attachments/assets/c9ab7112-26ec-4741-9afc-7844f0815545)
 
-Pudiendo haber realizar un inyección de código HTML lo suyo sería intentar inyectar código JavaScript, utilizando la etiqueta **<script>** no funciona, por lo que una alternativa de tantas es utilizar la etiqueta **<img>** y apuntar a una imagen inexistente, luego por ultimo indicar que cuando se produzca un error se ejecute el código JavaScript que deseemos.
+Pudiendo haber realizar un inyección de código HTML lo suyo sería intentar inyectar código JavaScript, utilizando la etiqueta **`<script>`** no funciona, por lo que una alternativa de tantas es utilizar la etiqueta **`<img>`** y apuntar a una imagen inexistente, luego por ultimo indicar que cuando se produzca un error se ejecute el código JavaScript que deseemos.
 
 ### Payload
 
