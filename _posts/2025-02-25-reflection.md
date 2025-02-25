@@ -45,7 +45,7 @@ Pudiendo haber realizar una inyección de código HTML lo suyo sería intentar i
 
 ## Lab2 - Stored XSS
 
-**Descripción:** **Este laboratorio te permite practicar inyecciones de script que se almacenan y se muestran a posteriores visitantes.
+**Descripción:** Este laboratorio te permite practicar inyecciones de script que se almacenan y se muestran a posteriores visitantes.
 
 ![image](https://github.com/user-attachments/assets/964ef6e4-9830-46e9-a799-c93da77d76fe)
 
