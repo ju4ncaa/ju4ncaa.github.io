@@ -121,3 +121,30 @@ Inyecto una etiqueta **`<img>`** en los tres parámetros GET que apunta hacia un
 
 ## Lab 4 - Reflected XSS through the URL
 
+**Descripción:** Introduce un parámetro ?data= en la URL para reflejar su contenido en la página.
+
+![image](https://github.com/user-attachments/assets/d73673f2-c5a6-4822-b4df-e055be6a8253)
+
+Intento inyectar código HTML, por ejemplo, un título **`<h1>`**, a través del parámetro GET **`data`**, consigo observar que se refleja el código inyectado
+
+### Payload
+
+```
+/laboratorio4/?data=<h1>HTML+Injection</h1>
+```
+
+![image](https://github.com/user-attachments/assets/c2649d35-50ce-4c23-9411-e242407fee9e)
+
+![image](https://github.com/user-attachments/assets/024cce05-34e8-4dfb-85f1-32f5518e8011)
+
+Viendo que se interpreta código HTML, inyecto una etiqueta **`<img>`** en el parámetro GET que apunta hacia una imagen inexistente, indicando que cuando se produzca el error se ejecute un código JavaScript, consiguiendo ejecutar el código de forma exitosa.
+
+### Payload
+
+```
+/laboratorio4/?data=%3Cimg+src=x+onerror=alert(%27xss%27)%3E
+```
+
+![image](https://github.com/user-attachments/assets/4e89a562-ee4b-4c85-bf60-1af81c762f4b)
+
+![image](https://github.com/user-attachments/assets/d1cd22fa-bcc1-4c74-8f8b-7cd2c9da360e)
