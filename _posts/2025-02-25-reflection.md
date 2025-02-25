@@ -4,7 +4,7 @@ description: >-
 title: BBLabs - Reflection | (Difficulty Easy) - XSS
 date: 2025-02-25
 categories: [Writeup, Bug Bounty Labs]
-tags: [bblabs, hacking, bug bounty labs, hacking web, easy, writeup, pentesting]
+tags: [bblabs, hacking, bug bounty labs, hacking web, xss, easy, writeup, pentesting]
 image_post: true
 image: https://github.com/user-attachments/assets/32140452-3a09-43d6-b1db-8791d9d0097f
 ---
@@ -79,6 +79,45 @@ Pudiendo haber realizar una inyección de código HTML lo suyo sería intentar i
 
 ![image](https://github.com/user-attachments/assets/72abe976-b362-4b7e-be93-26b04b4762aa)
 
-## Lab 3 - Dropdown + XSS
+## Lab 3 - Dropdown XSS
+
+**Descripción:** Selecciona alguna opción en los menús desplegables y haz clic en Enviar. Luego, puedes interceptar la petición con Burp Suite (u otra herramienta) y modificar los valores enviados para intentar inyectar tu payload.
+
+![image](https://github.com/user-attachments/assets/cef19622-c470-441d-aaac-b9355060b5c9)
+
+Comienzo seleccionando diferentes opciones disponibles de los dropdowns, interceptando la petición con BurpSuite y enviándola al Repeater
+
+![image](https://github.com/user-attachments/assets/530c2c7b-ab9c-4599-8b97-2628f3941fc7)
+
+![image](https://github.com/user-attachments/assets/4311c844-cb28-4421-baa5-b72011c3dbcc)
+
+Modifico los tres valores que se tramitan por GET **`opcion1, opcion2, opcion3`** e intento inyectar código HTML, por ejemplo, un título **`<h1>`**, consigo observar que se refleja el código inyectado
+
+### Payload
+
+```
+/laboratorio3/?opcion1=<h1>HTML+Injection</h1>&opcion2=<h1>HTML+Injection</h1>&opcion3=<h1>HTML+Injection</h1>
+```
+
+![image](https://github.com/user-attachments/assets/a9d2f655-a942-4441-bba4-3f94c20267f6)
+
+![image](https://github.com/user-attachments/assets/e02c9aa8-2fc1-4f75-aa6f-925007ae56e1)
+
+![image](https://github.com/user-attachments/assets/523aa084-bff0-4857-b708-94400dfea264)
+
+Inyecto una etiqueta **`<img>`** en los tres parámetros GET que apunta hacia una imagen inexistente, indicando que cuando se produzca el error se ejecuta un código JavaScript, consiguiendo ejecutar el código de forma exitosa.
+
+### Payload
+
+```
+/laboratorio3/?opcion1=<img+src=x+onerror=alert('xss')>&opcion2=<img+src=x+onerror=alert('xss')>&opcion3=<img+src=x+onerror=alert('xss')>
+```
+
+![image](https://github.com/user-attachments/assets/98e1979d-ea3a-45a2-a0b2-e7377e984fe7)
+
+![image](https://github.com/user-attachments/assets/d39e0bd6-bb7c-434a-a606-d43edb2b6600)
+
+![image](https://github.com/user-attachments/assets/5754d009-9490-4311-8987-a5c9070aaf1a)
 
 ## Lab 4 - Reflected XSS through the URL
+
