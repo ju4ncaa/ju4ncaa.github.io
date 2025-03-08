@@ -160,3 +160,99 @@ Veo que es posible inyectar HTML, pero a la hora de intentar inyectar código ja
 ```
 
 ![image](https://github.com/user-attachments/assets/ffb8ea8c-ee13-4804-bbeb-aadea70e9203)
+
+## 5. DOM XSS in jQuery anchor href attribute sink using location.search source
+
+### Description
+
+Este laboratorio contiene una vulnerabilidad de secuencias de comandos entre sitios basada en DOM en la página de envío de comentarios, utiliza la función $ selector de la biblioteca jQuery para econtrar y cambia su atributo href utilizando los datos de location.search.
+
+### Mission
+
+Para resolver este laboratorio, haz que el enlace «back» ejecute un `alert()` con `document.cookie`
+
+### Solution
+
+Al acceder observo una web que cuenta con diferentes posts
+
+![image](https://github.com/user-attachments/assets/2d9be873-20c3-4851-a7ef-ede05d11fdc7)
+
+Accedo a Submit feedback y en la URL observo el parámetro `?returnPath=/`
+
+![image](https://github.com/user-attachments/assets/d687a1b4-acf8-4e8e-9efc-bb503ba988df)
+
+Introduzco un valor diferente y busco en el código donde se ve reflejado, consigo observar que el valor de `?returnPath=` se almacena en el `href` del boton del boton Back
+
+![image](https://github.com/user-attachments/assets/776828af-a290-4305-928b-b6e7292c758f)
+
+![image](https://github.com/user-attachments/assets/6af7ca1f-57a7-47fb-8154-61bc405fd327)
+
+Desde Jquery se puede llamar a javascript desde el HTML con `javascript:`, por lo que inyecto un `alert()` con `document.cookie`
+
+#### Payload
+
+```
+/feedback?returnPath=javascript:alert(document.cookie)
+```
+
+Al hacer click sobre el boton de `<Back` se ejecuta el código javascript
+
+![image](https://github.com/user-attachments/assets/3053b69a-e8da-4b59-99fb-0ea6f69e5e54)
+
+## 6. Reflected XSS into attribute with angle brackets HTML-encoded
+
+### Description
+
+Este laboratorio contiene una vulnerabilidad de secuencia de comandos en sitios cruzados reflejada en la funcionalidad del blog de búsqueda donde los paréntesis angulares están codificados en entidades HTML. 
+
+### Mission
+
+Para resolver este laboratorio, realice un ataque de secuencias de comandos en sitios cruzados que inyecte un atributo y llame a la función `alert()`
+
+### Solution
+
+Al acceder puedo observar la barra de búsqueda para filtrar por los posts
+
+![image](https://github.com/user-attachments/assets/a75d3d37-0d49-45f7-9c00-fc990d7808b9)
+
+Envío un texto y compruebo con las dev tools en que partes del código se ve reflejado, pudiendo observar que se visualiza en la etiqueta `<h1>` y en el `value` del input
+
+![image](https://github.com/user-attachments/assets/2d6a1f33-c6a1-4da0-8fb1-6b2a0e667e60)
+
+![image](https://github.com/user-attachments/assets/6a157ca5-e222-4511-91f7-db5eb9c54659)
+
+Intento inyectar código JavaScript, pero en BurpSuite observo que el mayor y menor son convertidos en entidades HTML
+
+![image](https://github.com/user-attachments/assets/5a27db70-bd20-4e62-9210-d02436a6b020)
+
+![image](https://github.com/user-attachments/assets/a2ef343f-20cb-4820-8889-0e502b33b968)
+
+Al inyectar una comilla puedo observo que está no se convierte en una entidad HTML, por lo que es posible escapar del atributo `value` y ejecutar código javascript en la etiqueta `<input>`
+
+#### Payload
+
+```
+/?search="onfocus=alert() autofocus
+```
+
+![image](https://github.com/user-attachments/assets/a5650b67-9ab8-49cf-a0f1-8908b15643d6)
+
+## 7. Stored XSS into anchor href attribute with double quotes HTML-encoded
+
+### Description
+
+Este laboratorio contiene una vulnerabilidad de cross-site scripting almacenada en la funcionalidad de comentarios.
+
+### Mission
+
+Para resolver este laboratorio, envía un comentario que llame a la función `alert()` cuando se haga clic en el nombre del autor del comentario.
+
+### Solution
+
+Al acceder observo una web que cuenta con diferentes posts
+
+![image](https://github.com/user-attachments/assets/93af461b-909e-4139-90f9-3f0c6175549e)
+
+Cada post cuenta con un sistema de comentarios
+
+![image](https://github.com/user-attachments/assets/df6f8a37-f10d-4b9b-ab56-191f8b3fd8e3)
