@@ -82,3 +82,81 @@ Observo que el contenido del comentario se almacena en una etiqueta `<p>`, si su
 ![image](https://github.com/user-attachments/assets/a331917b-b7c7-41ad-bebf-049d796076ad)
 
 ![image](https://github.com/user-attachments/assets/29c915e6-4efe-4fcd-b8ae-2184013e3d8d)
+
+## 3. DOM XSS in document.write sink using source location.search
+
+### Description
+
+Este laboratorio contiene una vulnerabilidad DOM-based cross-site scripting en la funcionalidad de seguimiento de consultas de búsqueda que utiliza la función javascript `document.write`, esta escribe datos en la página, la función document.write se llama con datos de location.search, que pueden controlarse mediante la URL del sitio web.
+
+### Mission
+
+Para resolver este laboratorio, realiza un ataque de secuencias de comandos en sitios cuzados que llame a la función `alert()`
+
+### Solution
+
+Al acceder puedo observar la barra de búsqueda para filtrar por los posts
+
+![image](https://github.com/user-attachments/assets/cb1f5ec1-c529-4faf-9c76-764c845d6ab3)
+
+Envío un texto y lo intercepto con BurpSuite para visualizar como se imprime la respuesta
+
+![image](https://github.com/user-attachments/assets/9dbaa3a2-9511-4cb9-a84b-536eb40f23aa)
+
+![image](https://github.com/user-attachments/assets/dc792ce0-7c5c-4ce5-ab59-99e656a34777)
+
+Al intentar inyectar código javascript observo que los símbolos mayor y menor son convertidos en entidades HTML, esto provoca que no se inteprete el código
+
+![image](https://github.com/user-attachments/assets/34bf78a9-1c11-4340-97ba-f38cd9569686)
+
+![image](https://github.com/user-attachments/assets/1350d417-d7c0-47c4-aed0-c30cf2874618)
+
+Observo que el texto introducido a través de la barrá de búsqueda también se ve reflejado en el `src=` de la etiqueta `<img>`, sabiendo esto es posible intentar escapar la comilla de `src=` e intentar ejecutar código javascript
+
+![image](https://github.com/user-attachments/assets/967d8e0c-8743-4c84-a6e6-8dc4c4ee8be2)
+
+#### Payload
+
+```
+/?search="><script>alert()</script>
+```
+
+![image](https://github.com/user-attachments/assets/98349670-b761-4d88-8a37-9136866f8b86)
+
+## 4. DOM XSS in innerHTML sink using source location.search
+
+### Description
+
+Este laboratorio contiene una vulnerabilidad de cross-site scripting basada en DOM en la funcionalidad del blog de búsqueda, utiliza una asignación `innerHTML`, que cambia el contenido HTML de un elemento div, utilizando los datos de `location.search`
+
+### Mission
+
+Para resolver este laboratorio, realice un ataque de secuencias de comandos en sitios cruzados que llame a la función `alert()`
+
+### Solution
+
+Al acceder puedo observar la barra de búsqueda para filtrar por los posts
+
+![image](https://github.com/user-attachments/assets/95438aea-c5c5-4024-b93e-58ddebe35774)
+
+Envío un texto y analizo con las dev tools en que partes del código aparece
+
+![image](https://github.com/user-attachments/assets/d9d74adc-a085-4e4d-94df-939978d90b9c)
+
+![image](https://github.com/user-attachments/assets/eb034d47-6905-45c3-b657-0b885f0adfc8)
+
+Observo que el texto introducido se encuentra dentro de una etiqueta `<span>`, intento inyectar un texto de color rojo para comprobar si es posible realizar un HTML Injection
+
+![image](https://github.com/user-attachments/assets/1c103c68-3b99-4cea-ac10-a2c6cd184c90)
+
+![image](https://github.com/user-attachments/assets/458e94c8-aa0b-46d9-9bd3-447a4b62df62)
+
+Veo que es posible inyectar HTML, pero a la hora de intentar inyectar código javascript, el mismo no se interpreta, por lo que podemos jugar con la etiqueta img y carga un recurso inexistente, jugando con el evento `onerror` ejecutar código javascript
+
+#### Payload
+
+```
+/?search=<img src=x onerror=alert()>
+```
+
+![image](https://github.com/user-attachments/assets/ffb8ea8c-ee13-4804-bbeb-aadea70e9203)
