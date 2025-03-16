@@ -23,7 +23,7 @@ site:domain.com "PASSWORD"
 site:domain.com "BANK ACCOUNT"
 site:domain.com "PII"
 
-#file extensions
+#Extensiones de archivo
 ext:pdf
 ext:doc
 ext:docx
@@ -34,7 +34,7 @@ ext:xls
 ext:xlsx
 ext:csv
 
-#negative filtering removing the unwanted ones
+# Filtros negativos para eliminar resultados no deseados
 -api -form -doc -template -default -sample -public
 ```
 
