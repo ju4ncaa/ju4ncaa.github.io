@@ -17,7 +17,7 @@ El scope incluye una gran cantidad de dominios, pero la mayoría de los Bug Boun
 
 ```
 site:domain.com "CONFIDENTIAL"
-site:domain.com "SOCIAL SECURITY NUNBER"
+site:domain.com "SOCIAL SECURITY NUMBER"
 site:domain.com "CREDIT CARD"
 site:domain.com "PASSWORD"
 site:domain.com "BANK ACCOUNT"
