@@ -81,5 +81,5 @@ Authorization: NTLM TlRMTVNTUAABAAAAB4IIAAAAAAAAAAAAAAAAAAAAAAA=
 
 Una vez que se devuelve un desafío NTLM a través del encabezado de respuesta WWW-Authenticate, se puede decodificar para capturar información interna, se pueden usar dos formas para decodificar
 
-* NTLM Burp Extension
+* [NTLM Challenge Decoder Burp Extension](https://portswigger.net/bappstore/30d095e075e64a109b8d12fc8281b5e3)
 * [Python Script NTLM Challenger](https://github.com/nopfor/ntlm_challenger)
