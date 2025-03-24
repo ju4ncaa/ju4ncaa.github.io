@@ -83,3 +83,6 @@ Una vez que se devuelve un desafío NTLM a través del encabezado de respuesta W
 
 * [NTLM Challenge Decoder Burp Extension](https://portswigger.net/bappstore/30d095e075e64a109b8d12fc8281b5e3)
 * [Python Script NTLM Challenger](https://github.com/nopfor/ntlm_challenger)
+
+
+> Si estás interesado en colaborar o hacer bug bounty juntos, no dudes en agregarme en LinkedIn y enviarme un mensaje directo. ¡Estoy siempre dispuesto a aprender y trabajar
