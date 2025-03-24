@@ -6,7 +6,7 @@ date: 2025-03-24
 categories: [Bug Bounty]
 tags: [hacking, bug bounty, hacking web, bugcrowd]
 image_post: true
-image: https://github.com/user-attachments/assets/37227fa2-d74a-49ef-9aba-f6aa2184d02e
+image: https://github.com/user-attachments/assets/05aeef08-242d-4e62-874d-762a34c5c4af
 ---
 
 ## ¿Qué es NTLM Auth Disclosure?
