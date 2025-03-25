@@ -1,7 +1,7 @@
 ---
 description: >-
-  Cómo descubrí mi primer Open Redirect en un programa de Bug Bounty de pago
-title: Mi primer Open Redirect en un Bug Bounty de pago
+  Metdología para descubrir tu primer Open Redirect en un programa de Bug Bounty
+title: Encuentra tu primer Open Redirect
 date: 2025-03-14
 categories: [Bug Bounty]
 tags: [hacking, bug bounty, hacking web, open redirect, bugcrowd]
