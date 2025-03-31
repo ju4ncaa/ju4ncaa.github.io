@@ -44,4 +44,4 @@ La cantidad de documentos disponibles era enorme, lo que me daba esperanzas de e
 
 ![image](https://github.com/user-attachments/assets/e9bbf68a-3413-4303-b258-081b4e7c250a)
 
-Confío en que puedan resolverlo pronto, ya que espero con gran entusiasmo y alegría mi carta de reconocimiento. Este hallazgo fue especialmente significativo para mí, ya que marcó mi primer informe válido en la plataforma BugCrowd. Desde entonces, he desarrollado una gran pasión por el Google Dorking, convirtiéndose en una de mis principales áreas de enfoque dentro del reconocimiento.
+![VDP20Letter20of20Appreciation20-2020ju4ncaa_page-0001](https://github.com/user-attachments/assets/9a5f409b-1034-47e1-bd8b-f4c347133151)
