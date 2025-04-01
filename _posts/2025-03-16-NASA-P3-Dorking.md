@@ -56,7 +56,11 @@ La cantidad de documentos disponibles era enorme, lo que me daba esperanzas de e
 
 
 <div align="center">
-<img src="https://github.com/user-attachments/assets/9a5f409b-1034-47e1-bd8b-f4c347133151" alt="letter of appreciation" width=500px">
+
+  
+<img src="https://github.com/user-attachments/assets/9a5f409b-1034-47e1-bd8b-f4c347133151" alt="letter-of-appreciation" width="500px">
+
+
 </div>
 
 Este fué mi primer informe válido en BugCrowd y desde entonces me empezó a gustar mucho el Google Dorking, con el tiempo, me enfoqué más en esta técnica y se convirtió en una de mis principales formas de hacer reconocimiento.
