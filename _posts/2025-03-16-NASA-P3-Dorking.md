@@ -54,4 +54,11 @@ La cantidad de documentos disponibles era enorme, lo que me daba esperanzas de e
 
 ![image](https://github.com/user-attachments/assets/e03651df-88f8-4c75-abb8-6cf1d6aa454a)
 
-![VDP20Letter20of20Appreciation20-2020ju4ncaa_page-0001](https://github.com/user-attachments/assets/9a5f409b-1034-47e1-bd8b-f4c347133151)
+
+<div align="center">
+<img src="https://github.com/user-attachments/assets/9a5f409b-1034-47e1-bd8b-f4c347133151" alt="letter of appreciation" width=500px">
+</div>
+
+Este fué mi primer informe válido en BugCrowd y desde entonces me empezó a gustar mucho el Google Dorking, con el tiempo, me enfoqué más en esta técnica y se convirtió en una de mis principales formas de hacer reconocimiento.
+
+Después de unos meses, logré ganar una recompensa de entre 500€-1000€ solo usando dorking de manera manual en buscadores como Google, Bing, DuckDuckGo, Yahoo y Yandex.
