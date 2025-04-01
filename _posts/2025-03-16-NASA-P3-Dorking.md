@@ -42,6 +42,16 @@ La cantidad de documentos disponibles era enorme, lo que me daba esperanzas de e
 
 > Sensitive Data Exposure > Disclosure of Secrets > PII Leakage/Exposure
 
-![image](https://github.com/user-attachments/assets/e9bbf68a-3413-4303-b258-081b4e7c250a)
+![image](https://github.com/user-attachments/assets/ad26a25a-1383-4973-9a29-8f26cc5763bd)
+
+> Bug timeline
+
+![image](https://github.com/user-attachments/assets/beea0160-911a-4d48-8ded-c8a6acd51626)
+
+![image](https://github.com/user-attachments/assets/7a847e31-1d90-4790-9fba-773c71c97ac6)
+
+> Letter of Appreciation
+
+![image](https://github.com/user-attachments/assets/e03651df-88f8-4c75-abb8-6cf1d6aa454a)
 
 ![VDP20Letter20of20Appreciation20-2020ju4ncaa_page-0001](https://github.com/user-attachments/assets/9a5f409b-1034-47e1-bd8b-f4c347133151)
