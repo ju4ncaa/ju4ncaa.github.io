@@ -10,7 +10,7 @@ Soy entusiasta de la ciberseguridad, autodidacta desde hace 3 años. He alcanzad
 
 Aquí comparto todas mis notas, write‑ups y metodologías.
 
-## Notas
+<!--/*## Notas
 * Python Ofensivo =>
 * Active Directory =>
 * Bug Bounty =>
@@ -18,3 +18,4 @@ Aquí comparto todas mis notas, write‑ups y metodologías.
 ## Redes sociales
 
 * Bugcrowd =>
+-->
