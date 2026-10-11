@@ -1,5 +1,5 @@
 ---
-title: IDOR in Wallet Address API
+title: 500 USD Bounty IDOR in Wallet Address API
 date: 2025-07-07 01:24:00 -0500
 categories: [BugBounty, Hacking]
 tags: [bugbounty, hacking]
