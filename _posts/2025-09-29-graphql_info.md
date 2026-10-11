@@ -1,6 +1,6 @@
 ---
 title: 750 USD Bounty Graphql with Salary Information
-date: 2025-03-12 01:24:00 -0500
+date: 2025-09-29 01:24:00 -0500
 categories: [BugBounty, Hacking]
 tags: [bugbounty, hacking]
 image:
