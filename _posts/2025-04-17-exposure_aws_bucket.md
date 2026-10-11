@@ -1,5 +1,5 @@
 ---
-title: Exposición de Zowe en AWS S3
+title: 300 USD Bounty Exposure AWS Bucket
 date: 2025-04-17 01:24:00 -0500
 categories: [BugBounty, Hacking]
 tags: [bugbounty, hacking]
@@ -11,8 +11,6 @@ image:
 Durante mis investigaciones identifiqué una exposición de información relacionada con la configuración de Zowe, alojada en un bucket de Amazon S3. El hallazgo fue reportado a través de Bugcrowd y reconocido con una recompensa de 300 USD.
 
 Este caso demuestra que un recurso puede parecer protegido a nivel de bucket y, aun así, permitir el acceso directo a un objeto que contiene información sensible. También pone de manifiesto la importancia de revisar los permisos efectivos de acceso y evitar la exposición de archivos de configuración internos.
-
-<img width="1162" height="1354" alt="image" src="https://github.com/user-attachments/assets/57223358-7a69-4f6a-bf0e-bfae4a4669b3" />
 
 ## 1. Descripción de la vulnerabilidad
 
