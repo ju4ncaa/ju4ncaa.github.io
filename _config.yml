@@ -1,46 +1,30 @@
-# The Site Configuration
-
-# Import the theme
 theme: jekyll-theme-chirpy
 
-# The language of the webpage › http://www.lingoes.net/en/translator/langcode.htm
-# If it has the same name as one of the files in folder `_data/locales`, the layout language will also be changed,
-# otherwise, the layout language will use the default value of 'en'.
 lang: es
 
-# Change to your timezone › https://zones.arilyn.cc
-timezone:
+timezone: Europe/Madrid
 
-# jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
-# ↓ --------------------------
-
-title: Juan Carlos Rodríguez # the main title
+title: Juan Carlos Rodríguez
 
 tagline: Full Stack & n8n Developer | Pentesting, Bug Bounty | DevOps
 
-description: >- # used by seo meta and the atom feed
+description: >- 
   A minimal, responsive and feature-rich Jekyll theme for technical writing.
 
-# Fill in the protocol & hostname for your site.
-# E.g. 'https://username.github.io', note that it does not end with a '/'.
 url: "https://ju4ncaa.github.io"
 
 github:
-  username: ju4ncaa # change to your GitHub username
+  username: ju4ncaa 
 
 social:
-  # Change to your full name.
-  # It will be displayed as the default author of the posts and the copyright owner in the Footer
   name: Juan Carlos Rodríguez
   email: jcrr.developer@gmail.com
-  fediverse_handle: # fill in your fediverse handle. E.g. "@username@domain.com"
+  fediverse_handle:
   links:
     - https://github.com/ju4ncaa
     - https://www.linkedin.com/in/juancarlos-rr
 
 
-
-# Site Verification Settings
 webmaster_verifications:
   google: # fill in your Google verification code
   bing: # fill in your Bing verification code
