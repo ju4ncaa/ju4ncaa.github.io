@@ -4,7 +4,7 @@ date: 2025-04-17 01:24:00 -0500
 categories: [BugBounty, Hacking]
 tags: [bugbounty, hacking]
 image:
-  path: /assets/img/posts/2025-04-17-exposure_aws_bucket
+  path: /assets/img/posts/2025-04-17-exposure_aws_bucket.png
   alt: Exposure AWS Bucket
 ---
 
