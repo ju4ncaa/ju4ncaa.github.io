@@ -1,5 +1,5 @@
 ---
-title: Reconocimiento en Bug Bounty con n8n + IA
+title: Reconocimiento en Bug Bounty con n8n + Claude
 date: 2026-10-18 01:24:00 -0500
 categories: [BugBounty, Hacking, Automatizacion]
 tags: [bugbounty, hacking, automatizacion]
