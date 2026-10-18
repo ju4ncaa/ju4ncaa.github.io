@@ -1,5 +1,5 @@
 ---
-title: Bug Bounty Recon: N8N + Claude
+title: Bug Bounty Recon N8N + Claude
 date: 2026-10-18 01:24:00 -0500
 categories: [BugBounty, Hacking, Automatizacion]
 tags: [bugbounty, hacking, automatizacion]
